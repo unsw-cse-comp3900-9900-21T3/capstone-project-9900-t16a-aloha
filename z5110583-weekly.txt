@@ -1,0 +1,11 @@
+30/09/2021
+
+Last week: week2
+We decided each members role in the team. I am the Front-end developer. I am responsbible for the 
+workflow part of the proposal. 
+
+This week: week3 
+Our first sprint starts yesterday. I am going to create login/sign-up page. 
+
+Next week: week4
+I am going to finish all sprint 1 related work including admin related pages, customer detail page.
