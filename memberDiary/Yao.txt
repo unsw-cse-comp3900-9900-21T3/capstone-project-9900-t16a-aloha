@@ -1,7 +1,0 @@
-Peronal Diary
-
-29/09/2021 - Web
-Write Project proposal recommend system part;
-Read recommend system documents and papers;
-https://towardsdatascience.com/using-cosine-similarity-to-build-a-movie-recommendation-system-ae7f20842599
-
