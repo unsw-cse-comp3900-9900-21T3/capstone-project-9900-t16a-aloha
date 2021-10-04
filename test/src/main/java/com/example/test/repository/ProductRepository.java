@@ -10,4 +10,5 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 
     //@Query("select p from Product p where p.name like ?1")
     Iterable<Product> findProductsByNameContaining(String name);
+    Iterable<Product> findByPriceBetween(Float start, Float end);
 }

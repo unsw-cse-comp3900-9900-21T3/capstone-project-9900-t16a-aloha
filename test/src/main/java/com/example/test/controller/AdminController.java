@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import jdk.internal.org.jline.utils.ExecHelper;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.print.FlavorException;
 
 @Controller
 @RequestMapping(path ="/admin")
@@ -42,26 +46,36 @@ public class AdminController {
             (1) Search by productID: /search/id/{id}
             (2) Search by name: /search/name/{name}
 
+        Annotation: 
         depending on the data pass from frontend, we might change the implementation
+        also, thinking combining all the searching inside the single function (depending on front end design)
      */
     @GetMapping(path = "/search/id/{id}")
     public @ResponseBody Product searchByID(@PathVariable("id") String id) {
         return productRepository.findById(id);
     }
 
+    
     @GetMapping(path = "/search/name/{name}")
     public @ResponseBody Iterable<Product> searchByName(@PathVariable("name") String name) {
         return productRepository.findProductsByNameContaining(name);
     }
 
-    // TODO: Search by price range
+    // Annotation:
+    // not sure if the return type is correct since if we cannot parse float properly
+    // searching the price between price1 and price2
     @GetMapping(path = "/search/price/{price1}-{price2}")
     public @ResponseBody Iterable<Product> searchByPrice(@PathVariable("price1") String price1,
                                                          @PathVariable("price2") String price2) {
-        return productRepository.findAll();
-
+        try {
+            float p1 = Float.parseFloat(price1);
+            float p2 = Float.parseFloat(price2);
+            return productRepository.findByPriceBetween(Float.parseFloat(price1), Float.parseFloat(price2));
+        } catch (Exception e) {
+            return null;
+        }
     }
-    
+
     // update a product's information(not include image URL)
     @PostMapping(path = "/update")
     public @ResponseBody Map<String, Object> update(@RequestParam(value = "id") String id,
