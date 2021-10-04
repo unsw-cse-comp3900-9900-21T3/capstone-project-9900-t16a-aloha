@@ -72,6 +72,7 @@ public class UserController {
         if (!userToUpdateOption.isPresent()) {
             return null;
         }
+        // optional get id from user
 
         User userToUpdate = userToUpdateOption.get();
 
@@ -100,5 +101,6 @@ public class UserController {
         User updatedUser = this.userRepository.save(userToUpdate);
         return updatedUser;
     }
+
 
 }
