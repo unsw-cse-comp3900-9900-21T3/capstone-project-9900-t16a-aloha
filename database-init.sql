@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS `ecommerce`;
-CREATE DATABASE `ecommerce`;
+CREATE DATABASE `ecommerce`; 
 USE `ecommerce`;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;

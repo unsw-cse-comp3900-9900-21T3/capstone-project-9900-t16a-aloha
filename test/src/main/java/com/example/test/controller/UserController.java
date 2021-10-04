@@ -7,7 +7,6 @@ import java.util.Optional;
 import com.example.test.model.User;
 import com.example.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,21 +19,6 @@ public class UserController {
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<User> getAllUser() {
         return userRepository.findAll();
-    }
-
-    @PostMapping(path = "/add")
-    public @ResponseBody String addNewUser(@RequestParam String email,@RequestParam String password,
-                                           @RequestParam String firstname, @RequestParam String lastname
-                                           ) {
-        User u = new User();
-        u.setEmail(email);
-        u.setPassword(password);
-        u.setFirstName(firstname);
-        u.setLastName(lastname);
-        u.setTag(0);
-        u.setId(0);
-        userRepository.save(u);
-        return "saved";
     }
 
     // update the customer account info such as firstname, lastname, email, telephone
@@ -103,6 +87,7 @@ public class UserController {
         User updatedUser = this.userRepository.save(userToUpdate);
         return updatedUser;
     }
+
     @PostMapping(path = "/register")
     @CrossOrigin
     public @ResponseBody

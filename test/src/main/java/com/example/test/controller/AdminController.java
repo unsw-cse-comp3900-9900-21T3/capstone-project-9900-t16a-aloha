@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(path ="/admin")
@@ -20,6 +19,7 @@ public class AdminController {
     public @ResponseBody Iterable<Product> getAllProduct() {
         return productRepository.findAll();
     }
+
     @PostMapping(path = "/remove")
     public @ResponseBody Map<String, Object> removeProduct(@RequestParam String productID) {
         Map<String, Object> resBody = new HashMap<>(3);
@@ -41,12 +41,12 @@ public class AdminController {
         Possible requests:
             (1) Search by productID: /search/id/{id}
             (2) Search by name: /search/name/{name}
+
+        depending on the data pass from frontend, we might change the implementation
      */
     @GetMapping(path = "/search/id/{id}")
     public @ResponseBody Product searchByID(@PathVariable("id") String id) {
-
         return productRepository.findById(id);
-
     }
 
     @GetMapping(path = "/search/name/{name}")
@@ -61,6 +61,7 @@ public class AdminController {
         return productRepository.findAll();
 
     }
+    
     // update a product's information(not include image URL)
     @PostMapping(path = "/update")
     public @ResponseBody Map<String, Object> update(@RequestParam(value = "id") String id,
