@@ -93,6 +93,7 @@ public class UserController {
     public @ResponseBody
     Map<String, Object> register(@RequestBody User user) {
         Map<String, Object> resBody = new HashMap<>(3);
+    
         // check if required fields are empty
         if(user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
             resBody.put("status", "fail");
