@@ -1,5 +1,7 @@
 package com.example.test.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import com.example.test.model.User;
@@ -101,6 +103,49 @@ public class UserController {
         User updatedUser = this.userRepository.save(userToUpdate);
         return updatedUser;
     }
+    @PostMapping(path = "/register")
+    @CrossOrigin
+    public @ResponseBody
+    Map<String, Object> register(@RequestBody User user) {
+        Map<String, Object> resBody = new HashMap<>(3);
+        // check if required fields are empty
+        if(user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getEmail().isEmpty() || user.getPassword().isEmpty()) {
+            resBody.put("status", "fail");
+            resBody.put("msg", "Empty parameters");
+            return resBody;
+        }
+        // check if the account has been created
+        User u1 = userRepository.findByEmail(user.getEmail());
+        if(u1 != null) {
+            resBody.put("status", "fail");
+            resBody.put("msg", "User already exists");
+            return resBody;
+        }
+        user.setTag(0);
+        user.setId(0);
+        userRepository.save(user);
+        int id = userRepository.findByEmail(user.getEmail()).getId();
+        resBody.put("status", "success");
+        resBody.put("uid", id);
+        resBody.put("email", user.getEmail());
+        return resBody;
+    }
 
+    @PostMapping("/login")
+    @CrossOrigin
+    public @ResponseBody Map<String, Object> login(@RequestBody User user) {
+        Map<String, Object> resBody = new HashMap<>(3);
+        User u = userRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
+        if (u == null) {
+            resBody.put("status", "fail");
+            resBody.put("msg", "Invalid email or password");
+        }
+        else {
+            resBody.put("status", "success");
+            resBody.put("uid", u.getId());
+            resBody.put("email", u.getEmail());
+        }
+        return resBody;
+    }
 
 }
