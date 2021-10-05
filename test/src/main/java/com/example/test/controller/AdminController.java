@@ -70,7 +70,7 @@ public class AdminController {
         try {
             float p1 = Float.parseFloat(price1);
             float p2 = Float.parseFloat(price2);
-            return productRepository.findByPriceBetween(Float.parseFloat(p1), Float.parseFloat(p2));
+            return productRepository.findByPriceBetween(p1, p2);
         } catch (Exception e) {
             return null;
         }
