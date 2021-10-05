@@ -1,15 +1,13 @@
 package com.example.test.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 // ANNOTATION: maybe it is a good idea to change the table names to "users"
 @Entity
 @Table(name = "user")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userid")
     private Integer id;
     @Column(name = "email")
