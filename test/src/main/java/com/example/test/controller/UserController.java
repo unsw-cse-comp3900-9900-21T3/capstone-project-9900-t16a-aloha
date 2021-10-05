@@ -108,9 +108,10 @@ public class UserController {
             return resBody;
         }
         user.setTag(0);
-        user.setId(0);
+        //user.setId(0);
         userRepository.save(user);
-        int id = userRepository.findByEmail(user.getEmail()).getId();
+        //int id = userRepository.findByEmail(user.getEmail()).getId();
+        int id = user.getId();
         resBody.put("status", "success");
         resBody.put("uid", id);
         resBody.put("email", user.getEmail());
