@@ -65,3 +65,27 @@ INSERT INTO `user` VALUES (2, 'admin@admin.com', 'admin', 'Junwei', 'Guo', 1, 'M
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+-- ----------------------------
+-- Storge table
+-- ----------------------------
+DROP TABLE IF EXISTS storge;
+CREATE TABLE storge (
+    productID varchar(50) NOT NULL,
+    size decimal(3,1) NOT NULL,
+    stock int NOT NULL DEFAULT '0',
+    PRIMARY KEY(productID, size),
+    
+    -- notice here that we can't set the foreign key to be "on detele set null since it points to a primary key" 
+    FOREIGN KEY(productID) REFERENCES product(productID)
+)
+
+
+-- ----------------------------
+-- Records of storge
+-- ----------------------------
+-- BEGIN;
+-- INSERT INTO `storge` VALUES ('CJ1646-600', 10.5, 300);
+-- COMMIT;

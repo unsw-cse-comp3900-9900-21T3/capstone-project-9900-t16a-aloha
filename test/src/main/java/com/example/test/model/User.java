@@ -5,13 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+// ANNOTATION: maybe it is a good idea to change the table names to "users"
 @Entity
 @Table(name = "user")
 public class User {
     @Id
     @Column(name = "userid")
     private Integer id;
-
     @Column(name = "email")
     private String email;
     @Column(name = "password")

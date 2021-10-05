@@ -4,7 +4,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
+// ANNOTATION: maybe it is a good idea to change the table names to "products"
 @Entity
 @Table(name = "product")
 public class Product {
@@ -40,9 +42,16 @@ public class Product {
     @Column(name = "visibility")
     private int visibility;
 
+    // ANNOTATION: newly add one to many relationship with storge table
+    @OneToMany(mappedBy = "storgeid.product")
+    private Set<Storge> storge;
+
     public Product() {
 
     }
+
+    // ANNOTATION
+    // OPTIONAL: create constructor with argument
 
     public String getId() {
         return id;

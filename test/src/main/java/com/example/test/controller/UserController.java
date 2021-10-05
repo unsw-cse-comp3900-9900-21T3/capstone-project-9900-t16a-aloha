@@ -30,9 +30,9 @@ public class UserController {
             return null;
         }
         // optional get id from user
-        
+
         User userToUpdate = userToUpdateOption.get();
-    
+
         if (user.getFirstName() != null) {
             userToUpdate.setFirstName(user.getFirstName());
         }
@@ -45,7 +45,7 @@ public class UserController {
         if (user.getTelephone() != null) {
             userToUpdate.setTelephone(user.getTelephone());
         }
-        
+
         User updatedUser = this.userRepository.save(userToUpdate);
         return updatedUser;
     }

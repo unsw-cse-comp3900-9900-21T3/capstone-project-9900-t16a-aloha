@@ -1,7 +1,9 @@
 package com.example.test.controller;
 
 import com.example.test.model.Product;
+import com.example.test.model.Storge;
 import com.example.test.repository.ProductRepository;
+import com.example.test.repository.StorgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.print.FlavorException;
 
@@ -18,6 +21,9 @@ import javax.print.FlavorException;
 public class AdminController {
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    StorgeRepository storgeRepository;
 
     @GetMapping(path = "/showall")
     public @ResponseBody Iterable<Product> getAllProduct() {
@@ -41,12 +47,29 @@ public class AdminController {
         return resBody;
     }
 
+    // show all storge
+    @GetMapping(path = "/showAllStorge")
+    public @ResponseBody Iterable<Storge> getAllStorge() {
+        Iterable<Storge> test = storgeRepository.findAll();
+        System.out.println("sam");
+        return storgeRepository.findAll();
+    }
+
+    // add product storge
+    @PostMapping(path = "/add")
+    public @ResponseBody Storge addProductToStorge(@RequestBody Storge storge) {
+            if (storge.getStorgeid() == null || storge.getStock() == null || storge.getStorgeid().getProduct() == null || storge.getStorgeid().getSize() == null) {
+                return null;
+            }
+            return this.storgeRepository.save(storge);
+    }
+
     /* Search a product
         Possible requests:
             (1) Search by productID: /search/id/{id}
             (2) Search by name: /search/name/{name}
 
-        Annotation: 
+        ANNOTATION:
         depending on the data pass from frontend, we might change the implementation
         also, thinking combining all the searching inside the single function (depending on front end design)
      */
@@ -61,7 +84,7 @@ public class AdminController {
         return productRepository.findProductsByNameContaining(name);
     }
 
-    // Annotation:
+    // ANNOTATION:
     // not sure if the return type is correct since if we cannot parse float properly
     // searching the price between price1 and price2
     @GetMapping(path = "/search/price/{price1}-{price2}")
@@ -70,7 +93,7 @@ public class AdminController {
         try {
             float p1 = Float.parseFloat(price1);
             float p2 = Float.parseFloat(price2);
-            return productRepository.findByPriceBetween(Float.parseFloat(p1), Float.parseFloat(p2));
+            return productRepository.findByPriceBetween(p1, p2);
         } catch (Exception e) {
             return null;
         }
