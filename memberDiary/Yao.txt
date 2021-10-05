@@ -9,3 +9,7 @@ https://towardsdatascience.com/using-cosine-similarity-to-build-a-movie-recommen
 30/09/2021 - 
 Create jupyter notebook to play around with the dataset.
 Checkout the attributes in the dataset and Nan value handling
+
+05/10/2021 -
+Use cosine similarity to test the recommend on nike shoes
+By generating a combined feature. 
