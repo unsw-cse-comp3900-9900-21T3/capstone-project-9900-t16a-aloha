@@ -1,14 +1,20 @@
 package com.example.test.controller;
 
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.example.test.model.User;
 import com.example.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+
 
 @Controller
 @RequestMapping(path="/test")
@@ -128,11 +134,18 @@ public class UserController {
             resBody.put("msg", "Invalid email or password");
         }
         else {
+            resBody.put("token", getJWTToken(u));
             resBody.put("status", "success");
             resBody.put("uid", u.getId());
             resBody.put("email", u.getEmail());
         }
         return resBody;
+    }
+
+    private String getJWTToken(User user) {
+        String token = "";
+        token = JWT.create().withAudience(String.valueOf(user.getId())).sign(Algorithm.HMAC256(user.getPassword()));
+        return token;
     }
 
 }
