@@ -13,3 +13,8 @@ Checkout the attributes in the dataset and Nan value handling
 05/10/2021 -
 Use cosine similarity to test the recommend on nike shoes
 By generating a combined feature. 
+
+06/10/2021 -
+https://medium.com/@eiki1212/feature-extraction-in-natural-language-processing-with-python-59c7cdcaf064
+Using TF-IDF to IR(Information Retrieval) technique to analyze how important a word is in a document. 
+Improved the quality of the recommendation
