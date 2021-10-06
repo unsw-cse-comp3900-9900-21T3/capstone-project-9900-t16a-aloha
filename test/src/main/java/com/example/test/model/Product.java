@@ -132,4 +132,6 @@ public class Product {
     public void setVisibility(int visibility) {
         this.visibility = visibility;
     }
+
+    
 }

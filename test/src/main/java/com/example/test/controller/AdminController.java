@@ -2,6 +2,7 @@ package com.example.test.controller;
 
 import com.example.test.model.Product;
 import com.example.test.model.Storge;
+import com.example.test.model.StorgeId;
 import com.example.test.repository.ProductRepository;
 import com.example.test.repository.StorgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,11 +58,38 @@ public class AdminController {
 
     // add product storge
     @PostMapping(path = "/add")
-    public @ResponseBody Storge addProductToStorge(@RequestBody Storge storge) {
+    public @ResponseBody Storge addProductToStorge(@RequestParam String id, @RequestParam String size, @RequestParam String stock) {
+
+            /*
             if (storge.getStorgeid() == null || storge.getStock() == null || storge.getStorgeid().getProduct() == null || storge.getStorgeid().getSize() == null) {
                 return null;
             }
-            return this.storgeRepository.save(storge);
+            */
+            Product p = this.productRepository.findById(id);
+            StorgeId si = new StorgeId();
+            si.setProduct(p);
+            si.setSize(Float.parseFloat(size));
+
+            Storge s = new Storge();
+            s.setStorgeid(si);
+            s.setStock(Integer.parseInt(stock));
+            
+            return this.storgeRepository.save(s);
+    }
+
+    // annotation: test
+    // add product storge
+    @PostMapping(path = "/add/{id}")
+    public @ResponseBody Product addProduct(@PathVariable String id) {
+            Product p = new Product();
+            p.setId(id);
+            p.setName("sam");
+            p.setAvgRating(0);
+            p.setPrice(99);
+            p.setBrand("adidas");
+            p.setVisibility(0);
+
+            return this.productRepository.save(p);
     }
 
     /* Search a product
