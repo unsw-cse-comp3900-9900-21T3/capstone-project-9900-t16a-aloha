@@ -141,6 +141,8 @@ public class UserController {
             resBody.put("status", "success");
             resBody.put("uid", u.getId());
             resBody.put("email", u.getEmail());
+            // user role, 0 is customer and 1 is admin.
+            resBody.put("role", u.getTag());
         }
         return resBody;
     }
