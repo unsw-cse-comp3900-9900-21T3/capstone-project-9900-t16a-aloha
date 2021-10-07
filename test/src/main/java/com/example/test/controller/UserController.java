@@ -151,4 +151,46 @@ public class UserController {
         return token;
     }
 
+    // get the address of user
+    @GetMapping(path = "/user/{id}/address")
+    @CrossOrigin
+    public @ResponseBody Map<String, Object> getAddress(@PathVariable Integer id) {
+        Optional<User> userToUpdateOption = this.userRepository.findById(id);
+        // check if the user existed in database
+        if (!userToUpdateOption.isPresent()) {
+            return null;
+        }
+        User user = userToUpdateOption.get();
+        Map<String, Object> resBody = new HashMap<>(3);
+        resBody.put("userid", user.getId());
+        resBody.put("street", user.getStreet());
+        resBody.put("city", user.getCity());
+        resBody.put("state", user.getState());
+        resBody.put("postcode", user.getPostcode());
+        resBody.put("firstname", user.getFirstName());
+        resBody.put("lastname", user.getLastName());
+        resBody.put("telephone", user.getTelephone());
+        return resBody;
+    }
+
+    @GetMapping(path = "/user/{id}/info")
+    @CrossOrigin
+    public @ResponseBody Map<String, Object> getUserInfo(@PathVariable Integer id) {
+        Optional<User> userToUpdateOption = this.userRepository.findById(id);
+        // check if the user existed in database
+        if (!userToUpdateOption.isPresent()) {
+            return null;
+        }
+        User user = userToUpdateOption.get();
+        Map<String, Object> resBody = new HashMap<>(3);
+        resBody.put("userid", user.getId());
+        resBody.put("firstname", user.getFirstName());
+        resBody.put("lastname", user.getLastName());
+        resBody.put("telephone", user.getTelephone());
+        resBody.put("email", user.getEmail());
+        return resBody;
+    }
+
+
+
 }
