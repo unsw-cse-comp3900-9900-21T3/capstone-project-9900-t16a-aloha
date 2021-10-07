@@ -2,8 +2,11 @@
   display: none;
 }
 #address-subpage {
-  /* display: none; */
+  /* display: block; */
 }
 #account-page {
+  /* display: block; */
+}
+#product-search-page {
   display: none;
 }

@@ -5,6 +5,21 @@ const signUpPass = document.getElementById("password");
 
 const signUpBtn = document.getElementById("sign-up");
 signUpBtn.addEventListener("click", async (_) => {
+  if (
+    firstName.value === "" ||
+    lastName.value === "" ||
+    signUpEmail.value === "" ||
+    signUpPass.value === ""
+  ) {
+    alert("Please do not left empty fields for registration");
+    return;
+  }
+  if (
+    !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(signUpEmail.value)
+  ) {
+    alert("Please enter valid email address");
+    return;
+  }
   try {
     let text =
       '{ "firstName":"' +
@@ -63,7 +78,7 @@ signInBtn.addEventListener("click", async (_) => {
       },
       body: data,
     });
-    // console.log(obj);
+
     const jsData = await response.text();
 
     const d = JSON.parse(jsData);
@@ -71,7 +86,13 @@ signInBtn.addEventListener("click", async (_) => {
     if (d.status === "fail") {
       alert(d.msg);
     } else {
-      alert("Log In successfully");
+      // TODO  backend new pack
+      // admin
+      // sessionStorage.setItem("isAdmin", d.role);
+      sessionStorage.setItem("isAdmin", "1");
+
+      sessionStorage.setItem("userID", d.uid);
+      location.href = "./main.html";
     }
   } catch (err) {
     console.error(`Error: ${err}`);

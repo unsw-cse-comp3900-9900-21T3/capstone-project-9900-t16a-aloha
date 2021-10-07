@@ -9,10 +9,10 @@
     <title>A Shoe</title>
   </head>
   <body>
-    <div id="user-header" style="display: block">
+    <div id="user-header">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">A Shoe</a>
+          <a type="button" class="navbar-brand" id="left-top-main">A Shoe</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -60,12 +60,22 @@
                     /></svg
                 ></a>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">My Orders</a>
-                  <a class="dropdown-item" href="#">My Address</a>
-                  <a class="dropdown-item" href="#">My WishList</a>
-                  <a class="dropdown-item" href="#">My Account</a>
+                  <a type="button" class="dropdown-item" id="nav-dropdown-order"
+                    >My Orders</a
+                  >
+                  <a type="button" class="dropdown-item" id="nav-dropdown-addr"
+                    >My Address</a
+                  >
+                  <a type="button" class="dropdown-item" id="nav-dropdown-wish"
+                    >My WishList</a
+                  >
+                  <a type="button" class="dropdown-item" id="nav-dropdown-acct"
+                    >My Account</a
+                  >
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Log out</a>
+                  <a type="button" class="dropdown-item nav-dropdown-logout"
+                    >Log out</a
+                  >
                 </div>
               </li>
               <li class="nav-item" href="#">
@@ -88,7 +98,7 @@
         </div>
       </nav>
     </div>
-    <div id="admin-header" style="display: none">
+    <div id="admin-header">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">A Shoe</a>
@@ -106,6 +116,25 @@
 
           <div class="collapse navbar-collapse" id="navbarColor03">
             <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a type="button" class="nav-link" id="admin-add-shoe-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="25"
+                    fill="currentColor"
+                    class="bi bi-plus-square"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"
+                    />
+                    <path
+                      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+                    /></svg
+                  >Add SHOE
+                </a>
+              </li>
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle"
@@ -130,7 +159,9 @@
                     /></svg
                 ></a>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Log out</a>
+                  <a type="button" class="dropdown-item nav-dropdown-logout"
+                    >Log out</a
+                  >
                 </div>
               </li>
             </ul>
@@ -138,7 +169,7 @@
         </div>
       </nav>
     </div>
-    <div id="search-bar" style="display: none">
+    <div id="search-bar" style="display: block">
       <div class="bg-light">
         <div class="d-flex">
           <input class="form-control" type="text" placeholder="Search" />
@@ -172,8 +203,8 @@
       </div>
     </div>
 
-    <main style="display: block">
-      <div class="account-page container" id="account-page">
+    <main>
+      <div class="container" id="account-page">
         <div class="row m-3">
           <div class="col-4 me-auto">
             <div class="card">
@@ -196,7 +227,9 @@
               </svg>
 
               <div class="card-body">
-                <p class="card-text text-center">I am User name</p>
+                <p class="card-text text-center" id="account-icon-username">
+                  I am User name
+                </p>
               </div>
               <ul class="list-group list-group-flush">
                 <button
@@ -208,6 +241,7 @@
                 <button
                   type="button"
                   class="list-group-item list-group-item-action"
+                  id="account-address-btn"
                 >
                   My Address
                 </button>
@@ -220,6 +254,7 @@
                 <button
                   type="button"
                   class="list-group-item list-group-item-action"
+                  id="account-account-btn"
                 >
                   My Account
                 </button>
@@ -234,13 +269,13 @@
             </div>
             <div class="row">
               <div class="form-group">
-                <label for="accout-email" class="form-label mt-4"
+                <label for="account-email" class="form-label mt-4"
                   >Email address</label
                 >
                 <input
                   type="email"
                   class="form-control"
-                  id="accout-email"
+                  id="account-email"
                   placeholder="Enter email"
                 />
 
@@ -277,13 +312,12 @@
             </div>
             <div class="row m-3"></div>
             <div class="row justify-content-end me-auto">
-              <button type="button" class="btn btn-primary col-3">Edit</button>
               <button
+                id="account-change-btn"
                 type="button"
                 class="btn btn-primary col-3"
-                style="display: none"
               >
-                Submit
+                Change
               </button>
             </div>
           </div>
@@ -293,32 +327,53 @@
               <small class="text-muted">View and edit your address</small>
               <hr class="m-2" />
             </div>
-            <div class="row mt-2 g-3">
-              <div class="col-12">
-                <label for="inputAddress" class="form-label">Address</label>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="address-first-name">First Name</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="inputAddress"
+                  id="address-first-name"
+                  placeholder="First Name"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="address-last-name">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address-last-name"
+                  placeholder="Last Name"
+                />
+              </div>
+            </div>
+
+            <div class="row mt-2 g-3">
+              <div class="col-12">
+                <label for="address-phone" class="form-label">Phone</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address-phone"
+                  placeholder="Phone"
+                />
+              </div>
+              <div class="col-12">
+                <label for="address-address" class="form-label">Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address-address"
                   placeholder="1234 What St"
                 />
               </div>
-              <div class="col-12">
-                <label for="inputAddress2" class="form-label">Address 2</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="inputAddress2"
-                  placeholder="Apartment, or floor"
-                />
-              </div>
-              <div class="col-md-6">
-                <label for="inputCity" class="form-label">City</label>
-                <input type="text" class="form-control" id="inputCity" />
+              <div class="col-md-5">
+                <label for="address-city" class="form-label">City</label>
+                <input type="text" class="form-control" id="address-city" />
               </div>
               <div class="col-md-4">
-                <label for="inputState" class="form-label">State</label>
-                <select id="inputState" class="form-select">
+                <label for="address-state" class="form-label">State</label>
+                <select id="address-state" class="form-select">
                   <option selected>NSW</option>
                   <option>VIC</option>
                   <option>QLD</option>
@@ -329,14 +384,18 @@
                   <option>ACT</option>
                 </select>
               </div>
-              <div class="col-md-2">
-                <label for="inputZip" class="form-label">Zip</label>
-                <input type="text" class="form-control" id="inputZip" />
+              <div class="col-md-3">
+                <label for="address-zip" class="form-label">Zip</label>
+                <input type="text" class="form-control" id="address-zip" />
               </div>
               <div class="row m-3"></div>
               <div class="row justify-content-end me-auto">
-                <button type="button" class="btn btn-primary col-3">
-                  Sign in
+                <button
+                  id="address-change-btn"
+                  type="button"
+                  class="btn btn-primary col-3"
+                >
+                  Change
                 </button>
               </div>
             </div>
@@ -344,75 +403,206 @@
         </div>
       </div>
 
-      <div class="product-search-page container-lg">
-        <div class="row row-cols-4 g-3 m-3">
-          <div class="col">
-            <div class="card" style="width: 16rem">
-              <img src="assets/shoe.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <p class="card-text">Some</p>
-              </div>
+      <div class="container-lg" id="product-search-page">
+        <div
+          id="admin-product-list-parent"
+          class="row row-cols-auto g-3 m-1 justify-content-between"
+        ></div>
+      </div>
+
+      <div class="container" id="product-detail-page">
+        <div class="row m-3">
+          <div class="col-6 me-auto">
+            <div class="card" style="max-width: 30rem">
+              <img src="assets/shoe.png" style="width: 100%" />
             </div>
           </div>
-          <div class="col">
-            <div class="card" style="width: 16rem">
-              <img src="assets/shoe.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <p class="card-text">Some</p>
+          <div class="col-6 ms-auto">
+            <div class="row mb-3">
+              <div class="form-group">
+                <label class="form-label">Title</label>
+                <input
+                  class="h3 form-control"
+                  type="text"
+                  placeholder="Shoe name"
+                />
               </div>
+            </div>
+            <div class="row mb-3">
+              <div type="button " class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="form-group">
+                <label class="form-label">Price</label>
+                <input class="h6 form-control" type="text" placeholder="$ " />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group col-md-6">
+                <label for="product-detail-qty">Quantity</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="product-detail-qty"
+                  placeholder="Quantity"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="product-detail-size">Size</label>
+                <select
+                  type="text"
+                  class="form-control"
+                  id="product-detail-size"
+                  placeholder="Last Name"
+                >
+                  <option selected disabled>Select Size</option>
+                  <option value="7">US 7</option>
+                  <option value="8">US 8</option>
+                  <option value="9">US 9</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- <div class="row mb-3 p-3">
+              <button class="btn btn-primary">ADD TO CART</button>
+            </div> -->
+            <div class="row mb-3">
+              <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea
+                  class="form-control"
+                  rows="5"
+                  placeholder="Type the description..."
+                ></textarea>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="ms-3 form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="product-detail-condition"
+                />
+                <label class="form-check-label" for="product-detail-condition"
+                  >Set this product to be visible to your customers</label
+                >
+              </div>
+            </div>
+            <div class="row m-1">
+              <button class="btn btn-outline-secondary col-3 me-auto">
+                Cancel
+              </button>
+              <button class="btn btn-primary col-3 ms-auto">CHANGE</button>
             </div>
           </div>
-          <div class="col">
-            <div class="card" style="width: 16rem">
-              <img src="assets/shoe.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <p class="card-text">Some</p>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card" style="width: 16rem">
-              <img src="assets/shoe.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <p class="card-text">Some</p>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card" style="width: 16rem">
-              <img src="assets/shoe.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <p class="card-text">Some</p>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card" style="width: 16rem">
-              <img src="assets/shoe.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <p class="card-text">Some</p>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card" style="width: 16rem">
-              <img src="assets/shoe.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <p class="card-text">Some</p>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card" style="width: 16rem">
-              <img src="assets/shoe.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <p class="card-text">Some</p>
-              </div>
-            </div>
+        </div>
+        <div class="row ms-3">
+          <div class="col-6 me-auto">
+            <img
+              src="assets/welcome.jpg"
+              style="background-size: cover; max-height: 5rem"
+            />
+            <img
+              src="assets/shoe.png"
+              style="background-size: cover; max-height: 5rem"
+            />
           </div>
         </div>
       </div>
     </main>
+
+    <div id="template" style="display: none">
+      <div class="col" id="admin-product-list-temp">
+        <div class="card" style="width: 16rem">
+          <img
+            style="background-size: cover; width: 100%"
+            src="assets/shoe.png"
+            class="card-img-top"
+            alt="..."
+          />
+          <div class="card-body d-flex justify-content-between">
+            <h6 class="card-text">Some</h6>
+            <div class="badge bg-dark">$99.99</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="scripts/gotoMain.js"></script>
+    <script type="module" src="scripts/main.js"></script>
+    <script type="module" src="scripts/adminProductList.js"></script>
+    <script type="module" src="scripts/account.js"></script>
+    <script type="module" src="scripts/address.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
