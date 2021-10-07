@@ -23,12 +23,14 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping(path = "/all")
+    @CrossOrigin
     public @ResponseBody Iterable<User> getAllUser() {
         return userRepository.findAll();
     }
 
     // update the customer account info such as firstname, lastname, email, telephone
     @PostMapping(path = "/user/{id}/account")
+    @CrossOrigin
     public @ResponseBody User updateUserAccount(@PathVariable Integer id,  @RequestBody User user) {
         Optional<User> userToUpdateOption = this.userRepository.findById(id);
         // check if the user existed in database
@@ -57,7 +59,8 @@ public class UserController {
     }
 
     // update the customer address info such as 
-    @PostMapping(path = "/user/{id}/address") 
+    @PostMapping(path = "/user/{id}/address")
+    @CrossOrigin
     public @ResponseBody User updateUserAddress(@PathVariable("id") Integer id, @RequestBody User user) {
         Optional<User> userToUpdateOption = this.userRepository.findById(id);
         // check if the user existed in database

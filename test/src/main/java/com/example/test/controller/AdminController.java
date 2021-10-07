@@ -27,11 +27,13 @@ public class AdminController {
     StorgeRepository storgeRepository;
 
     @GetMapping(path = "/showall")
+    @CrossOrigin
     public @ResponseBody Iterable<Product> getAllProduct() {
         return productRepository.findAll();
     }
 
     @PostMapping(path = "/remove")
+    @CrossOrigin
     public @ResponseBody Map<String, Object> removeProduct(@RequestParam String productID) {
         Map<String, Object> resBody = new HashMap<>(3);
         Product product = productRepository.findById(productID);
@@ -50,6 +52,7 @@ public class AdminController {
 
     // show all storge
     @GetMapping(path = "/showAllStorge")
+    @CrossOrigin
     public @ResponseBody Iterable<Storge> getAllStorge() {
         Iterable<Storge> test = storgeRepository.findAll();
         System.out.println("sam");
@@ -58,6 +61,7 @@ public class AdminController {
 
     // add product storge
     @PostMapping(path = "/add")
+    @CrossOrigin
     public @ResponseBody Storge addProductToStorge(@RequestParam String id, @RequestParam String size, @RequestParam String stock) {
 
             /*
@@ -80,6 +84,7 @@ public class AdminController {
     // annotation: test
     // add product storge
     @PostMapping(path = "/add/{id}")
+    @CrossOrigin
     public @ResponseBody Product addProduct(@PathVariable String id) {
             Product p = new Product();
             p.setId(id);
@@ -102,12 +107,14 @@ public class AdminController {
         also, thinking combining all the searching inside the single function (depending on front end design)
      */
     @GetMapping(path = "/search/id/{id}")
+    @CrossOrigin
     public @ResponseBody Product searchByID(@PathVariable("id") String id) {
         return productRepository.findById(id);
     }
 
     
     @GetMapping(path = "/search/name/{name}")
+    @CrossOrigin
     public @ResponseBody Iterable<Product> searchByName(@PathVariable("name") String name) {
         return productRepository.findProductsByNameContaining(name);
     }
@@ -116,6 +123,7 @@ public class AdminController {
     // not sure if the return type is correct since if we cannot parse float properly
     // searching the price between price1 and price2
     @GetMapping(path = "/search/price/{price1}-{price2}")
+    @CrossOrigin
     public @ResponseBody Iterable<Product> searchByPrice(@PathVariable("price1") String price1,
                                                          @PathVariable("price2") String price2) {
         try {
@@ -129,6 +137,7 @@ public class AdminController {
 
     // update a product's information(not include image URL)
     @PostMapping(path = "/update")
+    @CrossOrigin
     public @ResponseBody Map<String, Object> update(@RequestParam(value = "id") String id,
                                                     @RequestParam(value = "name", required = false) String name,
                                                     @RequestParam(value = "price", required = false) String price,
@@ -176,11 +185,13 @@ public class AdminController {
 
     // TODO: add a image on current Product
     @PostMapping(path = "update/img/add/{url}")
+    @CrossOrigin
     public @ResponseBody Map<String, Object> addImage(@PathVariable("url") String url) {
         return  new HashMap<>(1);
     };
     // TODO: delete a image on current Product
     @PostMapping(path = "update/img/del/{url}")
+    @CrossOrigin
     public @ResponseBody Map<String, Object> delImage(@PathVariable("url") String url) {
         return new HashMap<>(1);
     }
