@@ -1,3 +1,4 @@
+import { gotoMain } from "./gotoMain.js";
 const firstName = document.getElementById("address-first-name");
 const lastName = document.getElementById("address-last-name");
 const phone = document.getElementById("address-phone");
@@ -9,6 +10,8 @@ const changeBtn = document.getElementById("address-change-btn");
 
 const accountIconUsername = document.getElementById("account-icon-username");
 
+const addrBackBtn = document.getElementById("address-back-btn");
+const acctBackBtn = document.getElementById("account-back-btn");
 /* * post request edit addr info * */
 
 changeBtn.addEventListener("click", async (_) => {
@@ -66,4 +69,6 @@ changeBtn.addEventListener("click", async (_) => {
   }
 });
 
+addrBackBtn.addEventListener("click", gotoMain);
+acctBackBtn.addEventListener("click", gotoMain);
 /* * get request get addr info * */

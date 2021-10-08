@@ -9,6 +9,44 @@
     <title>A Shoe</title>
   </head>
   <body>
+    <div class="modal" id="delete-product-confirmation">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmation</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure to delete the product?</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              id="modal-delete-product-btn"
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="user-header">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -313,6 +351,13 @@
             <div class="row m-3"></div>
             <div class="row justify-content-end me-auto">
               <button
+                id="account-back-btn"
+                type="button"
+                class="btn btn-outline-secondary col-3 me-2"
+              >
+                Back
+              </button>
+              <button
                 id="account-change-btn"
                 type="button"
                 class="btn btn-primary col-3"
@@ -389,7 +434,15 @@
                 <input type="text" class="form-control" id="address-zip" />
               </div>
               <div class="row m-3"></div>
+
               <div class="row justify-content-end me-auto">
+                <button
+                  id="address-back-btn"
+                  type="button"
+                  class="btn btn-outline-secondary col-3 me-2"
+                >
+                  Back
+                </button>
                 <button
                   id="address-change-btn"
                   type="button"
@@ -403,14 +456,14 @@
         </div>
       </div>
 
-      <div class="container-lg" id="product-search-page">
+      <div class="container" id="product-search-page">
         <div
           id="admin-product-list-parent"
-          class="row row-cols-auto g-3 m-1 justify-content-between"
+          class="row row-cols-auto g-3 m-1"
         ></div>
       </div>
 
-      <div class="container" id="product-detail-page">
+      <div class="container" id="add-product-detail-page">
         <div class="row m-3">
           <div class="col-6 me-auto">
             <div class="card" style="max-width: 30rem">
@@ -420,8 +473,11 @@
           <div class="col-6 ms-auto">
             <div class="row mb-3">
               <div class="form-group">
-                <label class="form-label">Title</label>
+                <label for="add-product-page-title" class="form-label"
+                  >Title</label
+                >
                 <input
+                  id="add-product-page-title"
                   class="h3 form-control"
                   type="text"
                   placeholder="Shoe name"
@@ -503,8 +559,15 @@
 
             <div class="row mb-3">
               <div class="form-group">
-                <label class="form-label">Price</label>
-                <input class="h6 form-control" type="text" placeholder="$ " />
+                <label for="add-product-page-price" class="form-label"
+                  >Price</label
+                >
+                <input
+                  id="add-product-page-price"
+                  class="h6 form-control"
+                  type="text"
+                  placeholder="$ "
+                />
               </div>
             </div>
             <div class="row mb-3">
@@ -538,8 +601,11 @@
             </div> -->
             <div class="row mb-3">
               <div class="form-group">
-                <label class="form-label">Description</label>
+                <label for="add-product-page-desc" class="form-label"
+                  >Description</label
+                >
                 <textarea
+                  id="add-product-page-desc"
                   class="form-control"
                   rows="5"
                   placeholder="Type the description..."
@@ -559,10 +625,18 @@
               </div>
             </div>
             <div class="row m-1">
-              <button class="btn btn-outline-secondary col-3 me-auto">
-                Cancel
+              <button
+                id="add-product-page-back-btn"
+                class="btn btn-outline-secondary col-3 me-auto"
+              >
+                BACK
               </button>
-              <button class="btn btn-primary col-3 ms-auto">CHANGE</button>
+              <button
+                id="admin-add-product-btn"
+                class="btn btn-primary col-3 ms-auto"
+              >
+                ADD
+              </button>
             </div>
           </div>
         </div>
@@ -582,8 +656,8 @@
     </main>
 
     <div id="template" style="display: none">
-      <div class="col" id="admin-product-list-temp">
-        <div class="card" style="width: 16rem">
+      <div class="col product-card" id="admin-product-list-temp">
+        <div type="button" class="card" style="height: 24rem; width: 16rem">
           <img
             style="background-size: cover; width: 100%"
             src="assets/shoe.png"
@@ -592,7 +666,36 @@
           />
           <div class="card-body d-flex justify-content-between">
             <h6 class="card-text">Some</h6>
-            <div class="badge bg-dark">$99.99</div>
+            <div>
+              <div class="badge bg-dark">$99.99</div>
+            </div>
+          </div>
+          <div class="card-hover-button">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm product-list-page-card-delete"
+              style="background-color: transparent"
+              data-bs-toggle="modal"
+              data-bs-target="#delete-product-confirmation"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-trash"
+                viewBox="0 0 16 16"
+                style="color: #d9534f"
+              >
+                <path
+                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                ></path>
+                <path
+                  fill-rule="evenodd"
+                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                ></path>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -601,6 +704,8 @@
     <script type="module" src="scripts/gotoMain.js"></script>
     <script type="module" src="scripts/main.js"></script>
     <script type="module" src="scripts/adminProductList.js"></script>
+    <script type="module" src="scripts/addProduct.js"></script>
+    <script type="module" src="scripts/deleteProduct.js"></script>
     <script type="module" src="scripts/account.js"></script>
     <script type="module" src="scripts/address.js"></script>
     <script

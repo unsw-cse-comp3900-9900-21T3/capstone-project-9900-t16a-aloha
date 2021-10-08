@@ -6,8 +6,11 @@ const userHeader = document.getElementById("user-header");
 const accountPage = document.getElementById("account-page");
 const searchPage = document.getElementById("product-search-page");
 const searchBar = document.getElementById("search-bar");
+const addProductPage = document.getElementById("add-product-detail-page");
+
 const gotoMain = () => {
   accountPage.style.display = "none";
+  addProductPage.style.display = "none";
   if (sessionStorage.getItem("isAdmin") == 1) {
     adminHeader.style.display = "block";
     userHeader.style.display = "none";
@@ -22,7 +25,7 @@ const gotoMain = () => {
   }
 };
 gotoMain();
-// product detail
-searchPage.style.display = "none";
-searchBar.style.display = "none";
+// add product detail
+// searchPage.style.display = "none";
+// searchBar.style.display = "none";
 export { gotoMain };

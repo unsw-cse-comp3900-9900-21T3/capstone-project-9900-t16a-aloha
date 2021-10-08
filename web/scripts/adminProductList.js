@@ -18,18 +18,30 @@ const getProductList = async () => {
       alert("Something Wrong");
     } else {
       d.forEach((e) => {
-        const productTempNew = productTemp.cloneNode(true);
-        productTempNew.id = e.id;
-        productTempNew.getElementsByClassName("card-text")[0].innerText =
-          e.name;
-        productTempNew.getElementsByClassName("badge")[0].innerText = e.price;
-        productTempNew.getElementsByClassName("card-img-top")[0].src = e.imgURL;
-        productList.appendChild(productTempNew);
+        const isExistP = document.getElementById(e.id);
+        if (!isExistP) {
+          const productTempNew = productTemp.cloneNode(true);
+          // set delete button
+          productTempNew.getElementsByClassName(
+            "product-list-page-card-delete"
+          )[0].id = "del-btn-" + e.id;
+
+          productTempNew.id = e.id;
+
+          productTempNew.getElementsByClassName("card-text")[0].innerText =
+            e.name;
+          productTempNew.getElementsByClassName("badge")[0].innerText =
+            "$" + e.price;
+          productTempNew.getElementsByClassName("card-img-top")[0].src =
+            e.imgURL;
+
+          productList.appendChild(productTempNew);
+        }
       });
     }
   } catch (err) {
     console.error(`Error: ${err}`);
   }
 };
-
+export { getProductList };
 getProductList();
