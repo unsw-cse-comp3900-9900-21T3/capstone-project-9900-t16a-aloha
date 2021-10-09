@@ -41,7 +41,7 @@ public class AdminController {
         Map<String, Object> resBody = new HashMap<>(3);
         Product product = productRepository.findById(productID);
         // product not exist or already removed
-        if (product == null || product.getVisibility()==0) {
+        if (product == null || product.getIsDeleted()==1) {
             resBody.put("status", "fail");
             resBody.put("msg", "product does not exist");
 
