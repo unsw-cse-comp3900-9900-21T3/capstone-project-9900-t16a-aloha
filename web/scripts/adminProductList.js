@@ -32,9 +32,14 @@ const getProductList = async () => {
             e.name;
           productTempNew.getElementsByClassName("badge")[0].innerText =
             "$" + e.price;
-          productTempNew.getElementsByClassName("card-img-top")[0].src =
-            e.imgURL;
 
+          if (e.imgURL == null) {
+            productTempNew.getElementsByClassName("card-img-top")[0].src =
+              "assets/shoe.png";
+          } else {
+            productTempNew.getElementsByClassName("card-img-top")[0].src =
+              e.imgURL;
+          }
           productList.appendChild(productTempNew);
         }
       });
