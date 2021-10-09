@@ -32,6 +32,9 @@ public class AdminController {
         return productRepository.findAll();
     }
 
+
+    // delete a product
+    // latest update: upon remove, set the 'isDeleted' attribute to 1 instead of 'visibility'
     @PostMapping(path = "/remove")
     @CrossOrigin
     public @ResponseBody Map<String, Object> removeProduct(@RequestParam String productID) {
@@ -40,9 +43,11 @@ public class AdminController {
         // product not exist or already removed
         if (product == null || product.getVisibility()==0) {
             resBody.put("status", "fail");
+            resBody.put("msg", "product does not exist");
 
         }
         else {
+            product.setIsDeleted(1);
             product.setVisibility(0);
             productRepository.save(product);
             resBody.put("status", "success");
@@ -146,6 +151,7 @@ public class AdminController {
     }
 
     // update a product's information(not include image URL)
+
     @PostMapping(path = "/update")
     @CrossOrigin
     public @ResponseBody Map<String, Object> update(@RequestParam(value = "id") String id,

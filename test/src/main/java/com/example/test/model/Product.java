@@ -42,6 +42,9 @@ public class Product {
     @Column(name = "visibility")
     private int visibility;
 
+    @Column(name = "isdeleted")
+    private int isDeleted;
+
     // ANNOTATION: newly add one to many relationship with storge table
     @OneToMany(mappedBy = "storgeid.product")
     private Set<Storge> storge;
@@ -132,6 +135,10 @@ public class Product {
     public void setVisibility(int visibility) {
         this.visibility = visibility;
     }
+
+    public int getIsDeleted() {return isDeleted;}
+
+    public void setIsDeleted(int isDeleted) { this.isDeleted = isDeleted;}
 
     
 }
