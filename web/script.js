@@ -89,7 +89,7 @@ signInBtn.addEventListener("click", async (_) => {
       // TODO  backend new pack
       // admin
       // sessionStorage.setItem("isAdmin", d.role);
-      sessionStorage.setItem("isAdmin", "1");
+      sessionStorage.setItem("isAdmin", d.role);
 
       sessionStorage.setItem("userID", d.uid);
       location.href = "./main.html";

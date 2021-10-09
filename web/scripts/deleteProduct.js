@@ -38,6 +38,8 @@ deleConfirmBtn.addEventListener("click", async (_) => {
       alert("Something Wrong");
     } else {
       alert("Deleted Successfully!");
+      let elem = document.getElementById(id);
+      elem.remove();
       getProductList();
     }
   } catch (err) {

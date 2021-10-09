@@ -6,7 +6,7 @@ const accountIconUsername = document.getElementById("account-icon-username");
 const acctAddrPage = document.getElementById("address-subpage");
 const acctAcctPage = document.getElementById("accout-subpage");
 const acctEmail = document.getElementById("account-email");
-const acctPass = document.getElementById("account-pwd");
+
 const acctFName = document.getElementById("account-first-name");
 const acctLName = document.getElementById("account-last-name");
 const preLoadAcct = async () => {
@@ -101,8 +101,7 @@ acctChangeBtn.addEventListener("click", async (_) => {
   if (
     acctFName.value === "" ||
     acctLName.value === "" ||
-    acctEmail.value === "" ||
-    acctPass.value === ""
+    acctEmail.value === ""
   ) {
     alert("Please do not left empty fields");
     return;
@@ -118,7 +117,6 @@ acctChangeBtn.addEventListener("click", async (_) => {
     acctInfo.firstName = acctFName.value;
     acctInfo.lastName = acctLName.value;
     acctInfo.email = acctEmail.value;
-    acctInfo.password = acctPass.value;
     const url = `http://localhost:8080/test/user/${sessionStorage.getItem(
       "userID"
     )}/account`;

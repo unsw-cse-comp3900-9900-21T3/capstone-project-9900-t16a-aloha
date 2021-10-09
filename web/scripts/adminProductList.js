@@ -19,7 +19,8 @@ const getProductList = async () => {
     } else {
       d.forEach((e) => {
         const isExistP = document.getElementById(e.id);
-        if (!isExistP) {
+
+        if (e.isDeleted === 0 && !isExistP) {
           const productTempNew = productTemp.cloneNode(true);
           // set delete button
           productTempNew.getElementsByClassName(

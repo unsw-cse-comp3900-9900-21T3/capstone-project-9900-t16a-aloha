@@ -317,7 +317,7 @@
                   placeholder="Enter email"
                 />
 
-                <label for="account-pwd" class="form-label mt-4"
+                <!-- <label for="account-pwd" class="form-label mt-4"
                   >Password</label
                 >
                 <input
@@ -325,7 +325,7 @@
                   class="form-control"
                   id="account-pwd"
                   placeholder="Password"
-                />
+                /> -->
 
                 <label for="account-first-name" class="form-label mt-4"
                   >First Name</label
@@ -484,7 +484,7 @@
                 />
               </div>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-3" style="display: none">
               <div type="button " class="col-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -659,12 +659,16 @@
       <div class="col product-card" id="admin-product-list-temp">
         <div type="button" class="card" style="height: 24rem; width: 16rem">
           <img
-            style="background-size: cover; width: 100%"
             src="assets/shoe.png"
+            style="object-fit: cover; height: 20rem; width: 16rem"
             class="card-img-top"
             alt="..."
           />
-          <div class="card-body d-flex justify-content-between">
+
+          <div
+            class="card-body d-flex justify-content-between"
+            style="height: 4rem"
+          >
             <h6 class="card-text">Some</h6>
             <div>
               <div class="badge bg-dark">$99.99</div>
