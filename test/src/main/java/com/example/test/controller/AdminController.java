@@ -93,11 +93,11 @@ public class AdminController {
             // save product to the product table
             Product addProduct = new Product();
             addProduct.setId(id);
-            addProduct.setName(p.getName());
-            addProduct.setAvgRating(p.getAvgRating());
+
             addProduct.setPrice(p.getPrice());
-            addProduct.setBrand(p.getBrand());
-            addProduct.setVisibility(p.getVisibility());
+            addProduct.setDescription(p.getDescription());
+            addProduct.setName(p.getName());
+
             Product saveProduct = this.productRepository.save(addProduct);
 
             StorgeId si = new StorgeId();
