@@ -87,5 +87,5 @@ CREATE TABLE storge (
 -- Records of storge
 -- ----------------------------
 -- BEGIN;
--- INSERT INTO `storge` VALUES ('CJ1646-600', 10.5, 300);
+INTO `storge` VALUES ('CJ1646-600', 10.5, 300);
 -- COMMIT;

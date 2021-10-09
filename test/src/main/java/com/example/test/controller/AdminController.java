@@ -59,7 +59,7 @@ public class AdminController {
         return storgeRepository.findAll();
     }
 
-    // add product storge
+    //annotation: add product storge
     @PostMapping(path = "/add")
     @CrossOrigin
     public @ResponseBody Storge addProductToStorge(@RequestParam String id, @RequestParam String size, @RequestParam String stock) {
@@ -81,20 +81,30 @@ public class AdminController {
             return this.storgeRepository.save(s);
     }
 
-    // annotation: test
-    // add product storge
+    // annotation: adding product includeing the size and stock
     @PostMapping(path = "/add/{id}")
     @CrossOrigin
-    public @ResponseBody Product addProduct(@PathVariable String id) {
-            Product p = new Product();
-            p.setId(id);
-            p.setName("sam");
-            p.setAvgRating(0);
-            p.setPrice(99);
-            p.setBrand("adidas");
-            p.setVisibility(0);
+    public @ResponseBody Product addProduct(@PathVariable String id, @RequestParam String size, @RequestParam String stock, @RequestBody Product p) {
+            // save product to the product table
+            Product addProduct = new Product();
+            addProduct.setId(id);
+            addProduct.setName(p.getName());
+            addProduct.setAvgRating(p.getAvgRating());
+            addProduct.setPrice(p.getPrice());
+            addProduct.setBrand(p.getBrand());
+            addProduct.setVisibility(p.getVisibility());
+            Product saveProduct = this.productRepository.save(addProduct);
 
-            return this.productRepository.save(p);
+            StorgeId si = new StorgeId();
+            si.setProduct(p);
+            si.setSize(Float.parseFloat(size));
+
+            Storge s = new Storge();
+            s.setStorgeid(si);
+            s.setStock(Integer.parseInt(stock));
+            this.storgeRepository.save(s);
+
+            return saveProduct;
     }
 
     /* Search a product
