@@ -20,6 +20,17 @@ const pisVisible = document.getElementById("product-detail-condition");
 const pSize = document.getElementById("product-detail-size");
 const pQty = document.getElementById("product-detail-qty");
 
+// product img
+const adminAddImgBtn = document.getElementById("upload-img");
+const adminMainImg = document.getElementById("admin-main-img");
+const adminAddImgList = document.getElementById("admin-add-product-img-list");
+const adminAddImgTemplate = document.getElementById("add-product-img-template");
+
+// variables
+// TODO flush imgs after submit URL.revokeObjectURL(output.src)
+let imgsArray = [];
+let imgsArrayToFlush = [];
+
 const gotoAddProductPage = () => {
   searchPage.style.display = "none";
   searchBar.style.display = "none";
@@ -29,6 +40,13 @@ const gotoAddProductPage = () => {
   pDescription.value = "";
   pSize.value = "";
   pQty.value = "";
+  adminMainImg.src = "assets/shoe.png";
+  // erase all img at beginning
+  while (adminAddImgList.firstChild) {
+    adminAddImgList.removeChild(adminAddImgList.firstChild);
+  }
+  imgsArray = [];
+  imgsArrayToFlush = [];
 };
 
 const goBack = () => {
@@ -77,15 +95,56 @@ const addProductToDB = async () => {
     console.log("Completed!", d);
     if (d.status === "fail") {
       alert("Something Wrong");
-    } else {
-      alert("Added Successfully");
-      goBack();
     }
+
+    // upload img API request
+    const url2 =
+      "https://api.imgbb.com/1/upload?expiration=600&key=ce665509ac9711eff2bf21d3a2cb1831";
+
+    if (imgsArray.length != 0) {
+      for (let img of imgsArray) {
+        const formData = new FormData();
+        formData.append("image", img);
+        const response2 = await fetch(url2, {
+          method: "POST",
+          body: formData,
+        });
+        const jsData2 = await response2.text();
+        const d2 = JSON.parse(jsData2);
+        console.log("Completed!", d2);
+        if (d2.status === "fail") {
+          alert("Something Wrong");
+        }
+      }
+    } else {
+      console.log("No img Upload");
+    }
+    // no error
+    alert("Added Successfully");
+    goBack();
   } catch (err) {
     console.error(`Error: ${err}`);
   }
 };
 
+const showPreview = () => {
+  const img = adminAddImgBtn.files[0];
+  if (img) {
+    adminMainImg.src = URL.createObjectURL(img);
+    const newSubImg = adminAddImgTemplate.cloneNode(true);
+    newSubImg.addEventListener("click", () => {
+      adminMainImg.src = URL.createObjectURL(img);
+    });
+    newSubImg.src = URL.createObjectURL(img);
+    adminAddImgList.appendChild(newSubImg);
+    imgsArray.push(img);
+    imgsArrayToFlush.push(newSubImg.src);
+  }
+
+  console.log(imgsArray);
+};
+
 gotoAddProductBtn.addEventListener("click", gotoAddProductPage);
 goBackBtn.addEventListener("click", goBack);
 addProductBtn.addEventListener("click", addProductToDB);
+adminAddImgBtn.addEventListener("change", showPreview);

@@ -31,3 +31,13 @@
   left: 80%;
   text-align: center;
 }
+.product-sub-img:hover {
+  box-shadow: 3px 3px 3px grey;
+  transition: 0.3s ease-out;
+  transform: scale(1.03);
+  opacity: 0.8;
+}
+#upload-icon-label:hover svg {
+  transition: 0.3s ease-out;
+  transform: scale(1.04);
+}
