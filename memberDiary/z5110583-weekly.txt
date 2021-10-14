@@ -23,3 +23,20 @@ to backend.
 
 Next week: week5
 Demo A. Review sprint 1 and have group chat about sprint 2 part.
+
+
+----------------------------------------------------------------------------------------------------
+
+14/10/2021
+
+Last week: week4
+Finish account page, product page, nav bar, search bar, address page, and corresponding API request 
+to backend.
+
+This week: week5
+After DemoA, we had a meeting to review sprint 1. We also starts sprint 2. I am working on admin edit 
+product detail page. 
+
+Next week: week6
+Planning finish all sprint 2 for my part. including wishlist shopping cart, admin part, and customer 
+product view.
