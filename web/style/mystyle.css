@@ -1,13 +1,6 @@
-#accout-subpage {
-  display: none;
-}
-#address-subpage {
-  /* display: block; */
-}
-#account-page {
-  /* display: block; */
-}
-#product-search-page {
+#product-search-page,
+#accout-subpage,
+#edit-product-detail-page {
   display: none;
 }
 .product-card:hover .card {

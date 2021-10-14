@@ -132,6 +132,7 @@ const showPreview = () => {
   if (img) {
     adminMainImg.src = URL.createObjectURL(img);
     const newSubImg = adminAddImgTemplate.cloneNode(true);
+    newSubImg.id = adminMainImg.src;
     newSubImg.addEventListener("click", () => {
       adminMainImg.src = URL.createObjectURL(img);
     });

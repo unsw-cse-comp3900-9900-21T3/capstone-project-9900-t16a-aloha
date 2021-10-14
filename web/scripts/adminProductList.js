@@ -1,3 +1,5 @@
+import { gotoEditProductPage } from "./editProduct.js";
+
 const productTemp = document.getElementById("admin-product-list-temp");
 const productList = document.getElementById("admin-product-list-parent");
 
@@ -17,33 +19,41 @@ const getProductList = async () => {
     if (d.status === "fail") {
       alert("Something Wrong");
     } else {
-      d.forEach((e) => {
-        const isExistP = document.getElementById(e.id);
+      d.forEach(
+        (e) => {
+          const isExistP = document.getElementById(e.id);
 
-        if (e.isDeleted === 0 && !isExistP) {
-          const productTempNew = productTemp.cloneNode(true);
-          // set delete button
-          productTempNew.getElementsByClassName(
-            "product-list-page-card-delete"
-          )[0].id = "del-btn-" + e.id;
+          if (e.isDeleted === 0 && !isExistP) {
+            const productTempNew = productTemp.cloneNode(true);
 
-          productTempNew.id = e.id;
+            // set delete button
+            productTempNew.getElementsByClassName(
+              "product-list-page-card-delete"
+            )[0].id = "del-btn-" + e.id;
 
-          productTempNew.getElementsByClassName("card-text")[0].innerText =
-            e.name;
-          productTempNew.getElementsByClassName("badge")[0].innerText =
-            "$" + e.price;
+            productTempNew.id = e.id;
 
-          if (e.imgURL == null) {
-            productTempNew.getElementsByClassName("card-img-top")[0].src =
-              "assets/shoe.png";
-          } else {
-            productTempNew.getElementsByClassName("card-img-top")[0].src =
-              e.imgURL;
+            productTempNew.getElementsByClassName("card-text")[0].innerText =
+              e.name;
+            productTempNew.getElementsByClassName("badge")[0].innerText =
+              "$" + e.price;
+
+            if (e.imgURL == null) {
+              productTempNew.getElementsByClassName("card-img-top")[0].src =
+                "assets/shoe.png";
+            } else {
+              productTempNew.getElementsByClassName("card-img-top")[0].src =
+                e.imgURL;
+            }
+            //TODO goto edit pages
+            productTempNew.addEventListener("click", (e) => {
+              gotoEditProductPage(e.id);
+            });
+            productList.appendChild(productTempNew);
           }
-          productList.appendChild(productTempNew);
         }
-      });
+        // prevent delete event propagation
+      );
     }
   } catch (err) {
     console.error(`Error: ${err}`);
