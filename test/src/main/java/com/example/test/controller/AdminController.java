@@ -32,7 +32,6 @@ public class AdminController {
         return productRepository.findAll();
     }
 
-
     // delete a product
     // latest update: upon remove, set the 'isDeleted' attribute to 1 instead of 'visibility'
     @PostMapping(path = "/remove")
@@ -60,20 +59,19 @@ public class AdminController {
     @CrossOrigin
     public @ResponseBody Iterable<Storge> getAllStorge() {
         Iterable<Storge> test = storgeRepository.findAll();
-        System.out.println("sam");
         return storgeRepository.findAll();
     }
 
-    //annotation: add product storge
+    /**
+     * Aim: add storge to storge table only (assume the product is already inside the product table)
+     * @param id
+     * @param size
+     * @param stock
+     * @return storge json
+     */
     @PostMapping(path = "/add")
     @CrossOrigin
     public @ResponseBody Storge addProductToStorge(@RequestParam String id, @RequestParam String size, @RequestParam String stock) {
-
-            /*
-            if (storge.getStorgeid() == null || storge.getStock() == null || storge.getStorgeid().getProduct() == null || storge.getStorgeid().getSize() == null) {
-                return null;
-            }
-            */
             Product p = this.productRepository.findById(id);
             StorgeId si = new StorgeId();
             si.setProduct(p);
@@ -86,14 +84,21 @@ public class AdminController {
             return this.storgeRepository.save(s);
     }
 
-    // annotation: adding product includeing the size and stock
+    /**
+     * Aim: add product to product table and add storge to storge table
+     * @param id
+     * @param size
+     * @param stock
+     * @param p
+     * @return product json
+     */
     @PostMapping(path = "/add/{id}")
     @CrossOrigin
-    public @ResponseBody Product addProduct(@PathVariable String id, @RequestParam String size, @RequestParam String stock, @RequestBody Product p) {
+    public @ResponseBody Product addProduct(@PathVariable String id, @RequestParam String size, @RequestParam String stock, @RequestParam int visibility ,@RequestBody Product p) {
             // save product to the product table
             Product addProduct = new Product();
+            addProduct.setVisibility(visibility);
             addProduct.setId(id);
-
             addProduct.setPrice(p.getPrice());
             addProduct.setDescription(p.getDescription());
             addProduct.setName(p.getName());
