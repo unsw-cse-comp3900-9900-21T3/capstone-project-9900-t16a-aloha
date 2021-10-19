@@ -18,3 +18,7 @@ By generating a combined feature.
 https://medium.com/@eiki1212/feature-extraction-in-natural-language-processing-with-python-59c7cdcaf064
 Using TF-IDF to IR(Information Retrieval) technique to analyze how important a word is in a document. 
 Improved the quality of the recommendation
+
+19/10/2021 - 
+Trained Partial chatbox
+Integrate with FrontEnd
