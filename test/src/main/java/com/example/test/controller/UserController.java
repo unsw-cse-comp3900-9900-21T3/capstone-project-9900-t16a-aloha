@@ -1,5 +1,7 @@
 package com.example.test.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
@@ -13,6 +15,7 @@ import com.example.test.model.User;
 import com.example.test.repository.ShoppingCartRepository;
 import com.example.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -218,20 +221,24 @@ public class UserController {
     }
 
 
-    // show the current shopping cart for particular user
+    // testing show the current shopping cart for particular user with pagination enable
     @GetMapping(path = "/user/{id}/shoppingcart")
     @CrossOrigin
-    public @ResponseBody Iterable<ShoppingCart> showShoppingCart(@PathVariable Integer id) {
-
-        return shoppingCartRepository.findByShoppingCartId_User_Id(id);
+    public @ResponseBody Page<ShoppingCart> showShoppingCart(@PathVariable Integer id,
+                                                                 @RequestParam(name = "pageIndex", defaultValue = "0") Integer pageIndex,
+                                                                 @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize ) {
+        Pageable paging = PageRequest.of(pageIndex, pageSize);
+        return shoppingCartRepository.findByShoppingCartId_User_Id(id, paging);
     }
 
 
-    // testing: show all shopping cart
+    // testing: show all shopping cart with pagination enable
     @GetMapping(path = "/user/shoppingcart")
     @CrossOrigin
-    public @ResponseBody Iterable<ShoppingCart> showShoppingCart() {
-        return shoppingCartRepository.findAll();
+    public @ResponseBody Page<ShoppingCart> showShoppingCart(@RequestParam(name = "pageIndex", defaultValue = "0") Integer pageIndex,
+                                                                 @RequestParam(name = "pageSize", defaultValue = "3") Integer pageSize) {
+        Pageable paging = PageRequest.of(pageIndex, pageSize);
+        return shoppingCartRepository.findAll(paging);
     }
 
 }
