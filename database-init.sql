@@ -67,7 +67,6 @@ COMMIT;
 SET FOREIGN_KEY_CHECKS = 1;
 
 
-
 -- ----------------------------
 -- Storge table
 -- ----------------------------
@@ -81,7 +80,6 @@ CREATE TABLE storge (
     -- notice here that we can't set the foreign key to be "on detele set null since it points to a primary key" 
     FOREIGN KEY(productID) REFERENCES product(productID)
 )
-
 
 -- ----------------------------
 -- Records of storge

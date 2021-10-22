@@ -49,6 +49,10 @@ public class Product {
     @OneToMany(mappedBy = "storgeid.product")
     private Set<Storge> storge;
 
+    // Annotation: newly add 'one to many' relatioship with shopping_cart
+    @OneToMany(mappedBy = "shoppingCartId.product")
+    private Set<ShoppingCart> shoppingCart;
+
     public Product() {
 
     }

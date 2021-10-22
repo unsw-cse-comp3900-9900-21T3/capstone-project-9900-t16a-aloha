@@ -8,7 +8,9 @@ import java.util.Optional;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.test.model.ShoppingCart;
 import com.example.test.model.User;
+import com.example.test.repository.ShoppingCartRepository;
 import com.example.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,13 +24,21 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    ShoppingCartRepository shoppingCartRepository;
+
     @GetMapping(path = "/all")
     @CrossOrigin
     public @ResponseBody Iterable<User> getAllUser() {
         return userRepository.findAll();
     }
 
-    // update the customer account info such as firstname, lastname, email, telephone
+    /**
+     * update customer account info such as firstname, lastname, email, telephone
+     * @param id
+     * @param user
+     * @return
+     */
     @PostMapping(path = "/user/{id}/account")
     @CrossOrigin
     public @ResponseBody User updateUserAccount(@PathVariable Integer id,  @RequestBody User user) {
@@ -58,7 +68,12 @@ public class UserController {
         return updatedUser;
     }
 
-    // update the customer address info such as 
+    /**
+     * update customer address info
+     * @param id
+     * @param user
+     * @return
+     */
     @PostMapping(path = "/user/{id}/address")
     @CrossOrigin
     public @ResponseBody User updateUserAddress(@PathVariable("id") Integer id, @RequestBody User user) {
@@ -153,7 +168,11 @@ public class UserController {
         return token;
     }
 
-    // get the address of user
+    /**
+     * get customer address information
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/user/{id}/address")
     @CrossOrigin
     public @ResponseBody Map<String, Object> getAddress(@PathVariable Integer id) {
@@ -175,6 +194,11 @@ public class UserController {
         return resBody;
     }
 
+    /**
+     * get customer personal information
+     * @param id
+     * @return
+     */
     @GetMapping(path = "/user/{id}/info")
     @CrossOrigin
     public @ResponseBody Map<String, Object> getUserInfo(@PathVariable Integer id) {
@@ -194,5 +218,20 @@ public class UserController {
     }
 
 
+    // show the current shopping cart for particular user
+    @GetMapping(path = "/user/{id}/shoppingcart")
+    @CrossOrigin
+    public @ResponseBody Iterable<ShoppingCart> showShoppingCart(@PathVariable Integer id) {
+
+        return shoppingCartRepository.findByShoppingCartId_User_Id(id);
+    }
+
+
+    // testing: show all shopping cart
+    @GetMapping(path = "/user/shoppingcart")
+    @CrossOrigin
+    public @ResponseBody Iterable<ShoppingCart> showShoppingCart() {
+        return shoppingCartRepository.findAll();
+    }
 
 }

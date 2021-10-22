@@ -1,6 +1,7 @@
 package com.example.test.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 // ANNOTATION: maybe it is a good idea to change the table names to "users"
 @Entity
@@ -38,6 +39,9 @@ public class User {
     private String lastVisited;
     @Column(name = "lastpurchased")
     private String lastPurchased;
+
+    @OneToMany(mappedBy = "shoppingCartId.user")
+    private Set<ShoppingCart> shoppingCart;
 
     public User() {
 

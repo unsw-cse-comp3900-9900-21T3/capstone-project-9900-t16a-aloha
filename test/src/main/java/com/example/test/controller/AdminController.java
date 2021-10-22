@@ -4,6 +4,7 @@ import com.example.test.model.Product;
 import com.example.test.model.Storge;
 import com.example.test.model.StorgeId;
 import com.example.test.repository.ProductRepository;
+import com.example.test.repository.ShoppingCartRepository;
 import com.example.test.repository.StorgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
