@@ -1,19 +1,19 @@
 package com.example.test.controller;
 
-import com.example.test.model.Product;
+import com.example.test.model.*;
 import com.example.test.repository.ProductRepository;
+import com.example.test.repository.WishlistRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.test.model.ShoppingCart;
-import com.example.test.model.User;
 import com.example.test.repository.ShoppingCartRepository;
 import com.example.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +34,9 @@ public class UserController {
 
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
+
+    @Autowired
+    private WishlistRepository wishlistRepository;
 
     @GetMapping(path = "/all")
     @CrossOrigin
@@ -290,6 +293,32 @@ public class UserController {
         Pageable paging = PageRequest.of(pageIndex, pageSize);
         return productRepository.findAll(paging);
     }
-    
 
+    /**
+     * Add a product to wishlist
+     * @param userId
+     * @param productId
+     * @param size
+     */
+    @PostMapping(path = "/user/wishlist/add")
+    @CrossOrigin
+    public @ResponseBody Map<String, Object> addToWishlist(@RequestParam(name =  "userid") Integer userId, @RequestParam(name = "productid") String productId,
+                                                           @RequestParam(name = "size") Float size) {
+        Map<String, Object> resBody = new HashMap<>(3);
+        Date date = new Date();
+        Product product = productRepository.findById(productId);
+        Optional<User> user = userRepository.findById(userId);
+        WishlistId wishlistId =new WishlistId();
+        wishlistId.setProduct(product);
+        wishlistId.setUser(user.get());
+        wishlistId.setSize(size);
+        Wishlist wishlist = new Wishlist();
+        wishlist.setWishlistId(wishlistId);
+        wishlist.setAddTime(date);
+        wishlistRepository.save(wishlist);
+        resBody.put("msg", "succeed");
+        return resBody;
+
+
+    }
 }
