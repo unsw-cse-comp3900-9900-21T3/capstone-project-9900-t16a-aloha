@@ -35,9 +35,9 @@ public class AdminController {
     // latest update: upon remove, set the 'isDeleted' attribute to 1 instead of 'visibility'
     @PostMapping(path = "/remove")
     @CrossOrigin
-    public @ResponseBody Map<String, Object> removeProduct(@RequestParam String productID) {
+    public @ResponseBody Map<String, Object> removeProduct(@RequestParam String productid) {
         Map<String, Object> resBody = new HashMap<>(3);
-        Optional<Product> products = productRepository.findById(productID);
+        Optional<Product> products = productRepository.findById(productid);
         // product not exist or already removed
         if (!products.isPresent()|| products.get().getIsDeleted()==1) {
             resBody.put("status", "fail");
@@ -55,7 +55,7 @@ public class AdminController {
     }
 
     // show all storge
-    @GetMapping(path = "/showAllStorge")
+    @GetMapping(path = "/showallstorge")
     @CrossOrigin
     public @ResponseBody Iterable<Storge> getAllStorge() {
         Iterable<Storge> test = storgeRepository.findAll();
@@ -103,7 +103,7 @@ public class AdminController {
             addProduct.setPrice(p.getPrice());
             addProduct.setDescription(p.getDescription());
             addProduct.setName(p.getName());
-
+            addProduct.setBrand(p.getBrand());
             Product saveProduct = this.productRepository.save(addProduct);
 
             StorgeId si = new StorgeId();
@@ -210,14 +210,14 @@ public class AdminController {
     /**
      * Add an image to current product
      * @param url
-     * @param productId
+     * @param productid
      * @return
      */
     @PostMapping(path = "/updateimg/add")
     @CrossOrigin
-    public @ResponseBody Map<String, Object> addImage(@RequestParam(name = "url") String url, @RequestParam(name = "productId") String productId) {
+    public @ResponseBody Map<String, Object> addImage(@RequestParam(name = "url") String url, @RequestParam(name = "productid") String productid) {
         Map<String, Object> resBody = new LinkedHashMap<>(3);
-        Optional<Product> product = productRepository.findById(productId);
+        Optional<Product> product = productRepository.findById(productid);
 
         String imgurl = product.get().getImgURL();
         // the product does not have images
@@ -256,14 +256,14 @@ public class AdminController {
     /**
      * Delete an image from current product
      * @param url
-     * @param productId
+     * @param productid
      * @return
      */
     @PostMapping(path = "/updateimg/del")
     @CrossOrigin
-    public @ResponseBody Map<String, Object> delImage(@RequestParam String url, @RequestParam String productId) {
+    public @ResponseBody Map<String, Object> delImage(@RequestParam String url, @RequestParam String productid) {
         Map<String,Object> resBody = new LinkedHashMap<>(3);
-        Optional<Product> product = productRepository.findById(productId);
+        Optional<Product> product = productRepository.findById(productid);
         String imgurl = product.get().getImgURL();
         String img = imgurl.substring(1,imgurl.length()-1);
         String[] temp = img.split(",");

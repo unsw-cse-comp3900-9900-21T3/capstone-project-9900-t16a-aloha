@@ -41,6 +41,18 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    @GetMapping(path = "/user/showall")
+    @CrossOrigin
+    public @ResponseBody ArrayList<Product> showAllProduct() {
+        ArrayList<Product> res = new ArrayList<>();
+        Iterable<Product> products = productRepository.findAll();
+        for(Product p: products) {
+            if(p.getVisibility() == 1) {
+                res.add(p);
+            }
+        }
+        return res;
+    }
     /**
      * update customer account info such as firstname, lastname, email, telephone
      * @param id
@@ -230,8 +242,8 @@ public class UserController {
     @GetMapping(path = "/user/{id}/shoppingcart")
     @CrossOrigin
     public @ResponseBody Page<ShoppingCart> showShoppingCart(@PathVariable Integer id,
-                                                                 @RequestParam(name = "pageIndex", defaultValue = "0") Integer pageIndex,
-                                                                 @RequestParam(name = "pageSize", defaultValue = "2") Integer pageSize ) {
+                                                                 @RequestParam(name = "pageindex", defaultValue = "0") Integer pageIndex,
+                                                                 @RequestParam(name = "pagesize", defaultValue = "2") Integer pageSize ) {
         Pageable paging = PageRequest.of(pageIndex, pageSize);
         return shoppingCartRepository.findByShoppingCartId_User_Id(id, paging);
     }
@@ -247,8 +259,8 @@ public class UserController {
      */
     @GetMapping(path = "/user/shoppingcart")
     @CrossOrigin
-    public @ResponseBody Page<ShoppingCart> showShoppingCart(@RequestParam(name = "pageIndex", defaultValue = "0") Integer pageIndex,
-                                                                 @RequestParam(name = "pageSize", defaultValue = "3") Integer pageSize) {
+    public @ResponseBody Page<ShoppingCart> showShoppingCart(@RequestParam(name = "pageindex", defaultValue = "0") Integer pageIndex,
+                                                                 @RequestParam(name = "pagesize", defaultValue = "3") Integer pageSize) {
         Pageable paging = PageRequest.of(pageIndex, pageSize);
         return shoppingCartRepository.findAll(paging);
     }
@@ -257,13 +269,13 @@ public class UserController {
     // assumption: the product and the user is already in the databse
     @GetMapping(path = "/user/{id}/shoppingcart/add")
     @CrossOrigin
-    public @ResponseBody Map<String, Object> addShoppingCart(@PathVariable Integer userId,
-                                                            @RequestParam(name="productId") String productId,
+    public @ResponseBody Map<String, Object> addShoppingCart(@PathVariable Integer userid,
+                                                            @RequestParam(name="productid") String productid,
                                                             @RequestParam(name="size") Float size,
                                                             @RequestParam(name="quantity") Integer quantity) {
 
         Map<String, Object> resBody = new HashMap<>(3);
-        Optional<User> addUserOptional = userRepository.findById(userId);
+        Optional<User> addUserOptional = userRepository.findById(userid);
         if (addUserOptional.isEmpty()) {
             resBody.put("status", "fail");
             resBody.put("msg", "user does not exist");
@@ -285,8 +297,8 @@ public class UserController {
      */
     @GetMapping(path = "/user/product")
     @CrossOrigin
-    public @ResponseBody Page<Product> showProduct(@RequestParam(name = "pageIndex", defaultValue = "0") Integer pageIndex,
-                                                   @RequestParam(name = "pageSize", defaultValue = "8") Integer pageSize) {
+    public @ResponseBody Page<Product> showProduct(@RequestParam(name = "pageindex", defaultValue = "0") Integer pageIndex,
+                                                   @RequestParam(name = "pagesize", defaultValue = "8") Integer pageSize) {
         Pageable paging = PageRequest.of(pageIndex, pageSize);
         return productRepository.findAll(paging);
     }
@@ -299,7 +311,7 @@ public class UserController {
      */
     @PostMapping(path = "/user/wishlist/add")
     @CrossOrigin
-    public @ResponseBody Map<String, Object> addToWishlist(@RequestParam(name =  "userId") Integer userId, @RequestParam(name = "productId") String productId,
+    public @ResponseBody Map<String, Object> addToWishlist(@RequestParam(name =  "userid") Integer userId, @RequestParam(name = "productid") String productId,
                                                            @RequestParam(name = "size") Float size) {
         Map<String, Object> resBody = new HashMap<>(3);
         Date date = new Date();
@@ -325,8 +337,8 @@ public class UserController {
      */
     @PostMapping(path = "/user/wishlist/remove")
     @CrossOrigin
-    public @ResponseBody Map<String, Object> removeFromWishlist(@RequestParam(name = "userId") Integer userId,
-                                                                @RequestParam(name = "productId") String productId,
+    public @ResponseBody Map<String, Object> removeFromWishlist(@RequestParam(name = "userid") Integer userId,
+                                                                @RequestParam(name = "productid") String productId,
                                                                 @RequestParam(name = "size") Float size) {
         Map<String, Object> resBody = new HashMap<>(3);
         Optional<Product> product = productRepository.findById(productId);
@@ -344,13 +356,13 @@ public class UserController {
 
     /**
      * Show an user's wishlist
-     * @param userId
+     * @param userid
      */
     @GetMapping(path = "/user/wishlist/show")
     public @ResponseBody
-    ArrayList<Object> showWishlist(@RequestParam Integer userId) {
+    ArrayList<Object> showWishlist(@RequestParam Integer userid) {
         ArrayList<Object> res = new ArrayList<>();
-        Iterable<Wishlist> wishlists =  wishlistRepository.findByWishlistId_User_Id(userId);
+        Iterable<Wishlist> wishlists =  wishlistRepository.findByWishlistId_User_Id(userid);
         for(Wishlist w:wishlists) {
             Map<String,Object>  wishlist = new LinkedHashMap<>(3);
             Product product = w.getWishlistId().getProduct();
