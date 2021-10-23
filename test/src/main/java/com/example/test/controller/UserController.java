@@ -1,5 +1,7 @@
 package com.example.test.controller;
 
+import com.example.test.model.Product;
+import com.example.test.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.net.http.HttpRequest;
@@ -28,7 +30,10 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    ShoppingCartRepository shoppingCartRepository;
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ShoppingCartRepository shoppingCartRepository;
 
     @GetMapping(path = "/all")
     @CrossOrigin
@@ -221,7 +226,7 @@ public class UserController {
     }
 
 
-    // testing show the current shopping cart for particular user with pagination enable
+    // testing: show the current shopping cart for particular user with pagination enable
     @GetMapping(path = "/user/{id}/shoppingcart")
     @CrossOrigin
     public @ResponseBody Page<ShoppingCart> showShoppingCart(@PathVariable Integer id,
@@ -232,7 +237,14 @@ public class UserController {
     }
 
 
-    // testing: show all shopping cart with pagination enable
+
+    /**
+     * testing: show all shopping cart with pagination enable
+     * annotation: this function may not need to be used
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
     @GetMapping(path = "/user/shoppingcart")
     @CrossOrigin
     public @ResponseBody Page<ShoppingCart> showShoppingCart(@RequestParam(name = "pageIndex", defaultValue = "0") Integer pageIndex,
@@ -240,5 +252,44 @@ public class UserController {
         Pageable paging = PageRequest.of(pageIndex, pageSize);
         return shoppingCartRepository.findAll(paging);
     }
+
+    // TODO: add product to the shopping list
+    // assumption: the product and the user is already in the databse
+    @GetMapping(path = "/user/{id}/shoppingcart/add")
+    @CrossOrigin
+    public @ResponseBody Map<String, Object> addShoppingCart(@PathVariable Integer userId,
+                                                            @RequestParam(name="productId") String productId,
+                                                            @RequestParam(name="size") Float size,
+                                                            @RequestParam(name="quantity") Integer quantity) {
+
+        Map<String, Object> resBody = new HashMap<>(3);
+        Optional<User> addUserOptional = userRepository.findById(userId);
+        if (addUserOptional.isEmpty()) {
+            resBody.put("status", "fail");
+            resBody.put("msg", "user does not exist");
+            return resBody;
+        }
+
+        // TODO: add the rest of body after fixing the productrepository
+        return resBody;
+    }
+
+
+
+
+    /**
+     * testing: show product with pagnation enable
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @GetMapping(path = "/user/product")
+    @CrossOrigin
+    public @ResponseBody Page<Product> showProduct(@RequestParam(name = "pageIndex", defaultValue = "0") Integer pageIndex,
+                                                   @RequestParam(name = "pageSize", defaultValue = "8") Integer pageSize) {
+        Pageable paging = PageRequest.of(pageIndex, pageSize);
+        return productRepository.findAll(paging);
+    }
+    
 
 }
