@@ -1,5 +1,5 @@
 import { getProductList } from "./adminProductList.js";
-
+import { fileToDataUrl } from "./helper.js";
 // header bar button
 const gotoAddProductBtn = document.getElementById("admin-add-shoe-btn");
 
@@ -7,6 +7,9 @@ const gotoAddProductBtn = document.getElementById("admin-add-shoe-btn");
 const searchPage = document.getElementById("product-search-page");
 const addProductPage = document.getElementById("add-product-detail-page");
 const searchBar = document.getElementById("search-bar");
+
+// edit page
+const editProductsPage = document.getElementById("edit-product-detail-page");
 
 // add product page buttons
 const goBackBtn = document.getElementById("add-product-page-back-btn");
@@ -17,28 +20,31 @@ const pTitle = document.getElementById("add-product-page-title");
 const pPrice = document.getElementById("add-product-page-price");
 const pDescription = document.getElementById("add-product-page-desc");
 const pisVisible = document.getElementById("product-detail-condition");
-const pSize = document.getElementById("product-detail-size");
-const pQty = document.getElementById("product-detail-qty");
-
+const pSize = document.getElementById("add-product-detail-size");
+const pQty = document.getElementById("add-product-detail-qty");
+const pBrand = document.getElementById("add-product-page-brand");
 // product img
 const adminAddImgBtn = document.getElementById("upload-img");
 const adminMainImg = document.getElementById("admin-main-img");
 const adminAddImgList = document.getElementById("admin-add-product-img-list");
 const adminAddImgTemplate = document.getElementById("add-product-img-template");
 
+const addImgDelBtn = document.getElementById("add-del-product-img");
+
 // variables
-// TODO flush imgs after submit URL.revokeObjectURL(output.src)
+
 let imgsArray = [];
-let imgsArrayToFlush = [];
 
 const gotoAddProductPage = () => {
   searchPage.style.display = "none";
   searchBar.style.display = "none";
+  editProductsPage.style.display = "none";
   addProductPage.style.display = "block";
   pTitle.value = "";
   pPrice.value = "";
+  pBrand.value = "";
   pDescription.value = "";
-  pSize.value = "";
+  pSize.value = "default";
   pQty.value = "";
   adminMainImg.src = "assets/shoe.png";
   // erase all img at beginning
@@ -46,19 +52,23 @@ const gotoAddProductPage = () => {
     adminAddImgList.removeChild(adminAddImgList.firstChild);
   }
   imgsArray = [];
-  imgsArrayToFlush = [];
 };
 
 const goBack = () => {
   searchPage.style.display = "block";
   searchBar.style.display = "block";
   addProductPage.style.display = "none";
+  editProductsPage.style.display = "none";
   getProductList();
 };
 
 const addProductToDB = async () => {
   // price validation
   // quantity validation
+  if (pBrand.value === "") {
+    alert("Please Enter Product Brand");
+    return;
+  }
   if (pTitle.value === "") {
     alert("Please Enter Product Title");
     return;
@@ -68,13 +78,17 @@ const addProductToDB = async () => {
     alert("Please Enter Valid Price (Maximum 2 dicimal) e.g. 99.99");
     return;
   }
-  if (!/^\d+$/.test(pQty.value)) {
-    alert("Please Enter Valid Quantity");
-    return;
-  }
 
+  if (pSize.value !== "default") {
+    if (!/^\d+$/.test(pQty.value)) {
+      alert("Please Enter Valid Quantity");
+      return;
+    }
+  }
   try {
     let id = "_" + Math.random().toString(36).substr(2, 9);
+    // TODO stock management
+    // TODO brand
     const url = `http://localhost:8080/admin/add/${id}?size=${pSize.value}&stock=${pQty.value}`;
     const data = JSON.stringify({
       name: pTitle.value,
@@ -97,25 +111,10 @@ const addProductToDB = async () => {
       alert("Something Wrong");
     }
 
-    // upload img API request
-    const url2 =
-      "https://api.imgbb.com/1/upload?expiration=600&key=ce665509ac9711eff2bf21d3a2cb1831";
-
+    //TODO  upload img API request
     if (imgsArray.length != 0) {
-      for (let img of imgsArray) {
-        const formData = new FormData();
-        formData.append("image", img);
-        const response2 = await fetch(url2, {
-          method: "POST",
-          body: formData,
-        });
-        const jsData2 = await response2.text();
-        const d2 = JSON.parse(jsData2);
-        console.log("Completed!", d2);
-        if (d2.status === "fail") {
-          alert("Something Wrong");
-        }
-      }
+      const imgsArrayString = JSON.stringify(imgsArray);
+      console.log(imgsArrayString);
     } else {
       console.log("No img Upload");
     }
@@ -127,25 +126,54 @@ const addProductToDB = async () => {
   }
 };
 
-const showPreview = () => {
+const showPreview = async () => {
   const img = adminAddImgBtn.files[0];
-  if (img) {
-    adminMainImg.src = URL.createObjectURL(img);
-    const newSubImg = adminAddImgTemplate.cloneNode(true);
-    newSubImg.id = adminMainImg.src;
-    newSubImg.addEventListener("click", () => {
-      adminMainImg.src = URL.createObjectURL(img);
-    });
-    newSubImg.src = URL.createObjectURL(img);
-    adminAddImgList.appendChild(newSubImg);
-    imgsArray.push(img);
-    imgsArrayToFlush.push(newSubImg.src);
-  }
 
-  console.log(imgsArray);
+  if (img) {
+    const imgUrl = await fileToDataUrl(img);
+    adminMainImg.src = imgUrl;
+    // adminMainImg.src = URL.createObjectURL(img);
+
+    const subImgContainer = adminAddImgTemplate.cloneNode(true);
+    const newSubImg = subImgContainer.getElementsByTagName("img")[0];
+    subImgContainer.id = "subImg" + Math.random().toString(36).substr(2, 9);
+    newSubImg.src = imgUrl;
+    newSubImg.addEventListener("click", () => {
+      // adminMainImg.src = URL.createObjectURL(img);
+      adminMainImg.src = imgUrl;
+    });
+
+    // newSubImg.src = URL.createObjectURL(img);
+    adminAddImgList.appendChild(subImgContainer);
+    imgsArray.push(imgUrl);
+  }
 };
 
 gotoAddProductBtn.addEventListener("click", gotoAddProductPage);
 goBackBtn.addEventListener("click", goBack);
 addProductBtn.addEventListener("click", addProductToDB);
 adminAddImgBtn.addEventListener("change", showPreview);
+
+addImgDelBtn.addEventListener("click", () => {
+  const srcDel = adminMainImg.src;
+  // 1. delete sub img
+  for (let subImg of adminAddImgList.childNodes) {
+    const imgDel = subImg.getElementsByTagName("img")[0];
+    if (imgDel.src === adminMainImg.src) {
+      subImg.remove();
+    }
+  }
+  // 2. change main img src
+  if (adminAddImgList.childNodes.length > 0) {
+    const firstImg =
+      adminAddImgList.childNodes[0].getElementsByTagName("img")[0];
+    adminMainImg.src = firstImg.src;
+  } else {
+    adminMainImg.src = "assets/shoe.png";
+  }
+  // 3. del ele in imgsArray
+  const index = imgsArray.indexOf(srcDel);
+  if (index > -1) {
+    imgsArray.splice(index, 1);
+  }
+});

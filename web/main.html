@@ -214,27 +214,19 @@
 
           <select class="form-select w-50" id="exampleSelect2">
             <option value="" disabled selected>Brand</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+            <option value="Nike">Nike</option>
+            <option value="Adidas">Adidas</option>
           </select>
           <select class="form-select w-50" id="exampleSelect2">
             <option value="" disabled selected>Price Range</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+            <option>100<</option>
+            <option>101-200</option>
+            <option>200></option>
           </select>
           <select class="form-select w-50" id="exampleSelect2">
             <option value="" disabled selected>Sort By</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+            <option>Name</option>
+            <option>Price</option>
           </select>
           <button class="btn btn-secondary" type="button">Search</button>
         </div>
@@ -459,22 +451,67 @@
       <div class="container" id="product-search-page">
         <div
           id="admin-product-list-parent"
-          class="row row-cols-auto g-3 m-1"
+          class="row row-cols-auto g-2 g-lg-3 m-1 p-2"
         ></div>
+
+        <div class="text-center mb-3">
+          <button type="button" class="btn btn-outline-primary">
+            Load More
+          </button>
+        </div>
       </div>
 
       <div class="container" id="add-product-detail-page">
         <div class="row m-3">
           <div class="col-6 me-auto">
-            <div class="card" style="width: 30rem; height: 40rem">
+            <div class="card main-img" style="width: 32rem; height: 40rem">
               <img
                 id="admin-main-img"
                 src="assets/shoe.png"
-                style="width: 100%; height: 100%"
+                style="max-width: 100%; height: 100%"
               />
+              <div class="main-img-hover-button">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm product-list-page-card-delete"
+                  style="background-color: transparent"
+                  id="add-del-product-img"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-trash"
+                    viewBox="0 0 16 16"
+                    style="color: #d9534f"
+                  >
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                    ></path>
+                    <path
+                      fill-rule="evenodd"
+                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
           <div class="col-6 ms-auto">
+            <div class="row mb-3">
+              <div class="form-group">
+                <label for="add-product-page-brand" class="form-label"
+                  >Brand</label
+                >
+                <input
+                  id="add-product-page-brand"
+                  class="h3 form-control"
+                  type="text"
+                  placeholder="Shoe Brand"
+                />
+              </div>
+            </div>
             <div class="row mb-3">
               <div class="form-group">
                 <label for="add-product-page-title" class="form-label"
@@ -576,23 +613,23 @@
             </div>
             <div class="row mb-3">
               <div class="form-group col-md-6">
-                <label for="product-detail-qty">Quantity</label>
+                <label for="add-product-detail-qty">Quantity</label>
                 <input
-                  type="text"
+                  type="number"
+                  min="0"
                   class="form-control"
-                  id="product-detail-qty"
+                  id="add-product-detail-qty"
                   placeholder="Quantity"
                 />
               </div>
               <div class="form-group col-md-6">
-                <label for="product-detail-size">Size</label>
+                <label for="add-product-detail-size">Size</label>
                 <select
                   type="text"
                   class="form-control"
-                  id="product-detail-size"
-                  placeholder="Last Name"
+                  id="add-product-detail-size"
                 >
-                  <option selected disabled>Select Size</option>
+                  <option value="default" selected disabled>Select Size</option>
                   <option value="7">US 7</option>
                   <option value="8">US 8</option>
                   <option value="9">US 9</option>
@@ -611,7 +648,7 @@
                 <textarea
                   id="add-product-page-desc"
                   class="form-control"
-                  rows="5"
+                  rows="3"
                   placeholder="Type the description..."
                 ></textarea>
               </div>
@@ -645,8 +682,10 @@
           </div>
         </div>
         <div class="row ms-3">
-          <div class="col-6 me-auto">
-            <span id="admin-add-product-img-list"> </span>
+          <div class="col-4">
+            <span class="d-flex" id="admin-add-product-img-list"> </span>
+          </div>
+          <div class="col-1 d-flex justify-content-center">
             <label
               for="upload-img"
               type="button"
@@ -683,15 +722,54 @@
       <div class="container" id="edit-product-detail-page">
         <div class="row m-3">
           <div class="col-6 me-auto">
-            <div class="card" style="width: 30rem; height: 40rem">
+            <div class="card main-img" style="width: 32rem; height: 40rem">
               <img
                 id="admin-edit-main-img"
                 src="assets/shoe.png"
                 style="width: 100%; height: 100%"
               />
+              <div class="main-img-hover-button">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm product-list-page-card-delete"
+                  style="background-color: transparent"
+                  id="edit-del-product-img"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-trash"
+                    viewBox="0 0 16 16"
+                    style="color: #d9534f"
+                  >
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                    ></path>
+                    <path
+                      fill-rule="evenodd"
+                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
           <div class="col-6 ms-auto">
+            <div class="row mb-3">
+              <div class="form-group">
+                <label for="edit-product-page-brand" class="form-label"
+                  >Brand</label
+                >
+                <input
+                  id="edit-product-page-brand"
+                  class="h3 form-control"
+                  type="text"
+                  placeholder="Shoe Brand"
+                />
+              </div>
+            </div>
             <div class="row mb-3">
               <div class="form-group">
                 <label for="edit-product-page-title" class="form-label"
@@ -795,7 +873,8 @@
               <div class="form-group col-md-6">
                 <label for="edit-product-detail-qty">Quantity</label>
                 <input
-                  type="text"
+                  type="number"
+                  min="0"
                   class="form-control"
                   id="edit-product-detail-qty"
                   placeholder="Quantity"
@@ -807,9 +886,8 @@
                   type="text"
                   class="form-control"
                   id="edit-product-detail-size"
-                  placeholder="Last Name"
                 >
-                  <option selected disabled>Select Size</option>
+                  <option value="default" selected disabled>Select Size</option>
                   <option value="7">US 7</option>
                   <option value="8">US 8</option>
                   <option value="9">US 9</option>
@@ -828,7 +906,7 @@
                 <textarea
                   id="edit-product-page-desc"
                   class="form-control"
-                  rows="5"
+                  rows="3"
                   placeholder="Type the description..."
                 ></textarea>
               </div>
@@ -864,10 +942,12 @@
           </div>
         </div>
         <div class="row ms-3">
-          <div class="col-6 me-auto">
-            <span id="admin-edit-product-img-list"> </span>
+          <div class="col-4">
+            <span class="d-flex" id="admin-edit-product-img-list"> </span>
+          </div>
+          <div class="col-1 d-flex justify-content-center">
             <label
-              for="upload-img"
+              for="edit-upload-img"
               type="button"
               style="max-height: 5rem"
               id="edit-upload-icon-label"
@@ -901,11 +981,14 @@
     </main>
 
     <div id="template" style="display: none">
-      <div class="col product-card" id="admin-product-list-temp">
+      <div
+        class="col product-card d-flex justify-content-center"
+        id="admin-product-list-temp"
+      >
         <div type="button" class="card" style="height: 24rem; width: 16rem">
           <img
             src="assets/shoe.png"
-            style="object-fit: cover; height: 20rem; width: 15.9rem"
+            style="object-fit: cover; height: 20rem; width: 100%"
             class="card-img-top"
             alt="..."
           />
@@ -949,20 +1032,18 @@
           </div>
         </div>
       </div>
-
-      <img
-        class="product-sub-img me-1"
-        type="button"
-        src="#"
-        style="
-          background-position: center;
-          background-repeat: no-repeat;
-          background-size: cover;
-          height: 3.5rem;
-          width: 2.2rem;
-        "
+      <div
         id="add-product-img-template"
-      />
+        class="me-1"
+        style="height: 70px; width: 56px"
+      >
+        <img
+          class="product-sub-img"
+          type="button"
+          src="#"
+          style="width: 100%; height: 100%"
+        />
+      </div>
     </div>
     <script>
       function stopProp(event) {

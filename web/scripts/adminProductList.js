@@ -1,9 +1,10 @@
 import { gotoEditProductPage } from "./editProduct.js";
-
+import { removeAllChilds } from "./helper.js";
 const productTemp = document.getElementById("admin-product-list-temp");
 const productList = document.getElementById("admin-product-list-parent");
 
 const getProductList = async () => {
+  removeAllChilds(productList);
   try {
     const url = "http://localhost:8080/admin/showall";
 
@@ -46,7 +47,7 @@ const getProductList = async () => {
                 e.imgURL;
             }
             //TODO goto edit pages
-            productTempNew.addEventListener("click", (e) => {
+            productTempNew.addEventListener("click", () => {
               gotoEditProductPage(e.id);
             });
             productList.appendChild(productTempNew);
@@ -59,5 +60,8 @@ const getProductList = async () => {
     console.error(`Error: ${err}`);
   }
 };
+
+const loadMoreProductList = async () => {};
+
 export { getProductList };
 getProductList();
