@@ -306,10 +306,10 @@ public class UserController {
                                                            @RequestParam(name = "size") Float size) {
         Map<String, Object> resBody = new HashMap<>(3);
         Date date = new Date();
-        Product product = productRepository.findById(productId);
+        Optional<Product> product = productRepository.findById(productId);
         Optional<User> user = userRepository.findById(userId);
         WishlistId wishlistId =new WishlistId();
-        wishlistId.setProduct(product);
+        wishlistId.setProduct(product.get());
         wishlistId.setUser(user.get());
         wishlistId.setSize(size);
         Wishlist wishlist = new Wishlist();

@@ -39,14 +39,15 @@ public class AdminController {
     @CrossOrigin
     public @ResponseBody Map<String, Object> removeProduct(@RequestParam String productID) {
         Map<String, Object> resBody = new HashMap<>(3);
-        Product product = productRepository.findById(productID);
+        Optional<Product> products = productRepository.findById(productID);
         // product not exist or already removed
-        if (product == null || product.getIsDeleted()==1) {
+        if (!products.isPresent()|| products.get().getIsDeleted()==1) {
             resBody.put("status", "fail");
             resBody.put("msg", "product does not exist");
 
         }
         else {
+            Product product = products.get();
             product.setIsDeleted(1);
             product.setVisibility(0);
             productRepository.save(product);
@@ -73,7 +74,8 @@ public class AdminController {
     @PostMapping(path = "/add")
     @CrossOrigin
     public @ResponseBody Storge addProductToStorge(@RequestParam String id, @RequestParam String size, @RequestParam String stock) {
-            Product p = this.productRepository.findById(id);
+            Optional<Product> product = productRepository.findById(id);
+            Product p = product.get();
             StorgeId si = new StorgeId();
             si.setProduct(p);
             si.setSize(Float.parseFloat(size));
@@ -130,7 +132,7 @@ public class AdminController {
     @GetMapping(path = "/search/id/{id}")
     @CrossOrigin
     public @ResponseBody Product searchByID(@PathVariable("id") String id) {
-        return productRepository.findById(id);
+        return productRepository.findById(id).get();
     }
 
     
@@ -167,11 +169,13 @@ public class AdminController {
                                                     @RequestParam(value = "brand", required = false) String brand,
                                                     @RequestParam(value = "desc", required = false) String desc) {
         Map<String, Object> resBody = new HashMap<>(3);
-        Product product = productRepository.findById(id);
-        if(product == null) {
+        Optional<Product> products = productRepository.findById(id);
+        if(!products.isPresent()) {
             resBody.put("status", "fail");
             resBody.put("msg", "Product does not exist");
+            return resBody;
         }
+        Product product = products.get();
         // check price format
         if(price != null) {
             try {
