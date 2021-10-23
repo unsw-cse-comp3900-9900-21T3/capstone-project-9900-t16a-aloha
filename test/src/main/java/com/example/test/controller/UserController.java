@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -302,7 +299,7 @@ public class UserController {
      */
     @PostMapping(path = "/user/wishlist/add")
     @CrossOrigin
-    public @ResponseBody Map<String, Object> addToWishlist(@RequestParam(name =  "userid") Integer userId, @RequestParam(name = "productid") String productId,
+    public @ResponseBody Map<String, Object> addToWishlist(@RequestParam(name =  "userId") Integer userId, @RequestParam(name = "productId") String productId,
                                                            @RequestParam(name = "size") Float size) {
         Map<String, Object> resBody = new HashMap<>(3);
         Date date = new Date();
@@ -318,7 +315,52 @@ public class UserController {
         wishlistRepository.save(wishlist);
         resBody.put("msg", "succeed");
         return resBody;
+    }
 
+    /**
+     * Remove a product from list
+     * @param userId
+     * @param productId
+     * @param size
+     */
+    @PostMapping(path = "/user/wishlist/remove")
+    @CrossOrigin
+    public @ResponseBody Map<String, Object> removeFromWishlist(@RequestParam(name = "userId") Integer userId,
+                                                                @RequestParam(name = "productId") String productId,
+                                                                @RequestParam(name = "size") Float size) {
+        Map<String, Object> resBody = new HashMap<>(3);
+        Optional<Product> product = productRepository.findById(productId);
+        Optional<User> user = userRepository.findById(userId);
+        WishlistId wishlistId =new WishlistId();
+        wishlistId.setProduct(product.get());
+        wishlistId.setUser(user.get());
+        wishlistId.setSize(size);
+        Wishlist wishlist = new Wishlist();
+        wishlist.setWishlistId(wishlistId);
+        wishlistRepository.delete(wishlist);
+        resBody.put("msg", "succeed");
+        return resBody;
+    }
+
+    /**
+     * Show an user's wishlist
+     * @param userId
+     */
+    @GetMapping(path = "/user/wishlist/show")
+    public @ResponseBody
+    ArrayList<Object> showWishlist(@RequestParam Integer userId) {
+        ArrayList<Object> res = new ArrayList<>();
+        Iterable<Wishlist> wishlists =  wishlistRepository.findByWishlistId_User_Id(userId);
+        for(Wishlist w:wishlists) {
+            Map<String,Object>  wishlist = new LinkedHashMap<>(3);
+            Product product = w.getWishlistId().getProduct();
+            wishlist.put("productID",product.getId());
+            wishlist.put("name",product.getName());
+            wishlist.put("size",w.getWishlistId().getSize());
+            wishlist.put("price", product.getPrice());
+            res.add(wishlist);
+        }
+        return res;
 
     }
 }

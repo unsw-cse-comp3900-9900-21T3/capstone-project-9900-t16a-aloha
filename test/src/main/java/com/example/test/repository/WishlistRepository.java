@@ -5,5 +5,5 @@ import com.example.test.model.WishlistId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WishlistRepository extends JpaRepository<Wishlist, WishlistId> {
-
+    Iterable<Wishlist> findByWishlistId_User_Id(Integer id);
 }
