@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 //import jdk.internal.org.jline.utils.ExecHelper;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import javax.print.FlavorException;
 
@@ -209,17 +207,91 @@ public class AdminController {
         return resBody;
     }
 
-    // TODO: add a image on current Product
-    @PostMapping(path = "update/img/add/{url}")
+    /**
+     * Add an image to current product
+     * @param url
+     * @param productId
+     * @return
+     */
+    @PostMapping(path = "/updateimg/add")
     @CrossOrigin
-    public @ResponseBody Map<String, Object> addImage(@PathVariable("url") String url) {
-        return  new HashMap<>(1);
+    public @ResponseBody Map<String, Object> addImage(@RequestParam(name = "url") String url, @RequestParam(name = "productId") String productId) {
+        Map<String, Object> resBody = new LinkedHashMap<>(3);
+        Optional<Product> product = productRepository.findById(productId);
+
+        String imgurl = product.get().getImgURL();
+        // the product does not have images
+        if (imgurl == null) {
+            String res ="";
+            res += "[";
+            res += "\""+url+"\"";
+            res += "]";
+            product.get().setImgURL(res);
+            productRepository.save(product.get());
+            resBody.put("msg","succeed");
+        }
+        else {
+            // remove "[" and "]"
+            String img = imgurl.substring(1,imgurl.length()-1);
+            String[] temp = img.split(",");
+            String res = "[";
+            for(String s: temp) {
+                res += s;
+                if(s.equals("\""+url+"\"")) {
+                    resBody.put("status","failed");
+                    resBody.put("msg", "This image has already existed");
+                    return resBody;
+                }
+            }
+            res += ","+"\""+url+"\"]";
+            product.get().setImgURL(res);
+            productRepository.save(product.get());
+            resBody.put("msg","succeed");
+        }
+        return resBody;
+
+
     };
-    // TODO: delete a image on current Product
-    @PostMapping(path = "update/img/del/{url}")
+
+    /**
+     * Delete an image from current product
+     * @param url
+     * @param productId
+     * @return
+     */
+    @PostMapping(path = "/updateimg/del")
     @CrossOrigin
-    public @ResponseBody Map<String, Object> delImage(@PathVariable("url") String url) {
-        return new HashMap<>(1);
+    public @ResponseBody Map<String, Object> delImage(@RequestParam String url, @RequestParam String productId) {
+        Map<String,Object> resBody = new LinkedHashMap<>(3);
+        Optional<Product> product = productRepository.findById(productId);
+        String imgurl = product.get().getImgURL();
+        String img = imgurl.substring(1,imgurl.length()-1);
+        String[] temp = img.split(",");
+        String res = "[";
+        boolean found = false;
+        for(String s: temp) {
+
+            if(!s.equals("\""+url+"\"")) {
+                res += s+",";
+            }
+            else {
+                found = true;
+            }
+        }
+        res = res.substring(0,res.length()-1);
+        res += "]";
+        if(!found) {
+            resBody.put("status", "failed");
+            resBody.put("msg","Image not found");
+        }
+        else {
+            product.get().setImgURL(res);
+            productRepository.save(product.get());
+            resBody.put("msg", "succeed");
+        }
+        return resBody;
+
+
     }
 
 
