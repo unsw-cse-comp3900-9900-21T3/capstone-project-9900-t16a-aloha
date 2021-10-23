@@ -40,19 +40,7 @@ public class UserController {
     public @ResponseBody Iterable<User> getAllUser() {
         return userRepository.findAll();
     }
-
-    @GetMapping(path = "/user/showall")
-    @CrossOrigin
-    public @ResponseBody ArrayList<Product> showAllProduct() {
-        ArrayList<Product> res = new ArrayList<>();
-        Iterable<Product> products = productRepository.findAll();
-        for(Product p: products) {
-            if(p.getVisibility() == 1) {
-                res.add(p);
-            }
-        }
-        return res;
-    }
+    
     /**
      * update customer account info such as firstname, lastname, email, telephone
      * @param id
@@ -300,7 +288,7 @@ public class UserController {
     public @ResponseBody Page<Product> showProduct(@RequestParam(name = "pageindex", defaultValue = "0") Integer pageIndex,
                                                    @RequestParam(name = "pagesize", defaultValue = "8") Integer pageSize) {
         Pageable paging = PageRequest.of(pageIndex, pageSize);
-        return productRepository.findAll(paging);
+        return productRepository.findAllByVisibility(paging, 1);
     }
 
     /**
