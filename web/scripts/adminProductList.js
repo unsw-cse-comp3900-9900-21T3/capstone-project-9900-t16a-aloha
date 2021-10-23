@@ -3,6 +3,7 @@ import { removeAllChilds } from "./helper.js";
 const productTemp = document.getElementById("admin-product-list-temp");
 const productList = document.getElementById("admin-product-list-parent");
 
+//TODO  getProductList has option of orders
 const getProductList = async () => {
   removeAllChilds(productList);
   try {
@@ -61,6 +62,7 @@ const getProductList = async () => {
   }
 };
 
+// TODO load more
 const loadMoreProductList = async () => {};
 
 export { getProductList };
