@@ -1,5 +1,6 @@
 package com.example.test.controller;
 
+import com.example.test.model.ImgUrl;
 import com.example.test.model.Product;
 import com.example.test.model.Storge;
 import com.example.test.model.StorgeId;
@@ -104,6 +105,7 @@ public class AdminController {
             addProduct.setDescription(p.getDescription());
             addProduct.setName(p.getName());
             addProduct.setBrand(p.getBrand());
+            addProduct.setImgURL(p.getImgURL());
             Product saveProduct = this.productRepository.save(addProduct);
 
             StorgeId si = new StorgeId();
@@ -165,7 +167,8 @@ public class AdminController {
                                                     @RequestParam(value = "price", required = false) String price,
                                                     @RequestParam(value = "discount",required = false) String discount,
                                                     @RequestParam(value = "brand", required = false) String brand,
-                                                    @RequestParam(value = "desc", required = false) String desc) {
+                                                    @RequestParam(value = "desc", required = false) String desc,
+                                                    @RequestBody ImgUrl imgurl) {
         Map<String, Object> resBody = new HashMap<>(3);
         Optional<Product> products = productRepository.findById(id);
         if(!products.isPresent()) {
@@ -202,6 +205,7 @@ public class AdminController {
         if(name != null) product.setName(name);
         if(brand != null) product.setBrand(brand);
         if(desc != null) product.setDescription(desc);
+        if(imgurl != null) product.setImgURL(imgurl.getImgurls());
         productRepository.save(product);
         resBody.put("status", "success");
         return resBody;
