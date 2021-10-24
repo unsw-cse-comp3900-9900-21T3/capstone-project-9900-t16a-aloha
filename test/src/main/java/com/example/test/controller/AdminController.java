@@ -101,6 +101,10 @@ public class AdminController {
             Product addProduct = new Product();
             addProduct.setVisibility(visibility);
             addProduct.setId(id);
+            addProduct.setAvgRating(0);
+
+            addProduct.setDiscount(0);
+            addProduct.setIsDeleted(0);
             addProduct.setPrice(p.getPrice());
             addProduct.setDescription(p.getDescription());
             addProduct.setName(p.getName());
@@ -109,7 +113,7 @@ public class AdminController {
             Product saveProduct = this.productRepository.save(addProduct);
 
             StorgeId si = new StorgeId();
-            si.setProduct(p);
+            si.setProduct(addProduct);
             si.setSize(Float.parseFloat(size));
 
             Storge s = new Storge();
