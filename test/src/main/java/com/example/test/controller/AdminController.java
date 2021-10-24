@@ -96,15 +96,15 @@ public class AdminController {
      */
     @PostMapping(path = "/add/{id}")
     @CrossOrigin
-    public @ResponseBody Product addProduct(@PathVariable String id, @RequestParam String size, @RequestParam String stock, @RequestParam int visibility ,@RequestBody Product p) {
+    public @ResponseBody Product addProduct(@PathVariable String id, @RequestParam int visibility ,@RequestBody Product p) {
             // save product to the product table
             Product addProduct = new Product();
             addProduct.setVisibility(visibility);
             addProduct.setId(id);
-            addProduct.setAvgRating(0);
+            addProduct.setAvgRating(p.getAvgRating());
 
-            addProduct.setDiscount(0);
-            addProduct.setIsDeleted(0);
+            addProduct.setDiscount(p.getDiscount());
+            addProduct.setIsDeleted(p.getIsDeleted());
             addProduct.setPrice(p.getPrice());
             addProduct.setDescription(p.getDescription());
             addProduct.setName(p.getName());
@@ -112,14 +112,14 @@ public class AdminController {
             addProduct.setImgURL(p.getImgURL());
             Product saveProduct = this.productRepository.save(addProduct);
 
-            StorgeId si = new StorgeId();
-            si.setProduct(addProduct);
-            si.setSize(Float.parseFloat(size));
-
-            Storge s = new Storge();
-            s.setStorgeid(si);
-            s.setStock(Integer.parseInt(stock));
-            this.storgeRepository.save(s);
+//            StorgeId si = new StorgeId();
+//            si.setProduct(addProduct);
+//            si.setSize(Float.parseFloat(size));
+//
+//            Storge s = new Storge();
+//            s.setStorgeid(si);
+//            s.setStock(Integer.parseInt(stock));
+//            this.storgeRepository.save(s);
 
             return saveProduct;
     }
