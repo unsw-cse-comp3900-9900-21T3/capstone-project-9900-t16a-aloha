@@ -5,6 +5,10 @@ const productList = document.getElementById("admin-product-list-parent");
 
 const loadMoreBtn = document.getElementById("admin-load-more");
 
+const selectBrand = document.getElementById("admin-search-brand");
+const selectPrice = document.getElementById("admin-search-price");
+const searchBtn = document.getElementById("admin-search-btn");
+
 //TODO  getProductList has option of orders
 const getProductList = async () => {
   removeAllChilds(productList);
