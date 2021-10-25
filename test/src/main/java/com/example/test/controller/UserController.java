@@ -411,6 +411,7 @@ public class UserController {
      * @param userid
      */
     @GetMapping(path = "/user/wishlist/show")
+    @CrossOrigin
     public @ResponseBody
     ArrayList<Object> showWishlist(@RequestParam Integer userid) {
         ArrayList<Object> res = new ArrayList<>();
