@@ -89,7 +89,7 @@ const loadMoreProductList = async (offset) => {
     } else {
       // console.log(d);
       const items = d.content;
-      if (items.length >= 0 && items.length < 8) {
+      if (items.length == 0) {
         loadMoreBtn.style.display = "none";
         return;
       }
