@@ -73,78 +73,9 @@
         ></button>
       </div>
       <div class="offcanvas-body">
-        <ul class="list-group list-group-flush" id="shopping-cart-list">
-          <li
-            class="list-group-item d-flex justify-content-between"
-            id="shopping-cart-item"
-          >
-            <div>
-              <img
-                src="assets/shoe.png"
-                width="50"
-                height="50"
-                style="
-                  display: block;
-                  max-width: 80px;
-                  max-height: 100px;
-                  width: auto;
-                  height: auto;
-                "
-              />
-            </div>
-            <div
-              class="d-flex flex-column justify-content-between"
-              style="width: 250px"
-            >
-              <h6>Shoe Name Shoe Name Shoe Name Shoe Name</h6>
-              <small class="text-muted">$ 99.99</small>
-            </div>
-            <div class="d-flex align-items-end">
-              <div class="input-group">
-                <span class="input-group-text" for="shopping-cart-item-qty"
-                  >Quantity</span
-                >
-                <input
-                  type="number"
-                  min="0"
-                  class="form-control form-control-sm"
-                  id="shopping-cart-item-qty"
-                  placeholder="Quantity"
-                />
-                <span class="input-group-text" for="shopping-cart-item-size"
-                  >Size</span
-                >
-                <select
-                  type="text"
-                  class="form-select form-select-sm"
-                  id="shopping-cart-item-size"
-                >
-                  <option value="default" selected disabled>Select Size</option>
-                  <option value="7">US 7</option>
-                  <option value="8">US 8</option>
-                  <option value="9">US 9</option>
-                </select>
-              </div>
-            </div>
-            <div
-              class="
-                d-flex
-                flex-column
-                justify-content-between
-                align-items-center
-              "
-            >
-              <h6>$ 99.99</h6>
-              <button
-                type="button"
-                class="btn-close"
-                aria-label="Close"
-              ></button>
-            </div>
-          </li>
-        </ul>
+        <ul class="list-group list-group-flush" id="shopping-cart-list"></ul>
       </div>
-      <div class="offcanvas-end border-0">
+      <div class="offcanvas-footer">
         <div class="d-grid">
           <button type="button" class="btn btn-primary">check out</button>
         </div>
@@ -1373,7 +1304,7 @@
           </div>
         </div>
         <div class="row ms-3">
-          <div class="col-4">
+          <div class="col-5">
             <span class="d-flex" id="user-product-img-list"> </span>
           </div>
         </div>
@@ -1511,40 +1442,18 @@
           class="d-flex flex-column justify-content-between"
           style="width: 250px"
         >
-          <h6>Shoe Name Shoe Name Shoe Name Shoe Name</h6>
-          <small class="text-muted">$ 99.99</small>
+          <h6 class="shop-name">Shoe Name Shoe Name Shoe Name Shoe Name</h6>
+          <small class="text-muted shop-price">$ 99.99</small>
         </div>
-        <div class="d-flex align-items-end">
-          <div class="input-group">
-            <span class="input-group-text" for="shopping-cart-item-qty"
-              >Quantity</span
-            >
-            <input
-              type="number"
-              min="0"
-              class="form-control form-control-sm"
-              id="shopping-cart-item-qty"
-              placeholder="Quantity"
-            />
-            <span class="input-group-text" for="shopping-cart-item-size"
-              >Size</span
-            >
-            <select
-              type="text"
-              class="form-select form-select-sm"
-              id="shopping-cart-item-size"
-            >
-              <option value="default" selected disabled>Select Size</option>
-              <option value="7">US 7</option>
-              <option value="8">US 8</option>
-              <option value="9">US 9</option>
-            </select>
-          </div>
+        <div class="d-flex flex-column justify-content-between">
+          <h6>Qty : <small class="text-muted shop-qty">2</small></h6>
+
+          <h6>Size: <small class="text-muted shop-size">US 7</small></h6>
         </div>
         <div
           class="d-flex flex-column justify-content-between align-items-center"
         >
-          <h6>$ 99.99</h6>
+          <h6 class="total-price">$ 99.99</h6>
           <button
             type="button"
             class="btn-close del-shopping-cart-item"
@@ -1559,7 +1468,7 @@
         event.stopPropagation();
       }
     </script>
-
+    <script type="module" src="scripts/getAllShoppingCart.js"></script>
     <script type="module" src="scripts/recommendPage.js"></script>
     <script type="module" src="scripts/gotoMain.js"></script>
     <script type="module" src="scripts/main.js"></script>

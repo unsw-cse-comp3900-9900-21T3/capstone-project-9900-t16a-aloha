@@ -49,6 +49,7 @@ Last week: week5
 Finish Demo A, and admin edit product pages. Imgs Features.
 
 This week: week6
-
+Finish sprint 2 all front end work
 
 Next week: week7
+Plan sprint 3

@@ -69,7 +69,8 @@ const getProductList = async () => {
   }
 };
 
-// TODO load more
+//  load more
+// todo load more with filter
 const loadMoreProductList = async (offset) => {
   try {
     const url = `http://localhost:8080/admin/showall?pageindex=${offset}`;

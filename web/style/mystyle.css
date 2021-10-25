@@ -48,10 +48,10 @@
 }
 
 .offcanvas {
-  width: 73vw;
+  width: 40vw;
 }
-@media (max-width: 1400px) {
+/* @media (max-width: 1400px) {
   .offcanvas {
     width: 90vw;
   }
-}
+} */
