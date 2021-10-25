@@ -225,58 +225,6 @@ public class UserController {
         return resBody;
     }
 
-
-    // show the current shopping cart for particular user with pagination enable
-    @GetMapping(path = "/user/{id}/shoppingcart")
-    @CrossOrigin
-    public @ResponseBody Page<ShoppingCart> showShoppingCart(@PathVariable Integer id,
-                                                                 @RequestParam(name = "pageindex", defaultValue = "0") Integer pageIndex,
-                                                                 @RequestParam(name = "pagesize", defaultValue = "2") Integer pageSize ) {
-        Pageable paging = PageRequest.of(pageIndex, pageSize);
-        return shoppingCartRepository.findByShoppingCartId_User_Id(id, paging);
-    }
-
-
-    /**
-     * testing: show all shopping cart with pagination enable
-     * annotation: this function may not need to be used
-     * @param pageIndex
-     * @param pageSize
-     * @return
-     */
-    @GetMapping(path = "/user/shoppingcart")
-    @CrossOrigin
-    public @ResponseBody Page<ShoppingCart> showShoppingCart(@RequestParam(name = "pageindex", defaultValue = "0") Integer pageIndex,
-                                                                 @RequestParam(name = "pagesize", defaultValue = "3") Integer pageSize) {
-        Pageable paging = PageRequest.of(pageIndex, pageSize);
-        return shoppingCartRepository.findAll(paging);
-    }
-
-    // TODO: add product to the shopping list
-    // assumption: the product and the user is already in the databse
-    @GetMapping(path = "/user/{id}/shoppingcart/add")
-    @CrossOrigin
-    public @ResponseBody Map<String, Object> addShoppingCart(@PathVariable Integer userid,
-                                                            @RequestParam(name="productid") String productid,
-                                                            @RequestParam(name="size") Float size,
-                                                            @RequestParam(name="quantity") Integer quantity) {
-
-        Map<String, Object> resBody = new HashMap<>(3);
-        Optional<User> addUserOptional = userRepository.findById(userid);
-        if (addUserOptional.isEmpty()) {
-            resBody.put("status", "fail");
-            resBody.put("msg", "user does not exist");
-            return resBody;
-        }
-
-        // TODO: add the rest of body after fixing the productrepository
-        return resBody;
-    }
-
-    // TODO: remove product from the shopping cart
-
-
-
     /**
      * show product with pagnation enable
      * @param pageIndex
@@ -289,6 +237,122 @@ public class UserController {
                                                    @RequestParam(name = "pagesize", defaultValue = "8") Integer pageSize) {
         Pageable paging = PageRequest.of(pageIndex, pageSize);
         return productRepository.findAllByVisibility(paging, 1);
+    }
+
+
+    /**
+     * show shopping cart for particular user (not pargination enable)
+     * @param userId
+     * @return
+     */
+    @GetMapping(path = "/user/shoppingcart/show")
+    @CrossOrigin
+    public @ResponseBody ArrayList<Object> showShoppingCart(@RequestParam(name = "userid") Integer userId) {
+        ArrayList<Object> res = new ArrayList<>();
+        Iterable<ShoppingCart> shoppingCarts =  shoppingCartRepository.findByShoppingCartId_User_Id(userId);
+        for (ShoppingCart s : shoppingCarts) {
+            Map<String,Object> shoppingCart = new LinkedHashMap<>(3);
+            Product product = s.getShoppingCartId().getProduct();
+            shoppingCart.put("productID", product.getId());
+            shoppingCart.put("size", s.getShoppingCartId().getSize());
+            shoppingCart.put("quantity", s.getQuantity());
+            res.add(shoppingCart);
+        }
+        return res;
+    }
+
+    /**
+     * add product to shopping cart
+     * @param userId
+     * @param productId
+     * @param size
+     * @param quantity
+     * @return
+     */
+    @PostMapping(path = "/user/shoppingcart/add")
+    @CrossOrigin
+    public @ResponseBody Map<String, Object> addShoppingCart(@RequestParam(name = "userid") Integer userId,
+                                                            @RequestParam(name="productid") String productId,
+                                                            @RequestParam(name="size") Float size,
+                                                            @RequestParam(name="quantity") Integer quantity) {
+
+        Map<String, Object> resBody = new HashMap<>(3);
+        Optional<User> addUserOptional = userRepository.findById(userId);
+        if (addUserOptional.isEmpty()) {
+            resBody.put("status", "fail");
+            resBody.put("msg", "user does not exist");
+            return resBody;
+        }
+
+        Optional<Product> addProductOptional = productRepository.findById(productId);
+        if (addProductOptional.isEmpty()) {
+            resBody.put("status", "fail");
+            resBody.put("msg", "product does not exist");
+            return resBody;
+        }
+
+        Product p = addProductOptional.get();
+        User u = addUserOptional.get();
+
+        ShoppingCartId shoppingCartId = new ShoppingCartId();
+        shoppingCartId.setProduct(p);
+        shoppingCartId.setSize(size);
+        shoppingCartId.setUser(u);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setShoppingCartId(shoppingCartId);
+        shoppingCart.setQuantity(quantity);
+
+        shoppingCartRepository.save(shoppingCart);
+
+        resBody.put("status", "succeed");
+        resBody.put("msg", "added to the shoppingcart");
+        return resBody;
+    }
+
+    /**
+     * Remove a product from shoppingcart
+     * @param userId
+     * @param productId
+     * @param size
+     */
+    @PostMapping(path = "/user/shoppingcart/remove")
+    @CrossOrigin
+    public @ResponseBody Map<String, Object> removeFromShoppingcart(@RequestParam(name = "userid") Integer userId,
+                                                                    @RequestParam(name = "productid") String productId,
+                                                                    @RequestParam(name = "size") Float size,
+                                                                    @RequestParam(name="quantity") Integer quantity) {
+        Map<String, Object> resBody = new HashMap<>(3);
+        Optional<User> addUserOptional = userRepository.findById(userId);
+        if (addUserOptional.isEmpty()) {
+            resBody.put("status", "fail");
+            resBody.put("msg", "user does not exist");
+            return resBody;
+        }
+
+        Optional<Product> addProductOptional = productRepository.findById(productId);
+        if (addProductOptional.isEmpty()) {
+            resBody.put("status", "fail");
+            resBody.put("msg", "product does not exist");
+            return resBody;
+        }
+
+        Product p = addProductOptional.get();
+        User u = addUserOptional.get();
+
+        ShoppingCartId shoppingCartId = new ShoppingCartId();
+        shoppingCartId.setProduct(p);
+        shoppingCartId.setSize(size);
+        shoppingCartId.setUser(u);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setShoppingCartId(shoppingCartId);
+        shoppingCart.setQuantity(quantity);
+
+        shoppingCartRepository.delete(shoppingCart);
+        resBody.put("status", "succeed");
+        resBody.put("msg", "delete product from shoppingcart");
+        return resBody;
     }
 
     /**

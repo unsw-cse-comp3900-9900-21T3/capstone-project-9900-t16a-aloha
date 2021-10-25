@@ -23,10 +23,18 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
+-- add a column in table product
+-- 0: not deleted
+-- 1: has been deleted
+-- ----------------------------
+ALTER TABLE `ecommerce`.`product` 
+ADD COLUMN `isDeleted` tinyint(1) NOT NULL DEFAULT 0 AFTER `visibility`;
+
+-- ----------------------------
 -- Records of product
 -- ----------------------------
 BEGIN;
-INSERT INTO `product` VALUES ('CJ1646-600', NULL, 0.00, 'Nike Air Force 1 \'07 Essential', 74.95, 0.00, 'Nike', 'Let your shoe game shimmer in the Nike Air Force 1 \'07 Essential. It takes the classic AF-1 design to the next level with its premium leather upper and iridescent Swoosh.', 'url1', 1);
+INSERT INTO `product` VALUES ('CJ1646-600', NULL, 0.00, 'Nike Air Force 1 \'07 Essential', 74.95, 0.00, 'Nike', 'Let your shoe game shimmer in the Nike Air Force 1 \'07 Essential. It takes the classic AF-1 design to the next level with its premium leather upper and iridescent Swoosh.', 'url1', 1, 0);
 COMMIT;
 
 -- ----------------------------
@@ -62,6 +70,7 @@ CREATE TABLE `user` (
 BEGIN;
 INSERT INTO `user` VALUES (1, 'test@test.com', 'test', 'Junwei', 'Guo', 0, 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES (2, 'admin@admin.com', 'admin', 'Junwei', 'Guo', 1, 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (3, 'yang@test.com', 'cus', 'sam', 'yoyo', 0, 'Male', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
@@ -79,11 +88,42 @@ CREATE TABLE storge (
     
     -- notice here that we can't set the foreign key to be "on detele set null since it points to a primary key" 
     FOREIGN KEY(productID) REFERENCES product(productID)
-)
+);
 
 -- ----------------------------
 -- Records of storge
 -- ----------------------------
--- BEGIN;
--- INSERT INTO `storge` VALUES ('CJ1646-600', 10.5, 300);
--- COMMIT;
+BEGIN;
+INSERT INTO `storge` VALUES ('CJ1646-600', 10.5, 300);
+COMMIT;
+
+-- ----------------------------
+-- Shopping cart
+-- ----------------------------
+DROP TABLE IF EXISTS shoppingcart;
+CREATE TABLE shoppingcart (
+  userID int NOT NULL,
+  productID varchar(50) NOT NULL,
+  size decimal(3, 1) NOT NULL,
+  quantity int NOT NULL DEFAULT '0',
+
+  PRIMARY KEY(userID, productID, size),
+
+  FOREIGN KEY(productID) REFERENCES product(productID),
+  FOREIGN KEY(userID) REFERENCES user(userID)
+);
+
+/*
+BEGIN;
+INSERT INTO `shoppingcart` VALUES (1, 'CJ1646-600', 10.5, 2);
+INSERT INTO `shoppingcart` VALUES (1, 'CJ1646-600', 9.5, 1);
+INSERT INTO `shoppingcart` VALUES (1, 'CI1396-004', 10.5, 1);
+INSERT INTO `shoppingcart` VALUES (1, 'CI1718-001', 8.5, 1);
+INSERT INTO `shoppingcart` VALUES (1, 'CI1718-001', 7.5, 1);
+INSERT INTO `shoppingcart` VALUES (1, 'CI3482-200', 6.5, 1);
+
+INSERT INTO `shoppingcart` VALUES (3, 'CI1396-004', 10.5, 1);
+INSERT INTO `shoppingcart` VALUES (3, 'CI1396-004', 9.5, 1);
+CI3482-200
+COMMIT;
+*/
