@@ -226,7 +226,7 @@ public class UserController {
     }
 
 
-    // testing: show the current shopping cart for particular user with pagination enable
+    // show the current shopping cart for particular user with pagination enable
     @GetMapping(path = "/user/{id}/shoppingcart")
     @CrossOrigin
     public @ResponseBody Page<ShoppingCart> showShoppingCart(@PathVariable Integer id,
@@ -235,7 +235,6 @@ public class UserController {
         Pageable paging = PageRequest.of(pageIndex, pageSize);
         return shoppingCartRepository.findByShoppingCartId_User_Id(id, paging);
     }
-
 
 
     /**
@@ -274,11 +273,12 @@ public class UserController {
         return resBody;
     }
 
+    // TODO: remove product from the shopping cart
 
 
 
     /**
-     * testing: show product with pagnation enable
+     * show product with pagnation enable
      * @param pageIndex
      * @param pageSize
      * @return
@@ -361,6 +361,5 @@ public class UserController {
             res.add(wishlist);
         }
         return res;
-
     }
 }

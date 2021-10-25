@@ -7,10 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-/**
- * TODO: change the product Id to string and change the method inside the adminController
- */
-
 public interface ProductRepository extends JpaRepository<Product, String> {
     //Product findById(String productID);
 

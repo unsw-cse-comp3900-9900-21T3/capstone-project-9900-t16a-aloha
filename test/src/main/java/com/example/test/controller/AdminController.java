@@ -8,6 +8,9 @@ import com.example.test.repository.ProductRepository;
 import com.example.test.repository.ShoppingCartRepository;
 import com.example.test.repository.StorgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +31,10 @@ public class AdminController {
 
     @GetMapping(path = "/showall")
     @CrossOrigin
-    public @ResponseBody Iterable<Product> getAllProduct() {
-        return productRepository.findAll();
+    public @ResponseBody Iterable<Product> getAllProduct(@RequestParam(name="pageindex", defaultValue = "0") Integer pageIndex,
+                                                         @RequestParam(name="pagesize", defaultValue = "8") Integer pageSize) {
+        Pageable paging = PageRequest.of(pageIndex, pageSize);
+        return productRepository.findAll(paging);
     }
 
     // delete a product
