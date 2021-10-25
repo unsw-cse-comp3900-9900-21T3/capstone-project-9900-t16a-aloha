@@ -41,84 +41,10 @@ public class UserController {
         return userRepository.findAll();
     }
     
-    /**
-     * update customer account info such as firstname, lastname, email, telephone
-     * @param id
-     * @param user
-     * @return
-     */
-    @PostMapping(path = "/user/{id}/account")
-    @CrossOrigin
-    public @ResponseBody User updateUserAccount(@PathVariable Integer id,  @RequestBody User user) {
-        Optional<User> userToUpdateOption = this.userRepository.findById(id);
-        // check if the user existed in database
-        if (!userToUpdateOption.isPresent()) {
-            return null;
-        }
-        // optional get id from user
 
-        User userToUpdate = userToUpdateOption.get();
-
-        if (user.getFirstName() != null) {
-            userToUpdate.setFirstName(user.getFirstName());
-        }
-        if (user.getLastName() != null) {
-            userToUpdate.setLastName(user.getLastName());
-        }
-        if (user.getEmail() != null) {
-            userToUpdate.setEmail(user.getEmail());
-        }
-        if (user.getTelephone() != null) {
-            userToUpdate.setTelephone(user.getTelephone());
-        }
-
-        User updatedUser = this.userRepository.save(userToUpdate);
-        return updatedUser;
-    }
-
-    /**
-     * update customer address info
-     * @param id
-     * @param user
-     * @return
-     */
-    @PostMapping(path = "/user/{id}/address")
-    @CrossOrigin
-    public @ResponseBody User updateUserAddress(@PathVariable("id") Integer id, @RequestBody User user) {
-        Optional<User> userToUpdateOption = this.userRepository.findById(id);
-        // check if the user existed in database
-        if (!userToUpdateOption.isPresent()) {
-            return null;
-        }
-        // optional get id from user
-
-        User userToUpdate = userToUpdateOption.get();
-
-        if (user.getFirstName() != null) {
-            userToUpdate.setFirstName(user.getFirstName());
-        }
-        if (user.getLastName() != null) {
-            userToUpdate.setLastName(user.getLastName());
-        }
-        if (user.getTelephone() != null) {
-            userToUpdate.setTelephone(user.getTelephone());
-        }
-        if (user.getCity() != null) {
-            userToUpdate.setCity(user.getCity());
-        }
-        if (user.getPostcode() != null) {
-            userToUpdate.setPostcode(user.getPostcode());
-        }
-        if (user.getState() != null) {
-            userToUpdate.setState(user.getState());
-        }
-        if (user.getStreet() != null) {
-            userToUpdate.setStreet(user.getStreet());
-        }
-
-        User updatedUser = this.userRepository.save(userToUpdate);
-        return updatedUser;
-    }
+    //=============================================================================
+    // user register and login section
+    //=============================================================================
 
     @PostMapping(path = "/register")
     @CrossOrigin
@@ -176,6 +102,10 @@ public class UserController {
         return token;
     }
 
+    //=============================================================================
+    // get user address and personal information section
+    //=============================================================================
+
     /**
      * get customer address information
      * @param id
@@ -225,6 +155,92 @@ public class UserController {
         return resBody;
     }
 
+    //=============================================================================
+    // update user address and personal information section
+    //=============================================================================
+
+    /**
+     * update customer account info such as firstname, lastname, email, telephone
+     * @param id
+     * @param user
+     * @return
+     */
+    @PostMapping(path = "/user/{id}/account")
+    @CrossOrigin
+    public @ResponseBody User updateUserAccount(@PathVariable Integer id,  @RequestBody User user) {
+        Optional<User> userToUpdateOption = this.userRepository.findById(id);
+        // check if the user existed in database
+        if (!userToUpdateOption.isPresent()) {
+            return null;
+        }
+        // optional get id from user
+
+        User userToUpdate = userToUpdateOption.get();
+
+        if (user.getFirstName() != null) {
+            userToUpdate.setFirstName(user.getFirstName());
+        }
+        if (user.getLastName() != null) {
+            userToUpdate.setLastName(user.getLastName());
+        }
+        if (user.getEmail() != null) {
+            userToUpdate.setEmail(user.getEmail());
+        }
+        if (user.getTelephone() != null) {
+            userToUpdate.setTelephone(user.getTelephone());
+        }
+
+        User updatedUser = this.userRepository.save(userToUpdate);
+        return updatedUser;
+    }
+
+    /**
+     * update customer address info
+     * @param id
+     * @param user
+     * @return
+     */
+    @PostMapping(path = "/user/{id}/address")
+    @CrossOrigin
+    public @ResponseBody User updateUserAddress(@PathVariable("id") Integer id, @RequestBody User user) {
+        Optional<User> userToUpdateOption = this.userRepository.findById(id);
+        // check if the user existed in database
+        if (!userToUpdateOption.isPresent()) {
+            return null;
+        }
+        // optional get id from user
+        User userToUpdate = userToUpdateOption.get();
+
+        if (user.getFirstName() != null) {
+            userToUpdate.setFirstName(user.getFirstName());
+        }
+        if (user.getLastName() != null) {
+            userToUpdate.setLastName(user.getLastName());
+        }
+        if (user.getTelephone() != null) {
+            userToUpdate.setTelephone(user.getTelephone());
+        }
+        if (user.getCity() != null) {
+            userToUpdate.setCity(user.getCity());
+        }
+        if (user.getPostcode() != null) {
+            userToUpdate.setPostcode(user.getPostcode());
+        }
+        if (user.getState() != null) {
+            userToUpdate.setState(user.getState());
+        }
+        if (user.getStreet() != null) {
+            userToUpdate.setStreet(user.getStreet());
+        }
+
+        User updatedUser = this.userRepository.save(userToUpdate);
+        return updatedUser;
+    }
+
+    //=============================================================================
+    // product section
+    //=============================================================================
+
     /**
      * show product with pagnation enable
      * @param pageIndex
@@ -239,6 +255,51 @@ public class UserController {
         return productRepository.findAllByVisibility(paging, 1);
     }
 
+    /**
+     * search product with optional brand, optional price range
+     * @param brand
+     * @param minPrice
+     * @param maxPrice
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @GetMapping(path = "/user/search")
+    @CrossOrigin
+    public @ResponseBody Page<Product> filterProduct(@RequestParam(name = "brand", required = false) String brand,
+                                                     @RequestParam(name = "minprice", required = false) Float minPrice,
+                                                     @RequestParam(name = "maxprice", required = false) Float maxPrice,
+                                                     @RequestParam(name = "pageindex", required = false, defaultValue = "0") Integer pageIndex,
+                                                     @RequestParam(name = "pagesize", required = false, defaultValue = "8") Integer pageSize) {
+        Pageable paging = PageRequest.of(pageIndex, pageSize);
+        if (brand == null && minPrice == null && maxPrice == null) {
+            return productRepository.findAllByVisibility(paging, 1);
+        }
+
+        if (brand == null ) {
+            if (minPrice != null && maxPrice == null) {
+                return productRepository.findByPriceIsGreaterThan(paging, minPrice);
+            } else if (minPrice == null && maxPrice != null) {
+                return productRepository.findByPriceIsLessThan(paging, maxPrice);
+            } else {
+                return productRepository.findByPriceBetween(paging, minPrice, maxPrice);
+            }
+        } else {
+            if (minPrice != null && maxPrice == null) {
+                return productRepository.findByBrandAndPriceIsGreaterThan(paging, brand, minPrice);
+            } else if (minPrice == null && maxPrice != null) {
+                return productRepository.findByBrandAndPriceIsLessThan(paging, brand, maxPrice);
+            } else if (minPrice != null && maxPrice != null) {
+                return productRepository.findByBrandAndPriceBetween(paging, brand, minPrice, maxPrice);
+            } else {
+                return productRepository.findByBrand(paging, brand);
+            }
+        }
+    }
+
+    //=============================================================================
+    // shoppingcart section
+    //=============================================================================
 
     /**
      * show shopping cart for particular user (not pargination enable)
@@ -354,6 +415,10 @@ public class UserController {
         resBody.put("msg", "delete product from shoppingcart");
         return resBody;
     }
+
+    //=============================================================================
+    // wishlist section
+    //=============================================================================
 
     /**
      * Add a product to wishlist

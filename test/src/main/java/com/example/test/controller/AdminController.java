@@ -29,6 +29,12 @@ public class AdminController {
     @Autowired
     StorgeRepository storgeRepository;
 
+    /**
+     * show product with pagination
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
     @GetMapping(path = "/showall")
     @CrossOrigin
     public @ResponseBody Iterable<Product> getAllProduct(@RequestParam(name="pageindex", defaultValue = "0") Integer pageIndex,
@@ -37,8 +43,11 @@ public class AdminController {
         return productRepository.findAllByIsDeleted(paging,0);
     }
 
-    // delete a product
-    // latest update: upon remove, set the 'isDeleted' attribute to 1 instead of 'visibility'
+    /**
+     * delete a product, upon remove, set the 'isDeleted' attribute to 1 instead of 'visibility'
+     * @param productid
+     * @return
+     */
     @PostMapping(path = "/remove")
     @CrossOrigin
     public @ResponseBody Map<String, Object> removeProduct(@RequestParam String productid) {
@@ -60,7 +69,10 @@ public class AdminController {
         return resBody;
     }
 
-    // show all storge
+    /**
+     * show all storge
+     * @return
+     */
     @GetMapping(path = "/showallstorge")
     @CrossOrigin
     public @ResponseBody Iterable<Storge> getAllStorge() {
@@ -69,7 +81,7 @@ public class AdminController {
     }
 
     /**
-     * Aim: add storge to storge table only (assume the product is already inside the product table)
+     * Add storge to storge table only (assume the product is already inside the product table)
      * @param id
      * @param size
      * @param stock
@@ -165,8 +177,9 @@ public class AdminController {
         }
     }
 
-    // update a product's information(not include image URL)
 
+
+    // update a product's information(not include image URL)
     @PostMapping(path = "/update")
     @CrossOrigin
     public @ResponseBody Map<String, Object> update(@RequestParam(value = "id") String id,
