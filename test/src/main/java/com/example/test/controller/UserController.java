@@ -256,7 +256,7 @@ public class UserController {
     }
 
     /**
-     * search product with optional brand, optional price range
+     * search product with optional brand, optional price range, pagination enable
      * @param brand
      * @param minPrice
      * @param maxPrice
@@ -278,21 +278,21 @@ public class UserController {
 
         if (brand == null ) {
             if (minPrice != null && maxPrice == null) {
-                return productRepository.findByPriceIsGreaterThan(paging, minPrice);
+                return productRepository.findByPriceIsGreaterThanAndVisibilityAndIsDeleted(paging, minPrice, 1, 0);
             } else if (minPrice == null && maxPrice != null) {
-                return productRepository.findByPriceIsLessThan(paging, maxPrice);
+                return productRepository.findByPriceIsLessThanAndVisibilityAndIsDeleted(paging, maxPrice, 1, 0);
             } else {
-                return productRepository.findByPriceBetween(paging, minPrice, maxPrice);
+                return productRepository.findByPriceBetweenAndVisibilityAndIsDeleted(paging, minPrice, maxPrice, 1, 0);
             }
         } else {
             if (minPrice != null && maxPrice == null) {
-                return productRepository.findByBrandAndPriceIsGreaterThan(paging, brand, minPrice);
+                return productRepository.findByBrandAndPriceIsGreaterThanAndVisibilityAndIsDeleted(paging, brand, minPrice, 1, 0);
             } else if (minPrice == null && maxPrice != null) {
-                return productRepository.findByBrandAndPriceIsLessThan(paging, brand, maxPrice);
+                return productRepository.findByBrandAndPriceIsLessThanAndVisibilityAndIsDeleted(paging, brand, maxPrice, 1, 0);
             } else if (minPrice != null && maxPrice != null) {
-                return productRepository.findByBrandAndPriceBetween(paging, brand, minPrice, maxPrice);
+                return productRepository.findByBrandAndPriceBetweenAndVisibilityAndIsDeleted(paging, brand, minPrice, maxPrice, 1, 0);
             } else {
-                return productRepository.findByBrand(paging, brand);
+                return productRepository.findByBrandAndVisibilityAndIsDeleted(paging, brand, 1, 0);
             }
         }
     }
