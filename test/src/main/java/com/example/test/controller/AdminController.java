@@ -89,8 +89,6 @@ public class AdminController {
     /**
      * Aim: add product to product table and add storge to storge table
      * @param id
-     * @param size
-     * @param stock
      * @param p
      * @return product json
      */
@@ -172,6 +170,7 @@ public class AdminController {
                                                     @RequestParam(value = "discount",required = false) String discount,
                                                     @RequestParam(value = "brand", required = false) String brand,
                                                     @RequestParam(value = "desc", required = false) String desc,
+                                                    @RequestParam(value = "visibility", required = false) Integer visibility,
                                                     @RequestBody ImgUrl imgurl) {
         Map<String, Object> resBody = new HashMap<>(3);
         Optional<Product> products = productRepository.findById(id);
@@ -210,6 +209,7 @@ public class AdminController {
         if(brand != null) product.setBrand(brand);
         if(desc != null) product.setDescription(desc);
         if(imgurl != null) product.setImgURL(imgurl.getImgurls());
+        if(visibility !=null) product.setVisibility(visibility);
         productRepository.save(product);
         resBody.put("status", "success");
         return resBody;
