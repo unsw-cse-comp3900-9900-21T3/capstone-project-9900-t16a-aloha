@@ -14,4 +14,5 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Iterable<Product> findProductsByNameContaining(String name);
     Iterable<Product> findByPriceBetween(Float start, Float end);
     Page<Product> findAllByVisibility(Pageable page,Integer visibility);
+    Page<Product> findAllByIsDeleted(Pageable page, Integer isDeleted);
 }

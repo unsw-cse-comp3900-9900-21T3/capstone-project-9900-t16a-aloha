@@ -34,7 +34,7 @@ public class AdminController {
     public @ResponseBody Iterable<Product> getAllProduct(@RequestParam(name="pageindex", defaultValue = "0") Integer pageIndex,
                                                          @RequestParam(name="pagesize", defaultValue = "8") Integer pageSize) {
         Pageable paging = PageRequest.of(pageIndex, pageSize);
-        return productRepository.findAll(paging);
+        return productRepository.findAllByIsDeleted(paging,0);
     }
 
     // delete a product
