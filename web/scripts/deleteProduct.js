@@ -24,7 +24,7 @@ const deleConfirmBtn = document.getElementById("modal-delete-product-btn");
 deleConfirmBtn.addEventListener("click", async (_) => {
   try {
     let id = sessionStorage.getItem("toDel");
-    const url = `http://localhost:8080/admin/remove/?productID=${id}`;
+    const url = `http://localhost:8080/admin/remove/?productid=${id}`;
     const response = await fetch(url, {
       method: "post",
       headers: {
@@ -40,7 +40,7 @@ deleConfirmBtn.addEventListener("click", async (_) => {
       alert("Deleted Successfully!");
       let elem = document.getElementById(id);
       elem.remove();
-      getProductList();
+      // getProductList();
     }
   } catch (err) {
     console.error(`Error: ${err}`);

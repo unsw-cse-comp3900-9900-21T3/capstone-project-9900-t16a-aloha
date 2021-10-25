@@ -1,5 +1,8 @@
 import { preLoadAddr, preLoadAcct } from "./account.js";
 import { gotoMain } from "./gotoMain.js";
+import { getUserSearchProductList } from "./userSearchPage.js";
+
+import { getProductDetail } from "./gotoUserProductDetailPage.js";
 // nav bars element
 const mainBtn = document.getElementById("left-top-main");
 const navDropdownAddr = document.getElementById("nav-dropdown-addr");
@@ -21,6 +24,9 @@ const recommendPage = document.getElementById("recommend-page");
 const userSearchPage = document.getElementById("user-search-page");
 const userSearchBar = document.getElementById("user-search-bar");
 const userAboutPage = document.getElementById("user-about-page");
+const userProductDetailPage = document.getElementById(
+  "user-product-detail-page"
+);
 // main page init
 
 mainBtn.addEventListener("click", gotoMain);
@@ -35,6 +41,7 @@ const gotoAccountAddr = () => {
   userSearchPage.style.display = "none";
   userSearchBar.style.display = "none";
   userAboutPage.style.display = "none";
+  userProductDetailPage.style.display = "none";
   preLoadAddr();
 };
 
@@ -48,19 +55,37 @@ const gotoAccountAcct = () => {
   userSearchPage.style.display = "none";
   userSearchBar.style.display = "none";
   userAboutPage.style.display = "none";
+  userProductDetailPage.style.display = "none";
   preLoadAcct();
 };
 
 const gotoUserSearchPage = () => {
   userSearchPage.style.display = "block";
   userSearchBar.style.display = "block";
+  getUserSearchProductList();
 
+  userProductDetailPage.style.display = "none";
   acctAddrPage.style.display = "none";
   acctAcctPage.style.display = "none";
   searchPage.style.display = "none";
   accountPage.style.display = "none";
   userAboutPage.style.display = "none";
   recommendPage.style.display = "none";
+};
+
+const gotoUserProductDetailPageDom = (pid) => {
+  getProductDetail(pid);
+
+  userSearchPage.style.display = "none";
+  userSearchBar.style.display = "none";
+  acctAddrPage.style.display = "none";
+  acctAcctPage.style.display = "none";
+  searchPage.style.display = "none";
+  accountPage.style.display = "none";
+  userAboutPage.style.display = "none";
+  recommendPage.style.display = "none";
+
+  userProductDetailPage.style.display = "block";
 };
 
 const gotoLogin = () => {
@@ -75,3 +100,4 @@ for (let ele of logoutBtn) {
 navDropdownAddr.addEventListener("click", gotoAccountAddr);
 navDropdownAcct.addEventListener("click", gotoAccountAcct);
 userSearchPageLink.addEventListener("click", gotoUserSearchPage);
+export { gotoUserProductDetailPageDom };

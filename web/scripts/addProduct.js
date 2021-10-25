@@ -34,8 +34,9 @@ const addImgDelBtn = document.getElementById("add-del-product-img");
 // variables
 
 let imgsArray = [];
-
+let stockPair = new Map();
 const gotoAddProductPage = () => {
+  stockPair.clear();
   searchPage.style.display = "none";
   searchBar.style.display = "none";
   editProductsPage.style.display = "none";
@@ -88,21 +89,23 @@ const addProductToDB = async () => {
   try {
     let id = "_" + Math.random().toString(36).substr(2, 9);
     // TODO stock management
-    // TODO brand
-    const url = `http://localhost:8080/admin/add/${id}?size=${pSize.value}&stock=${pQty.value}`;
-    const data = JSON.stringify({
+
+    const url = `http://localhost:8080/admin/add/${id}?visibility=${
+      pisVisible.checked ? 1 : 0
+    }`;
+    let data = {
       name: pTitle.value,
       price: pPrice.value,
+      brand: pBrand.value,
       description: pDescription.value,
-      visibility: pisVisible.value == "on" ? 1 : 0,
-    });
-    console.log(data);
+    };
+
     const response = await fetch(url, {
       method: "post",
       headers: {
         "content-type": "application/json",
       },
-      body: data,
+      body: JSON.stringify(data),
     });
     const jsData = await response.text();
     const d = JSON.parse(jsData);
@@ -111,12 +114,52 @@ const addProductToDB = async () => {
       alert("Something Wrong");
     }
 
-    //TODO  upload img API request
+    //  upload img API request
     if (imgsArray.length != 0) {
+      const url = `http://localhost:8080/admin/update?id=${id}`;
       const imgsArrayString = JSON.stringify(imgsArray);
       console.log(imgsArrayString);
+      const response = await fetch(url, {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          imgurls: imgsArrayString,
+        }),
+      });
+      const jsData = await response.text();
+      const d = JSON.parse(jsData);
+      console.log("Completed!", d);
+      if (d.status === "fail") {
+        alert("Something Wrong");
+      }
     } else {
       console.log("No img Upload");
+    }
+    console.log(stockPair.size);
+    if (stockPair.size != 0) {
+      for (let shoeSize of stockPair.keys()) {
+        console.log("key:" + shoeSize + ", value:" + stockPair.get(shoeSize));
+        let num = stockPair.get(shoeSize);
+        if (num === "") {
+          continue;
+        }
+        let url = `http://localhost:8080/admin/add?id=${id}&size=${shoeSize}&stock=${num}`;
+        console.log(url);
+        let response = await fetch(url, {
+          method: "post",
+          headers: {
+            "content-type": "application/json",
+          },
+        });
+        let jsData = await response.text();
+        let d = JSON.parse(jsData);
+        // console.log("Completed!", d);
+        if (d.status === "fail") {
+          alert("Something Wrong in stock");
+        }
+      }
     }
     // no error
     alert("Added Successfully");
@@ -127,6 +170,11 @@ const addProductToDB = async () => {
 };
 
 const showPreview = async () => {
+  console.log(imgsArray.length);
+  if (imgsArray.length >= 8) {
+    alert("No more than 8 imgs");
+    return;
+  }
   const img = adminAddImgBtn.files[0];
 
   if (img) {
@@ -155,6 +203,10 @@ addProductBtn.addEventListener("click", addProductToDB);
 adminAddImgBtn.addEventListener("change", showPreview);
 
 addImgDelBtn.addEventListener("click", () => {
+  if (adminAddImgList.childNodes.length === 0) {
+    alert("No img to delete");
+    return;
+  }
   const srcDel = adminMainImg.src;
   // 1. delete sub img
   for (let subImg of adminAddImgList.childNodes) {
@@ -175,5 +227,23 @@ addImgDelBtn.addEventListener("click", () => {
   const index = imgsArray.indexOf(srcDel);
   if (index > -1) {
     imgsArray.splice(index, 1);
+  }
+});
+
+["keyup", "change"].forEach((evt) =>
+  pQty.addEventListener(evt, () => {
+    if (pSize.value === "default") {
+      alert("Please select size first");
+      pQty.value = "";
+    } else {
+      stockPair.set(pSize.value, pQty.value);
+    }
+  })
+);
+pSize.addEventListener("change", () => {
+  if (stockPair.get(pSize.value)) {
+    pQty.value = stockPair.get(pSize.value);
+  } else {
+    pQty.value = "";
   }
 });

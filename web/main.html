@@ -56,6 +56,124 @@
       </div>
     </div>
 
+    <!-- shopping cart offcanvas -->
+    <div
+      class="offcanvas offcanvas-end"
+      tabindex="-1"
+      id="shopping-cart"
+      aria-labelledby="offcanvasRightLabel"
+    >
+      <div class="offcanvas-header border-bottom">
+        <h5 id="offcanvasRightLabel">Shopping Cart</h5>
+        <button
+          type="button"
+          class="btn-close text-reset"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="list-group list-group-flush" id="shopping-cart-list">
+          <li
+            class="list-group-item d-flex justify-content-between"
+            id="shopping-cart-item"
+          >
+            <div>
+              <img
+                src="assets/shoe.png"
+                width="50"
+                height="50"
+                style="
+                  display: block;
+                  max-width: 80px;
+                  max-height: 100px;
+                  width: auto;
+                  height: auto;
+                "
+              />
+            </div>
+            <div
+              class="d-flex flex-column justify-content-between"
+              style="width: 250px"
+            >
+              <h6>Shoe Name Shoe Name Shoe Name Shoe Name</h6>
+              <small class="text-muted">$ 99.99</small>
+            </div>
+            <div class="d-flex align-items-end">
+              <div class="input-group">
+                <span class="input-group-text" for="shopping-cart-item-qty"
+                  >Quantity</span
+                >
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control form-control-sm"
+                  id="shopping-cart-item-qty"
+                  placeholder="Quantity"
+                />
+                <span class="input-group-text" for="shopping-cart-item-size"
+                  >Size</span
+                >
+                <select
+                  type="text"
+                  class="form-select form-select-sm"
+                  id="shopping-cart-item-size"
+                >
+                  <option value="default" selected disabled>Select Size</option>
+                  <option value="7">US 7</option>
+                  <option value="8">US 8</option>
+                  <option value="9">US 9</option>
+                </select>
+              </div>
+            </div>
+            <div
+              class="
+                d-flex
+                flex-column
+                justify-content-between
+                align-items-center
+              "
+            >
+              <h6>$ 99.99</h6>
+              <button
+                type="button"
+                class="btn-close"
+                aria-label="Close"
+              ></button>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="offcanvas-end border-0">
+        <div class="d-grid">
+          <button type="button" class="btn btn-primary">check out</button>
+        </div>
+      </div>
+    </div>
+    <!-- wish list offcanvas -->
+    <div
+      class="offcanvas offcanvas-end"
+      tabindex="-1"
+      id="wishlist"
+      aria-labelledby="offcanvasRightLabel"
+    >
+      <div class="offcanvas-header border-bottom">
+        <h5>WishList</h5>
+        <button
+          type="button"
+          class="btn-close text-reset"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <div
+          id="wish-list-parent"
+          class="row row-cols-auto g-2 g-lg-3 m-1 p-2"
+        ></div>
+      </div>
+    </div>
+
     <div id="user-header">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -117,9 +235,9 @@
                   <a type="button" class="dropdown-item" id="nav-dropdown-addr"
                     >My Address</a
                   >
-                  <a type="button" class="dropdown-item" id="nav-dropdown-wish"
+                  <!-- <a type="button" class="dropdown-item" id="nav-dropdown-wish"
                     >My WishList</a
-                  >
+                  > -->
                   <a type="button" class="dropdown-item" id="nav-dropdown-acct"
                     >My Account</a
                   >
@@ -130,7 +248,10 @@
                 </div>
               </li>
               <li class="nav-item" href="#">
-                <a class="nav-link" href="#"
+                <a
+                  class="nav-link"
+                  data-bs-toggle="offcanvas"
+                  href="#shopping-cart"
                   ><svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="25"
@@ -141,8 +262,29 @@
                   >
                     <path
                       d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"
-                    /></svg
-                ></a>
+                    />
+                  </svg>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="offcanvas" href="#wishlist">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="23"
+                    height="23"
+                    fill="currentColor"
+                    class="bi bi-bookmark-heart"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 4.41c1.387-1.425 4.854 1.07 0 4.277C3.146 5.48 6.613 2.986 8 4.412z"
+                    />
+                    <path
+                      d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"
+                    />
+                  </svg>
+                </a>
               </li>
             </ul>
           </div>
@@ -295,12 +437,12 @@
                 >
                   My Address
                 </button>
-                <button
+                <!-- <button
                   type="button"
                   class="list-group-item list-group-item-action"
                 >
                   My WishList
-                </button>
+                </button> -->
                 <button
                   type="button"
                   class="list-group-item list-group-item-action"
@@ -475,7 +617,11 @@
         ></div>
 
         <div class="text-center mb-3">
-          <button type="button" class="btn btn-outline-primary">
+          <button
+            id="admin-load-more"
+            type="button"
+            class="btn btn-outline-primary"
+          >
             Load More
           </button>
         </div>
@@ -1052,16 +1198,187 @@
         <div
           id="user-search-page-products"
           class="row row-cols-auto g-2 g-lg-3 m-1 p-2"
-        >
-          <h6>Search page</h6>
-        </div>
+        ></div>
 
         <div class="text-center mb-3">
-          <button type="button" class="btn btn-outline-primary">
+          <button
+            id="search-load-more-btn"
+            type="button"
+            class="btn btn-outline-primary"
+          >
             Load More
           </button>
         </div>
       </div>
+
+      <!-- user product detail -->
+      <div class="container" id="user-product-detail-page">
+        <div class="row m-3">
+          <div class="col-6 me-auto">
+            <div class="card main-img" style="width: 32rem; height: 40rem">
+              <img
+                id="user-product-main-img"
+                src="assets/shoe.png"
+                style="width: 100%; height: 100%"
+              />
+            </div>
+          </div>
+          <div class="col-6 ms-auto">
+            <div class="row mb-3">
+              <div class="form-group">
+                <h5 id="user-product-detail-brand">NIKE</h5>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group">
+                <h3 id="user-product-detail-name">
+                  shoe name shoe name shoe name
+                </h3>
+              </div>
+            </div>
+            <div class="row mb-5">
+              <div type="button " class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="form-group">
+                <h5 id="user-product-detail-price">$99.99</h5>
+              </div>
+            </div>
+            <div class="row mb-5">
+              <div class="form-group col-md-6">
+                <label for="user-product-detail-qty">Quantity</label>
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  id="user-product-detail-qty"
+                  placeholder="Quantity"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="user-product-detail-size">Size</label>
+                <select
+                  type="text"
+                  class="form-control"
+                  id="user-product-detail-size"
+                >
+                  <option value="default" selected disabled>Select Size</option>
+                  <option value="7">US 7</option>
+                  <option value="8">US 8</option>
+                  <option value="9">US 9</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- <div class="row mb-3 p-3">
+              <button class="btn btn-primary">ADD TO CART</button>
+            </div> -->
+            <div class="row mb-5">
+              <div class="form-group">
+                <label for="user-product-page-desc" class="form-label"
+                  >Description</label
+                >
+                <p class="border-top" id="user-product-page-desc">
+                  Let your shoe game shimmer in the Nike Air Force 1 '07
+                  Essential. It takes the classic AF-1 design to the next level
+                  with its premium leather upper and iridescent Swoosh.
+                </p>
+              </div>
+            </div>
+
+            <div class="row m-1">
+              <button
+                id="user-product-page-back-btn"
+                class="btn btn-outline-secondary col-3 me-auto"
+              >
+                BACK
+              </button>
+              <button
+                id="user-addcart-product-btn"
+                class="btn btn-primary col-3 ms-auto"
+              >
+                ADD TO CART
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row ms-3">
+          <div class="col-4">
+            <span class="d-flex" id="user-product-img-list"> </span>
+          </div>
+        </div>
+      </div>
+
       <div class="container" id="user-about-page">
         <p>about</p>
       </div>
@@ -1141,13 +1458,16 @@
               <div class="badge bg-dark">$99.99</div>
             </div>
           </div>
+
           <div class="card-hover-button">
             <button
               type="button"
-              class="btn btn-secondary btn-sm product-list-page-card-delete"
+              class="btn btn-secondary btn-sm product-list-page-card-wish"
               style="background-color: transparent"
+              onclick="stopProp(event)"
             >
               <i
+                type="button"
                 class="bi bi-heart toggle-wishlist"
                 style="color: #d9534f; font-size: 1.3rem"
               ></i>
@@ -1168,6 +1488,70 @@
           style="width: 100%; height: 100%"
         />
       </div>
+
+      <li
+        class="list-group-item d-flex justify-content-between"
+        id="shopping-cart-item"
+      >
+        <div>
+          <img
+            src="assets/shoe.png"
+            width="50"
+            height="50"
+            style="
+              display: block;
+              max-width: 80px;
+              max-height: 100px;
+              width: auto;
+              height: auto;
+            "
+          />
+        </div>
+        <div
+          class="d-flex flex-column justify-content-between"
+          style="width: 250px"
+        >
+          <h6>Shoe Name Shoe Name Shoe Name Shoe Name</h6>
+          <small class="text-muted">$ 99.99</small>
+        </div>
+        <div class="d-flex align-items-end">
+          <div class="input-group">
+            <span class="input-group-text" for="shopping-cart-item-qty"
+              >Quantity</span
+            >
+            <input
+              type="number"
+              min="0"
+              class="form-control form-control-sm"
+              id="shopping-cart-item-qty"
+              placeholder="Quantity"
+            />
+            <span class="input-group-text" for="shopping-cart-item-size"
+              >Size</span
+            >
+            <select
+              type="text"
+              class="form-select form-select-sm"
+              id="shopping-cart-item-size"
+            >
+              <option value="default" selected disabled>Select Size</option>
+              <option value="7">US 7</option>
+              <option value="8">US 8</option>
+              <option value="9">US 9</option>
+            </select>
+          </div>
+        </div>
+        <div
+          class="d-flex flex-column justify-content-between align-items-center"
+        >
+          <h6>$ 99.99</h6>
+          <button
+            type="button"
+            class="btn-close del-shopping-cart-item"
+            aria-label="Close"
+          ></button>
+        </div>
+      </li>
     </div>
 
     <script>
@@ -1175,6 +1559,7 @@
         event.stopPropagation();
       }
     </script>
+
     <script type="module" src="scripts/recommendPage.js"></script>
     <script type="module" src="scripts/gotoMain.js"></script>
     <script type="module" src="scripts/main.js"></script>

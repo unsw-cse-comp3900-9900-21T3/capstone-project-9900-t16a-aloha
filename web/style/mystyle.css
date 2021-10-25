@@ -1,6 +1,7 @@
 #product-search-page,
 #accout-subpage,
-#edit-product-detail-page {
+#edit-product-detail-page,
+#user-product-detail-page {
   display: none;
 }
 .product-card:hover .card {
@@ -44,4 +45,13 @@
 #upload-icon-label:hover svg {
   transition: 0.3s ease-out;
   transform: scale(1.04);
+}
+
+.offcanvas {
+  width: 73vw;
+}
+@media (max-width: 1400px) {
+  .offcanvas {
+    width: 90vw;
+  }
 }

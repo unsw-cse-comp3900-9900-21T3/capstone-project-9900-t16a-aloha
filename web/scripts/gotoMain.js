@@ -1,3 +1,4 @@
+import { getProductList } from "./adminProductList.js";
 // admin/user header
 const adminHeader = document.getElementById("admin-header");
 const userHeader = document.getElementById("user-header");
@@ -12,11 +13,16 @@ const recommendPage = document.getElementById("recommend-page");
 const userSearchPage = document.getElementById("user-search-page");
 const userSearchBar = document.getElementById("user-search-bar");
 const userAboutPage = document.getElementById("user-about-page");
-
+const userProductDetailPage = document.getElementById(
+  "user-product-detail-page"
+);
 const gotoMain = () => {
   accountPage.style.display = "none";
   addProductPage.style.display = "none";
+  userProductDetailPage.style.display = "none";
   if (sessionStorage.getItem("isAdmin") == 1) {
+    getProductList();
+
     adminHeader.style.display = "block";
     userHeader.style.display = "none";
     searchPage.style.display = "block";
@@ -27,6 +33,8 @@ const gotoMain = () => {
     userAboutPage.style.display = "none";
   } else {
     // customer
+    // 1. show recommend
+
     adminHeader.style.display = "none";
     userHeader.style.display = "block";
     searchPage.style.display = "none";
