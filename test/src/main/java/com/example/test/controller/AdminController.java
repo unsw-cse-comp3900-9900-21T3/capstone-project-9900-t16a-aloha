@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 //import jdk.internal.org.jline.utils.ExecHelper;
 
+import java.awt.geom.FlatteningPathIterator;
 import java.util.*;
 
 import javax.print.FlavorException;
@@ -145,8 +146,7 @@ public class AdminController {
             (2) Search by name: /search/name/{name}
 
         ANNOTATION:
-        depending on the data pass from frontend, we might change the implementation
-        also, thinking combining all the searching inside the single function (depending on front end design)
+        thinking combining all the searching inside the single function (depending on front end design)
      */
     @GetMapping(path = "/search/id/{id}")
     @CrossOrigin
@@ -175,6 +175,44 @@ public class AdminController {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @GetMapping(path = "/search")
+    @CrossOrigin
+    public @ResponseBody Page<Product> searchProduct(@RequestParam(name = "productid", required = false) String id,
+                                                     @RequestParam(name = "name", required = false) String name,
+                                                     @RequestParam(name = "minprice", required = false) Float minPrice,
+                                                     @RequestParam(name = "maxprice", required = false) Float maxPrice,
+                                                     @RequestParam(name = "pageindex", defaultValue = "0", required = false) Integer pageIndex,
+                                                     @RequestParam(name = "pageSize", defaultValue = "8", required = false) Integer pageSize) {
+        Pageable paging = PageRequest.of(pageIndex, pageSize);
+        if (id == null && name == null && minPrice == null && maxPrice == null) {
+            return productRepository.findAllByIsDeleted(paging,0);
+        }
+        if (id != null) {
+            return productRepository.findByIdAndIsDeleted(paging, id, 0);
+        } else {
+            if (name == null) {
+                if (minPrice != null && maxPrice == null) {
+                    return productRepository.findByPriceIsGreaterThanAndIsDeleted(paging, minPrice, 0);
+                } else if (minPrice == null && maxPrice != null) {
+                    return productRepository.findByPriceIsLessThanAndIsDeleted(paging, maxPrice, 0);
+                } else {
+                    return productRepository.findByPriceBetweenAndIsDeleted(paging, minPrice, maxPrice, 0);
+                }
+            } else {
+                if (minPrice != null && maxPrice == null) {
+                    return productRepository.findByNameContainsAndPriceIsGreaterThanAndIsDeleted(paging, name, minPrice, 0);
+                } else if (minPrice == null && maxPrice != null) {
+                    return productRepository.findByNameContainsAndPriceIsLessThanAndIsDeleted(paging, name, maxPrice, 0);
+                } else if (minPrice != null && maxPrice != null) {
+                    return productRepository.findByNameContainsAndPriceIsBetweenAndIsDeleted(paging, name, minPrice, maxPrice, 0);
+                } else {
+                    return productRepository.findByNameContainsAndIsDeleted(paging, name, 0);
+                }
+            }
+        }
+
     }
 
 
