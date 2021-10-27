@@ -106,7 +106,7 @@
     </div>
 
     <div id="user-header">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar navbar-expand-lg navbar-light border-bottom">
         <div class="container-fluid">
           <a type="button" class="navbar-brand" id="left-top-main">A Shoe</a>
           <button
@@ -1133,11 +1133,11 @@
           class="row row-cols-auto g-2 g-lg-3 m-1 p-2"
         ></div>
 
-        <div class="text-center mb-3">
+        <div class="text-center m-3">
           <button
             id="search-load-more-btn"
             type="button"
-            class="btn btn-outline-primary"
+            class="btn btn-outline-primary load-more-btns"
           >
             Load More
           </button>
@@ -1156,7 +1156,7 @@
               />
             </div>
           </div>
-          <div class="col-6 ms-auto">
+          <div class="col-6 ms-auto products-text">
             <div class="row mb-3">
               <div class="form-group">
                 <h5 id="user-product-detail-brand">NIKE</h5>
@@ -1312,8 +1312,82 @@
         </div>
       </div>
 
-      <div class="container" id="user-about-page">
-        <p>about</p>
+      <div id="user-about-page" class="container text-center">
+        <div class="m-5" id="about-img"></div>
+        <div class="">
+          <h2>Who We Are</h2>
+          <br />
+          <br />
+          <div
+            id="carouselExampleControls"
+            class="carousel carousel-dark slide"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <h4>
+                  "The best shoes online shopping website ever!"<br /><span
+                    class="text-muted"
+                    >Peng Yang, Front-end developer</span
+                  >
+                </h4>
+              </div>
+              <div class="carousel-item">
+                <h4>
+                  "We know what you want"<br /><span class="text-muted"
+                    >Yao Yuan, Recommend system Engineer</span
+                  >
+                </h4>
+              </div>
+              <div class="carousel-item">
+                <h4>
+                  "tremendous shoes"<br /><span class="text-muted"
+                    >Tim, back-end developer</span
+                  >
+                </h4>
+              </div>
+
+              <div class="carousel-item">
+                <h4>
+                  "Simple is best"<br /><span class="text-muted"
+                    >Sam, back-end developer</span
+                  >
+                </h4>
+              </div>
+              <div class="carousel-item">
+                <h4>
+                  "One word... Amazing!!"<br /><span class="text-muted"
+                    >Han, Database enginner</span
+                  >
+                </h4>
+              </div>
+            </div>
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselExampleControls"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselExampleControls"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
       </div>
     </main>
 
@@ -1322,7 +1396,11 @@
         class="col product-card d-flex justify-content-center"
         id="admin-product-list-temp"
       >
-        <div type="button" class="card" style="height: 24rem; width: 16rem">
+        <div
+          type="button"
+          class="card product-card-inside"
+          style="height: 24rem; width: 16rem"
+        >
           <img
             src="assets/shoe.png"
             style="object-fit: cover; height: 20rem; width: 100%"

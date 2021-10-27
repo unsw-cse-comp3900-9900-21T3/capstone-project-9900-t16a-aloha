@@ -20,6 +20,9 @@ const gotoMain = () => {
   accountPage.style.display = "none";
   addProductPage.style.display = "none";
   userProductDetailPage.style.display = "none";
+  userAboutPage.style.display = "none";
+  userSearchBar.style.display = "none";
+  userSearchPage.style.display = "none";
   if (sessionStorage.getItem("isAdmin") == 1) {
     getProductList();
 
@@ -28,9 +31,6 @@ const gotoMain = () => {
     searchPage.style.display = "block";
     searchBar.style.display = "block";
     recommendPage.style.display = "none";
-    userSearchPage.style.display = "none";
-    userSearchBar.style.display = "none";
-    userAboutPage.style.display = "none";
   } else {
     // customer
     // 1. show recommend
@@ -40,9 +40,6 @@ const gotoMain = () => {
     searchPage.style.display = "none";
     searchBar.style.display = "none";
     recommendPage.style.display = "block";
-    userSearchPage.style.display = "none";
-    userSearchBar.style.display = "none";
-    userAboutPage.style.display = "none";
   }
 };
 gotoMain();

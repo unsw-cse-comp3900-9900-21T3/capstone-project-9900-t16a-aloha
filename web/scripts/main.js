@@ -10,7 +10,7 @@ const navDropdownAcct = document.getElementById("nav-dropdown-acct");
 const justForYouLink = document.getElementById("user-main-page-link");
 const userSearchPageLink = document.getElementById("user-search-page-link");
 const logoutBtn = document.getElementsByClassName("nav-dropdown-logout");
-
+const aboutLink = document.getElementById("user-about-page-link");
 // admin/user header
 const adminHeader = document.getElementById("admin-header");
 const userHeader = document.getElementById("user-header");
@@ -42,6 +42,7 @@ const gotoAccountAddr = () => {
   userSearchBar.style.display = "none";
   userAboutPage.style.display = "none";
   userProductDetailPage.style.display = "none";
+
   preLoadAddr();
 };
 
@@ -54,8 +55,9 @@ const gotoAccountAcct = () => {
   recommendPage.style.display = "none";
   userSearchPage.style.display = "none";
   userSearchBar.style.display = "none";
-  userAboutPage.style.display = "none";
+
   userProductDetailPage.style.display = "none";
+  userAboutPage.style.display = "none";
   preLoadAcct();
 };
 
@@ -88,6 +90,18 @@ const gotoUserProductDetailPageDom = (pid) => {
   userProductDetailPage.style.display = "block";
 };
 
+const gotoAbout = () => {
+  userAboutPage.style.display = "block";
+
+  userSearchPage.style.display = "none";
+  userSearchBar.style.display = "none";
+  acctAddrPage.style.display = "none";
+  acctAcctPage.style.display = "none";
+  searchPage.style.display = "none";
+  accountPage.style.display = "none";
+  recommendPage.style.display = "none";
+};
+
 const gotoLogin = () => {
   sessionStorage.clear();
   location.href = "./index.html";
@@ -100,4 +114,5 @@ for (let ele of logoutBtn) {
 navDropdownAddr.addEventListener("click", gotoAccountAddr);
 navDropdownAcct.addEventListener("click", gotoAccountAcct);
 userSearchPageLink.addEventListener("click", gotoUserSearchPage);
+aboutLink.addEventListener("click", gotoAbout);
 export { gotoUserProductDetailPageDom };
