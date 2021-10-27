@@ -551,7 +551,7 @@
           <button
             id="admin-load-more"
             type="button"
-            class="btn btn-outline-primary"
+            class="btn btn-outline-primary load-more-btns"
           >
             Load More
           </button>
@@ -1076,14 +1076,14 @@
         </div>
       </div>
 
-      <div class="container" id="recommend-page">
+      <div class="container mag-to-fluid" id="recommend-page">
         <div
           id="recommend-page-products"
           class="row row-cols-auto g-2 g-lg-3 m-1 p-2"
         ></div>
 
         <div class="text-center mb-3">
-          <button type="button" class="btn btn-outline-primary">
+          <button type="button" class="btn btn-outline-primary load-more-btns">
             Load More
           </button>
         </div>
@@ -1127,7 +1127,7 @@
           </div>
         </div>
       </div>
-      <div class="container" id="user-search-page">
+      <div class="container mag-to-fluid" id="user-search-page">
         <div
           id="user-search-page-products"
           class="row row-cols-auto g-2 g-lg-3 m-1 p-2"
@@ -1390,7 +1390,54 @@
         </div>
       </div>
     </main>
-
+    <div style="position: fixed; top: 18vh; font-size: 1.2rem">
+      <button
+        data-bs-toggle="collapse"
+        href="#access-btns"
+        class="btn btn-primary"
+      >
+        <i class="bi bi-caret-down-square"></i>
+      </button>
+      <div class="collapse" id="access-btns">
+        <div
+          class="btn-group-vertical"
+          role="group"
+          aria-label="Vertical button group"
+        >
+          <button type="button" class="btn btn-primary" id="access-zoom-btn">
+            <i class="bi bi-zoom-in"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary eye-care-btns"
+            style="background-color: #faf9de"
+          >
+            <i class="bi bi-eyeglasses" style="color: black"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary eye-care-btns"
+            style="background-color: #fff2e2"
+          >
+            <i class="bi bi-eyeglasses" style="color: black"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary eye-care-btns"
+            style="background-color: #fde6e0"
+          >
+            <i class="bi bi-eyeglasses" style="color: black"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary eye-care-btns"
+            style="background-color: #e3edcd"
+          >
+            <i class="bi bi-eyeglasses" style="color: black"></i>
+          </button>
+        </div>
+      </div>
+    </div>
     <div id="template" style="display: none">
       <div
         class="col product-card d-flex justify-content-center"
@@ -1548,7 +1595,13 @@
         event.stopPropagation();
       }
     </script>
-    <script type="module" src="scripts/getAllShoppingCart.js"></script>
+    <script
+      type="module"
+      src="scripts/accessbility.js"
+      <script
+      type="module"
+      src="scripts/getAllShoppingCart.js"
+    ></script>
     <script type="module" src="scripts/recommendPage.js"></script>
     <script type="module" src="scripts/gotoMain.js"></script>
     <script type="module" src="scripts/main.js"></script>

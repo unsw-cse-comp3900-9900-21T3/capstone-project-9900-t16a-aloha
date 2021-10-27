@@ -60,47 +60,30 @@
   flex: 1;
 }
 
-/* .product-card {
+.product-card.zoomin {
   transform: scale(1.4);
   margin: 2rem 3.4rem 9rem 3.4rem;
   transform-origin: 0 0;
 }
-#user-search-page{
-  fluid
-}
-.load-more-btns {
+
+.load-more-btns.zoomin {
   transform: scale(1.4);
   margin: 5.4rem;
 }
-.products-text {
+.products-text.zoomin {
   transform: scale(1.2);
   font-size: 1.3rem;
   transform-origin: 0 0;
 }
-img {
-  filter: sepia(10%);
-}
-.offcanvas {
-  background-color: #faf9de;
-}
-body {
-  background-color: #faf9de;
-   杏仁黄    #FAF9DE  
-秋叶褐    #FFF2E2  
-胭脂红    #FDE6E0  
-青草绿    #E3EDCD   
-}
-.eye-care-mode {
-  background-color: #faf9de;
-} */
 
-/* 
-#user-search-page-products{
-  gap:
-} */
-
-/* @media (max-width: 1400px) {
-  .offcanvas {
-    width: 90vw;
-  }
-} */
+html.zoomin {
+  cursor: url("../assets/cursor.svg"), auto;
+}
+.cursor {
+  width: 20px;
+  height: 20px;
+  border: 1px solid whitesmoke;
+  border-radius: 50%;
+  position: absolute;
+  animation: cursorAnim 0.5s infinite;
+}
