@@ -139,6 +139,7 @@ pSize.addEventListener("change", () => {
 addCartBtn.addEventListener("click", async () => {
   const userId = sessionStorage.getItem("userID");
   const url = `http://localhost:8080/test/user/shoppingcart/add?userid=${userId}&productid=${pid}&size=${pSize.value}&quantity=${pQty.value}`;
+
   try {
     await fetch(url, {
       method: "post",

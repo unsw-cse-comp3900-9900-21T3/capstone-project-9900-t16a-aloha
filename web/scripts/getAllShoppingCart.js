@@ -4,9 +4,19 @@ const shopCanvas = document.getElementById("shopping-cart");
 
 const shoppingCartItemTemp = document.getElementById("shopping-cart-item");
 const shoppingcartParent = document.getElementById("shopping-cart-list");
+const checkoutAddr = document.getElementById("checkout-address");
+const checkoutBtn = document.getElementById("check-out-btn");
+
+const totalAmt = document.getElementById("total-amount-check");
 
 const getAllShoppingCart = async () => {
   removeAllChilds(shoppingcartParent);
+  shoppingcartParent.style.display = "block";
+  checkoutAddr.style.display = "none";
+  checkoutBtn.style.display = "block";
+  const paypalBtn = document.getElementById("paypal-button-container");
+  paypalBtn.innerHTML = "";
+
   console.log("im in");
   const userId = sessionStorage.getItem("userID");
   const url = `http://localhost:8080/test/user/shoppingcart/show?userid=${userId}`;
@@ -23,6 +33,7 @@ const getAllShoppingCart = async () => {
     if (d.status === "fail") {
       alert("Something Wrong");
     } else {
+      let tAmt = 0;
       for (let p of d) {
         // get product detail
         const url = `http://localhost:8080/admin/search/id/${p.productID}`;
@@ -50,6 +61,7 @@ const getAllShoppingCart = async () => {
         newItem.getElementsByClassName("shop-name")[0].innerText = nameOfP;
         newItem.getElementsByClassName("shop-price")[0].innerText =
           "$" + priceOfP;
+        tAmt += priceOfP;
         newItem.getElementsByClassName("shop-qty")[0].innerText = p.quantity;
         newItem.getElementsByClassName("shop-size")[0].innerText =
           "US " + p.size;
@@ -72,6 +84,7 @@ const getAllShoppingCart = async () => {
 
         shoppingcartParent.appendChild(newItem);
       }
+      totalAmt.innerText = "$" + tAmt;
     }
   } catch (err) {
     console.log(err);

@@ -38,7 +38,7 @@ for (let eBtn of eyeCareBtns) {
     } else {
       document.body.style.backgroundColor = "initial";
       for (let ele of document.getElementsByClassName("offcanvas")) {
-        ele.style.backgroundColor = "initial";
+        ele.style.backgroundColor = "white";
       }
       for (let pic of document.getElementsByTagName("img")) {
         pic.style.filter = "";

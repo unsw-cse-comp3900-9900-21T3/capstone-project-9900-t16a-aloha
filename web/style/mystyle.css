@@ -143,3 +143,15 @@ html.zoomin {
   animation: cursorAnim3 0.5s forwards;
   border: 1px solid red;
 }
+
+@keyframes append-animate {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.product-card {
+  animation: append-animate 1s linear;
+}
