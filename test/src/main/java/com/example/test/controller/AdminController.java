@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -177,6 +178,10 @@ public class AdminController {
         }
     }
 
+    /*
+        sortby: name, price
+        order: asc, desc
+     */
     @GetMapping(path = "/search")
     @CrossOrigin
     public @ResponseBody Page<Product> searchProduct(@RequestParam(name = "productid", required = false) String id,
@@ -184,8 +189,21 @@ public class AdminController {
                                                      @RequestParam(name = "minprice", required = false) Float minPrice,
                                                      @RequestParam(name = "maxprice", required = false) Float maxPrice,
                                                      @RequestParam(name = "pageindex", defaultValue = "0", required = false) Integer pageIndex,
-                                                     @RequestParam(name = "pageSize", defaultValue = "8", required = false) Integer pageSize) {
-        Pageable paging = PageRequest.of(pageIndex, pageSize);
+                                                     @RequestParam(name = "pagesize", defaultValue = "8", required = false) Integer pageSize,
+                                                     @RequestParam(name = "sortby", required = false) String sortby,
+                                                     @RequestParam(name = "order", defaultValue = "desc", required = false) String order) {
+        Pageable paging;
+        if(sortby == null || (!sortby.equals("name") && !sortby.equals("price"))) {
+            paging = PageRequest.of(pageIndex, pageSize);
+        }
+        else {
+            if (order.equals("asc")) {
+                paging = PageRequest.of(pageIndex, pageSize, Sort.by(sortby));
+            }
+            else {
+                paging = PageRequest.of(pageIndex, pageSize, Sort.by(sortby).descending());
+            }
+        }
         if (id == null && name == null && minPrice == null && maxPrice == null) {
             return productRepository.findAllByIsDeleted(paging,0);
         }
@@ -196,6 +214,12 @@ public class AdminController {
                 if (minPrice != null && maxPrice == null) {
                     return productRepository.findByPriceIsGreaterThanAndIsDeleted(paging, minPrice, 0);
                 } else if (minPrice == null && maxPrice != null) {
+//                    if (sortby.equals("name")) {
+//                        // find products that cheaper than max price then ordered by name desc
+//                        if(order.equals("desc")) {
+//                            return productRepository.findByPriceIsLessThanAndIsDeletedOrderByNameDesc(paging, maxPrice, 0);
+//                        }
+//                    }
                     return productRepository.findByPriceIsLessThanAndIsDeleted(paging, maxPrice, 0);
                 } else {
                     return productRepository.findByPriceBetweenAndIsDeleted(paging, minPrice, maxPrice, 0);

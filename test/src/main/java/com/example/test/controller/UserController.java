@@ -15,6 +15,7 @@ import com.example.test.repository.ShoppingCartRepository;
 import com.example.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -257,6 +258,8 @@ public class UserController {
 
     /**
      * search product with optional brand, optional price range, pagination enable
+     * sortby: name, price
+     * order: asc, desc
      * @param brand
      * @param minPrice
      * @param maxPrice
@@ -270,8 +273,22 @@ public class UserController {
                                                      @RequestParam(name = "minprice", required = false) Float minPrice,
                                                      @RequestParam(name = "maxprice", required = false) Float maxPrice,
                                                      @RequestParam(name = "pageindex", required = false, defaultValue = "0") Integer pageIndex,
-                                                     @RequestParam(name = "pagesize", required = false, defaultValue = "8") Integer pageSize) {
-        Pageable paging = PageRequest.of(pageIndex, pageSize);
+                                                     @RequestParam(name = "pagesize", required = false, defaultValue = "8") Integer pageSize,
+                                                     @RequestParam(name = "sortby", required = false) String sortby,
+                                                     @RequestParam(name = "order", required = false, defaultValue = "desc") String order) {
+        Pageable paging;
+        if(sortby == null || (!sortby.equals("name") && !sortby.equals("price"))) {
+            paging = PageRequest.of(pageIndex, pageSize);
+        }
+        else {
+            if (order.equals("asc")) {
+                paging = PageRequest.of(pageIndex, pageSize, Sort.by(sortby));
+            }
+            else {
+                paging = PageRequest.of(pageIndex, pageSize, Sort.by(sortby).descending());
+            }
+        }
+
         if (brand == null && minPrice == null && maxPrice == null) {
             return productRepository.findAllByVisibility(paging, 1);
         }
