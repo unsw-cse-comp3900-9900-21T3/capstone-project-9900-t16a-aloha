@@ -79,11 +79,67 @@
 html.zoomin {
   cursor: url("../assets/cursor.svg"), auto;
 }
-.cursor {
-  width: 20px;
-  height: 20px;
+
+/* idea from https://www.youtube.com/watch?v=rfpRZ2t_BrQ&t=402s */
+
+.zoomin.cursor {
+  z-index: 1100;
+  width: 50px;
+  height: 50px;
   border: 1px solid whitesmoke;
   border-radius: 50%;
   position: absolute;
-  animation: cursorAnim 0.5s infinite;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+  animation: cursorAnim 0.5s infinite alternate;
+  pointer-events: none;
+}
+
+.zoomin.cursor::after {
+  content: "";
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  border: 13px solid grey;
+  border-radius: 50%;
+  opacity: 0.7;
+  top: -1px;
+  left: -1px;
+  animation: cursorAnim2 0.5s infinite alternate;
+}
+
+@keyframes cursorAnim {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.7);
+  }
+}
+
+@keyframes cursorAnim2 {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.4);
+  }
+}
+
+@keyframes cursorAnim3 {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(3);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.zoomin.expand {
+  animation: cursorAnim3 0.5s forwards;
+  border: 1px solid red;
 }
