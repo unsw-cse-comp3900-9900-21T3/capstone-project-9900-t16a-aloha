@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 public interface ProductRepository extends JpaRepository<Product, String> {
     //Product findById(String productID);
     Page<Product> findByIdAndIsDeleted(Pageable page, String id, Integer isDeleted);
+    Page<Product> findByIdAndVisibilityAndIsDeleted(Pageable page, String id, Integer visibility, Integer isDeleted);
     //@Query("select p from Product p where p.name like ?1")
     Iterable<Product> findProductsByNameContaining(String name);
     Iterable<Product> findByPriceBetween(Float start, Float end);
@@ -26,7 +27,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findByBrandAndPriceIsGreaterThanAndVisibilityAndIsDeleted(Pageable page, String brand, Float minPrice, Integer visibility, Integer isDeleted);
     Page<Product> findByBrandAndPriceIsLessThanAndVisibilityAndIsDeleted(Pageable page, String brand, Float maxPrice, Integer visibility, Integer isDeleted);
     Page<Product> findByBrandAndPriceBetweenAndVisibilityAndIsDeleted(Pageable page, String brand, Float minPrice, Float maxPrice, Integer visibility, Integer isDeleted);
-
+    Page<Product> findByNameContainsAndVisibilityAndIsDeleted(Pageable page, String name, Integer visibility, Integer isDeleted);
     // admin query: consider isDeleted
     Page<Product> findByPriceIsLessThanAndIsDeleted(Pageable page, Float maxPrice, Integer isDeleted);
     Page<Product> findByPriceIsGreaterThanAndIsDeleted(Pageable page, Float minPrice, Integer isDeleted);

@@ -269,7 +269,9 @@ public class UserController {
      */
     @GetMapping(path = "/user/search")
     @CrossOrigin
-    public @ResponseBody Page<Product> filterProduct(@RequestParam(name = "brand", required = false) String brand,
+    public @ResponseBody Page<Product> filterProduct(@RequestParam(name = "productid", required = false) String id,
+                                                     @RequestParam(name = "name", required = false) String name,
+                                                     @RequestParam(name = "brand", required = false) String brand,
                                                      @RequestParam(name = "minprice", required = false) Float minPrice,
                                                      @RequestParam(name = "maxprice", required = false) Float maxPrice,
                                                      @RequestParam(name = "pageindex", required = false, defaultValue = "0") Integer pageIndex,
@@ -288,7 +290,12 @@ public class UserController {
                 paging = PageRequest.of(pageIndex, pageSize, Sort.by(sortby).descending());
             }
         }
-
+        if (id != null) {
+            return productRepository.findByIdAndVisibilityAndIsDeleted(paging,id,1,0);
+        }
+        if (name != null) {
+            return productRepository.findByNameContainsAndVisibilityAndIsDeleted(paging, name, 1,0);
+        }
         if (brand == null && minPrice == null && maxPrice == null) {
             return productRepository.findAllByVisibility(paging, 1);
         }
