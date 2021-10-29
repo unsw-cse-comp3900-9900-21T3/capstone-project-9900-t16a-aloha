@@ -29,6 +29,13 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findByBrandAndPriceBetweenAndVisibilityAndIsDeleted(Pageable page, String brand, Float minPrice, Float maxPrice, Integer visibility, Integer isDeleted);
     Page<Product> findByNameContainsAndVisibilityAndIsDeleted(Pageable page, String name, Integer visibility, Integer isDeleted);
     // admin query: consider isDeleted
+    Page<Product> findByNameContainsAndBrandAndPriceIsBetweenAndIsDeleted(Pageable page, String name, String brand, Float minPrice, Float maxPrice, Integer isDeleted);
+    Page<Product> findByNameContainsAndBrandAndPriceIsLessThanAndIsDeleted(Pageable page, String name, String brand, Float maxPrice, Integer isDeleted);
+    Page<Product> findByBrandAndIsDeleted(Pageable page, String brand, Integer isDeleted);
+    Page<Product> findByNameContainsAndBrandAndPriceIsGreaterThanAndIsDeleted(Pageable page, String name, String brand, Float minPrice, Integer isDeleted);
+    Page<Product> findByBrandAndPriceIsGreaterThanAndIsDeleted(Pageable page, String brand, Float minPrice, Integer isDeleted);
+    Page<Product> findByBrandAndPriceIsLessThanAndIsDeleted(Pageable page, String brand, Float maxPrice, Integer isDeleted);
+    Page<Product> findByBrandAndPriceBetweenAndIsDeleted(Pageable page, String brand, Float minPrice, Float maxPrice, Integer isDeleted);
     Page<Product> findByPriceIsLessThanAndIsDeleted(Pageable page, Float maxPrice, Integer isDeleted);
     Page<Product> findByPriceIsGreaterThanAndIsDeleted(Pageable page, Float minPrice, Integer isDeleted);
     Page<Product> findByPriceBetweenAndIsDeleted(Pageable page, Float minPrice, Float maxPrice, Integer isDeleted);

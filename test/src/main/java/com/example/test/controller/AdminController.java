@@ -186,6 +186,7 @@ public class AdminController {
     @CrossOrigin
     public @ResponseBody Page<Product> searchProduct(@RequestParam(name = "productid", required = false) String id,
                                                      @RequestParam(name = "name", required = false) String name,
+                                                     @RequestParam(name = "brand", required = false) String brand,
                                                      @RequestParam(name = "minprice", required = false) Float minPrice,
                                                      @RequestParam(name = "maxprice", required = false) Float maxPrice,
                                                      @RequestParam(name = "pageindex", defaultValue = "0", required = false) Integer pageIndex,
@@ -204,39 +205,74 @@ public class AdminController {
                 paging = PageRequest.of(pageIndex, pageSize, Sort.by(sortby).descending());
             }
         }
-        if (id == null && name == null && minPrice == null && maxPrice == null) {
-            return productRepository.findAllByIsDeleted(paging,0);
-        }
+
         if (id != null) {
             return productRepository.findByIdAndIsDeleted(paging, id, 0);
-        } else {
+        }
+        else {
             if (name == null) {
-                if (minPrice != null && maxPrice == null) {
+                // > minprice
+                if (minPrice != null && maxPrice == null && brand == null) {
                     return productRepository.findByPriceIsGreaterThanAndIsDeleted(paging, minPrice, 0);
-                } else if (minPrice == null && maxPrice != null) {
-//                    if (sortby.equals("name")) {
-//                        // find products that cheaper than max price then ordered by name desc
-//                        if(order.equals("desc")) {
-//                            return productRepository.findByPriceIsLessThanAndIsDeletedOrderByNameDesc(paging, maxPrice, 0);
-//                        }
-//                    }
+                }
+                // < maxprice
+                else if (minPrice == null && maxPrice != null && brand == null) {
                     return productRepository.findByPriceIsLessThanAndIsDeleted(paging, maxPrice, 0);
-                } else {
+                }
+                // minprice - maxprice
+                else if(minPrice != null && maxPrice != null && brand == null){
                     return productRepository.findByPriceBetweenAndIsDeleted(paging, minPrice, maxPrice, 0);
                 }
+                // brand and > min price
+                else if(minPrice != null && maxPrice == null && brand !=null) {
+                    return productRepository.findByBrandAndPriceIsGreaterThanAndIsDeleted(paging, brand, minPrice, 0);
+                }
+                // brand and < max price
+                else if (minPrice == null && maxPrice !=null && brand !=null) {
+                    return productRepository.findByBrandAndPriceIsLessThanAndIsDeleted(paging, brand, maxPrice, 0);
+                }
+                // brand and min price - max price
+                else if(minPrice != null && maxPrice != null && brand !=null) {
+                    return productRepository.findByBrandAndPriceBetweenAndIsDeleted(paging, brand, minPrice, maxPrice, 0);
+                }
+                // brand
+                else if (minPrice == null && maxPrice == null && brand != null){
+                    return productRepository.findByBrandAndIsDeleted(paging, brand, 0);
+
+                }
             } else {
-                if (minPrice != null && maxPrice == null) {
+                // name and > min price
+                if (minPrice != null && maxPrice == null && brand == null) {
                     return productRepository.findByNameContainsAndPriceIsGreaterThanAndIsDeleted(paging, name, minPrice, 0);
-                } else if (minPrice == null && maxPrice != null) {
+                }
+                // name and < max price
+                else if (minPrice == null && maxPrice != null && brand == null) {
                     return productRepository.findByNameContainsAndPriceIsLessThanAndIsDeleted(paging, name, maxPrice, 0);
-                } else if (minPrice != null && maxPrice != null) {
+                }
+                // name and min price - max price
+                else if (minPrice != null && maxPrice != null && brand == null) {
                     return productRepository.findByNameContainsAndPriceIsBetweenAndIsDeleted(paging, name, minPrice, maxPrice, 0);
-                } else {
+                }
+                // name
+                else if (brand == null){
                     return productRepository.findByNameContainsAndIsDeleted(paging, name, 0);
+                }
+                // name and brand and > min price
+                else if (minPrice != null && maxPrice == null && brand != null) {
+                    return productRepository.findByNameContainsAndBrandAndPriceIsGreaterThanAndIsDeleted(paging, name, brand, minPrice, 0);
+
+                }
+                // name and brand and < max price
+                else if (minPrice == null && maxPrice != null && brand !=null) {
+                    return productRepository.findByNameContainsAndBrandAndPriceIsLessThanAndIsDeleted(paging, name, brand, maxPrice, 0);
+                }
+                // name and brand and min price - max price
+                else if(minPrice != null && maxPrice !=null && brand != null) {
+                    return productRepository.findByNameContainsAndBrandAndPriceIsBetweenAndIsDeleted(paging, name, brand, minPrice, maxPrice, 0);
                 }
             }
         }
-
+        return productRepository.findAllByIsDeleted(paging,0);
     }
 
 
