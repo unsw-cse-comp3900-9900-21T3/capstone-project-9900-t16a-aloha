@@ -19,6 +19,8 @@
       chat-title="AlohaChatbot"
       agent-id="2b084b15-a99e-4da4-8550-3d67a3875396"
       language-code="en"
+      id="chat-bot"
+      style="display: none"
     ></df-messenger>
 
     <script
@@ -161,12 +163,12 @@
             </div>
           </div>
 
-          <div class="row mt-2 g-3" id="smart-button-container">
+          <div class="row mt-2 g-3 pay-btns" id="smart-button-container">
             <div style="text-align: center">
               <div id="paypal-button-container"></div>
             </div>
           </div>
-          <div class="row g-3">
+          <div class="row g-3 pay-btns">
             <div type="button" id="afterpay-button">
               <img
                 style="max-width: 100%; max-height: 100%"
@@ -418,19 +420,24 @@
 
           <select class="form-select w-50" id="admin-search-brand">
             <option value="" disabled selected>Brand</option>
+            <option value="">None</option>
             <option value="Nike">Nike</option>
             <option value="Adidas">Adidas</option>
           </select>
           <select class="form-select w-50" id="admin-search-price">
             <option value="" disabled selected>Price Range</option>
-            <option>100<</option>
-            <option>101-200</option>
-            <option>200></option>
+            <option value="">None</option>
+            <option value="1">100<</option>
+            <option value="2">101-200</option>
+            <option value="3">200></option>
           </select>
           <select class="form-select w-50" id="admin-search-sortby">
             <option value="" disabled selected>Sort By</option>
-            <option>Name</option>
-            <option>Price</option>
+            <option value="">None</option>
+            <option value="nameAsc">Name A-Z</option>
+            <option value="nameDesc">Name Z-A</option>
+            <option value="priceAsc">Price low-high</option>
+            <option value="priceDesc">Price high-low</option>
           </select>
           <button id="admin-search-btn" class="btn btn-secondary" type="button">
             Search
@@ -1214,21 +1221,24 @@
 
             <select class="form-select w-50" id="user-search-brand">
               <option value="" disabled selected>Brand</option>
-              <option value="">Empty</option>
+              <option value="">None</option>
               <option value="Nike">Nike</option>
               <option value="Adidas">Adidas</option>
             </select>
             <select class="form-select w-50" id="user-search-price">
               <option value="" disabled selected>Price Range</option>
-              <option value="">Empty</option>
+              <option value="">None</option>
               <option value="1">100<</option>
               <option value="2">101-200</option>
               <option value="3">200></option>
             </select>
             <select class="form-select w-50" id="user-search-sortby">
               <option value="" disabled selected>Sort By</option>
-              <option value="name">Name</option>
-              <option value="price">Price</option>
+              <option value="">None</option>
+              <option value="nameAsc">Name A-Z</option>
+              <option value="nameDesc">Name Z-A</option>
+              <option value="priceAsc">Price low-high</option>
+              <option value="priceDesc">Price high-low</option>
             </select>
             <button
               id="user-search-btn"
@@ -1503,7 +1513,10 @@
         </div>
       </div>
     </main>
-    <div style="position: fixed; top: 18vh; font-size: 1.2rem">
+    <div
+      id="accessibility-menu"
+      style="position: fixed; top: 18vh; font-size: 1.2rem"
+    >
       <button
         data-bs-toggle="collapse"
         href="#access-btns"
@@ -1712,6 +1725,31 @@
       document
         .getElementById("afterpay-button")
         .addEventListener("click", async function () {
+          const firstName = document.getElementById("check-first-name");
+          const lastName = document.getElementById("check-last-name");
+          const phone = document.getElementById("check-phone");
+          const address = document.getElementById("check-address");
+          const city = document.getElementById("check-city");
+          const state = document.getElementById("check-state");
+          const zip = document.getElementById("check-zip");
+
+          if (
+            firstName.value === "" ||
+            lastName.value === "" ||
+            phone.value === "" ||
+            address.value === "" ||
+            city.value === "" ||
+            state.value === "" ||
+            zip.value === ""
+          ) {
+            alert("Please do not left empty fields");
+            return;
+          }
+          if (!/^\d+$/.test(phone.value)) {
+            alert("Please enter valid phone number");
+            return;
+          }
+
           AfterPay.initialize({ countryCode: "AU" });
           // To avoid triggering browser anti-popup rules, the AfterPay.open()
           // function must be directly called inside the click event listener

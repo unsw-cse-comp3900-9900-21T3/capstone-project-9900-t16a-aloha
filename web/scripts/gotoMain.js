@@ -16,6 +16,8 @@ const userAboutPage = document.getElementById("user-about-page");
 const userProductDetailPage = document.getElementById(
   "user-product-detail-page"
 );
+const accessMenu = document.getElementById("accessibility-menu");
+const chatBot = document.getElementById("chat-bot");
 const gotoMain = () => {
   accountPage.style.display = "none";
   addProductPage.style.display = "none";
@@ -31,6 +33,8 @@ const gotoMain = () => {
     searchPage.style.display = "block";
     searchBar.style.display = "block";
     recommendPage.style.display = "none";
+    accessMenu.style.display = "none";
+    chatBot.style.display = "none";
   } else {
     // customer
     // 1. show recommend
@@ -40,6 +44,8 @@ const gotoMain = () => {
     searchPage.style.display = "none";
     searchBar.style.display = "none";
     recommendPage.style.display = "block";
+    accessMenu.style.display = "block";
+    chatBot.style.display = "block";
   }
 };
 gotoMain();

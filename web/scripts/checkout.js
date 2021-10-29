@@ -11,6 +11,7 @@ const city = document.getElementById("check-city");
 const state = document.getElementById("check-state");
 const zip = document.getElementById("check-zip");
 const shoppingcartParent = document.getElementById("shopping-cart-list");
+const inputList = [firstName, lastName, phone, address, city, state, zip];
 checkoutBtn.addEventListener("click", async () => {
   if (shoppingcartParent.childNodes.length === 0) {
     alert("No items in shopping cart");
@@ -55,6 +56,45 @@ checkoutBtn.addEventListener("click", async () => {
   }
 });
 
+const disableBtn = () => {
+  if (
+    firstName.value === "" ||
+    lastName.value === "" ||
+    phone.value === "" ||
+    address.value === "" ||
+    city.value === "" ||
+    state.value === "" ||
+    zip.value === ""
+  ) {
+    for (let btn of document.getElementsByClassName("pay-btns")) {
+      console.log(btn.style.pointerEvents);
+      btn.style.pointerEvents = "none";
+      btn.style.opacity = "50%";
+    }
+    alert("Please do not left empty fields");
+    return;
+  } else {
+    for (let btn of document.getElementsByClassName("pay-btns")) {
+      console.log(btn.style.pointerEvents);
+      btn.style.pointerEvents = "auto";
+      btn.style.opacity = "100%";
+    }
+  }
+  if (!/^\d+$/.test(phone.value)) {
+    for (let btn of document.getElementsByClassName("pay-btns")) {
+      console.log(btn.style.pointerEvents);
+      btn.style.pointerEvents = "none";
+      btn.style.opacity = "50%";
+    }
+    alert("Please enter valid phone number");
+    return;
+  }
+};
+for (let ele of inputList) {
+  ele.removeEventListener("change", disableBtn);
+  ele.addEventListener("change", disableBtn);
+}
+
 function initPayPalButton(moneyAmt) {
   paypal
     .Buttons({
@@ -86,7 +126,8 @@ function initPayPalButton(moneyAmt) {
           //   const element = document.getElementById("paypal-button-container");
           //   element.innerHTML = "";
           //   element.innerHTML = "<h3>Thank you for your payment!</h3>";
-          actions.redirect("http://localhost:7999/finished.html");
+          location.href = "./finished.html";
+          // actions.redirect("http://localhost:7999/finished.html");
           // Or go to another URL:  actions.redirect('thank_you.html');
         });
       },

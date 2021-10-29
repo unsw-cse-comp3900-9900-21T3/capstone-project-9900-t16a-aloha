@@ -9,6 +9,9 @@ const loadMoreBtn = document.getElementById("search-load-more-btn");
 
 const selectBrand = document.getElementById("user-search-brand");
 const selectPrice = document.getElementById("user-search-price");
+const sortBy = document.getElementById("user-search-sortby");
+const searchInput = document.getElementById("user-search-input");
+const searchBtn = document.getElementById("user-search-btn");
 let offset = 1;
 let filterIndex = 0;
 const getUserSearchProductList = async () => {
@@ -215,7 +218,12 @@ const loadMoreUserSearch = async (offset) => {
   }
 };
 loadMoreBtn.addEventListener("click", () => {
-  if (selectBrand.value != "" || selectPrice.value != "") {
+  if (
+    selectBrand.value != "" ||
+    selectPrice.value != "" ||
+    sortBy.value != "" ||
+    searchInput.value != ""
+  ) {
     filterIndex++;
     priceBrandLoadMore(filterIndex);
   } else {
@@ -238,6 +246,20 @@ const priceBrand = async (filterIndex) => {
   } else if (selectPrice.value == 3) {
     url += "&minprice=" + "200";
   }
+  if (sortBy.value == "nameAsc") {
+    url += "&sortby=name" + "&order=asc";
+  } else if (sortBy.value == "nameDesc") {
+    url += "&sortby=name" + "&order=desc";
+  } else if (sortBy.value == "priceAsc") {
+    url += "&sortby=price" + "&order=asc";
+  } else if (sortBy.value == "priceDesc") {
+    url += "&sortby=price" + "&order=desc";
+  }
+
+  if (searchInput.value != "") {
+    url += "&name=" + searchInput.value;
+  }
+
   console.log(url);
   try {
     const response = await fetch(url, {
@@ -318,6 +340,20 @@ const priceBrandLoadMore = async (filterIndex) => {
     url += "&maxprice=" + "200";
   } else if (selectPrice.value == 3) {
     url += "&minprice=" + "200";
+  }
+
+  if (sortBy.value == "nameAsc") {
+    url += "&sortby=name" + "&order=asc";
+  } else if (sortBy.value == "nameDesc") {
+    url += "&sortby=name" + "&order=desc";
+  } else if (sortBy.value == "priceAsc") {
+    url += "&sortby=price" + "&order=asc";
+  } else if (sortBy.value == "priceDesc") {
+    url += "&sortby=price" + "&order=desc";
+  }
+
+  if (searchInput.value != "") {
+    url += "&name=" + searchInput.value;
   }
   console.log(url);
   try {
@@ -404,4 +440,18 @@ selectPrice.addEventListener("change", () => {
   filterIndex = 0;
   priceBrand(filterIndex);
 });
+
+sortBy.addEventListener("change", () => {
+  loadMoreBtn.style.display = "initial";
+  offset = 1;
+  filterIndex = 0;
+  priceBrand(filterIndex);
+});
+searchBtn.addEventListener("click", () => {
+  loadMoreBtn.style.display = "initial";
+  offset = 1;
+  filterIndex = 0;
+  priceBrand(filterIndex);
+});
+
 export { getUserSearchProductList };
