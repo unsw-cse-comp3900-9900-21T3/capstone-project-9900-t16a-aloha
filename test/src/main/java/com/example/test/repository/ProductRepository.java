@@ -28,6 +28,16 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findByBrandAndPriceIsLessThanAndVisibilityAndIsDeleted(Pageable page, String brand, Float maxPrice, Integer visibility, Integer isDeleted);
     Page<Product> findByBrandAndPriceBetweenAndVisibilityAndIsDeleted(Pageable page, String brand, Float minPrice, Float maxPrice, Integer visibility, Integer isDeleted);
     Page<Product> findByNameContainsAndVisibilityAndIsDeleted(Pageable page, String name, Integer visibility, Integer isDeleted);
+    Page<Product> findByNameContainsAndBrandAndVisibilityAndIsDeleted(Pageable page, String name, String brand, Integer visibility, Integer isDeleted);
+    Page<Product> findByNameContainsAndPriceIsLessThanAndVisibilityAndIsDeleted(Pageable page, String name, Float maxPrice, Integer visibility, Integer isDeleted);
+    Page<Product> findByNameContainsAndPriceIsGreaterThanAndVisibilityAndIsDeleted(Pageable page, String name, Float maxPrice, Integer visibility, Integer isDeleted);
+    Page<Product> findByNameContainsAndPriceIsBetweenAndVisibilityAndIsDeleted(Pageable page, String name, Float minPrice,Float maxPrice, Integer visibility, Integer isDeleted);
+    Page<Product> findByBrandAndPriceIsBetweenAndVisibilityAndIsDeleted(Pageable page, String brand, Float minPrice, Float maxPrice, Integer visibility, Integer isDeleted);
+    Page<Product> findByNameContainsAndBrandAndPriceIsLessThanAndVisibilityAndIsDeleted(Pageable page, String name, String brand, Float maxPrice, Integer visibility, Integer isDeleted);
+    Page<Product> findByNameContainsAndBrandAndPriceIsGreaterThanAndVisibilityAndIsDeleted(Pageable page, String name, String brand, Float minPrice, Integer visibility, Integer isDeleted);
+    Page<Product> findByNameContainsAndBrandAndPriceIsBetweenAndVisibilityAndIsDeleted(Pageable page, String name, String brand, Float minPrice, Float maxPrice, Integer visibility, Integer isDeleted);
+
+
     // admin query: consider isDeleted
     Page<Product> findByNameContainsAndBrandAndPriceIsBetweenAndIsDeleted(Pageable page, String name, String brand, Float minPrice, Float maxPrice, Integer isDeleted);
     Page<Product> findByNameContainsAndBrandAndPriceIsLessThanAndIsDeleted(Pageable page, String name, String brand, Float maxPrice, Integer isDeleted);
