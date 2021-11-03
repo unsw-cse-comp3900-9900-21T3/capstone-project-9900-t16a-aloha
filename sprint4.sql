@@ -17,7 +17,7 @@ CREATE TABLE `orderhistory` (
   `orderTime` datetime NOT NULL,
   `firstName` varchar(50) DEFAULT NULL,
   `lastName` varchar(50) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
+  `street` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `city` varchar(50) DEFAULT NULL,
   `state` varchar(50) DEFAULT NULL,
