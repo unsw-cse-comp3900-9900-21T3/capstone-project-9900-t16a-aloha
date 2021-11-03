@@ -638,4 +638,35 @@ public class UserController {
         res.put("status", "success");
         return res;
     }
+
+    @GetMapping(path = "/getOrders/{id}")
+    @CrossOrigin
+    public @ResponseBody ArrayList<Map<String, Object>> getOrders(@PathVariable(name = "id") Integer userid) {
+        Iterable<OrderHistory> orderHistories = orderHistoryRepository.findByUserIdOrderByOrderTimeDesc(userid);
+        ArrayList<Map<String, Object>> res = new ArrayList<>();
+        for(OrderHistory order: orderHistories) {
+            Iterable<OrderDetail> orderDetails = orderDetailRepository.findByOrderId_OrderHistory_Id(order.getId());
+            Map<String, Object> orderInfo = new LinkedHashMap<>();
+            orderInfo.put("orderid", order.getId());
+            orderInfo.put("phone", order.getTelephone());
+            orderInfo.put("firstName", order.getFirstname());
+            orderInfo.put("lastName", order.getLastname());
+            orderInfo.put("street", order.getStreet());
+            orderInfo.put("city", order.getCity());
+            orderInfo.put("postcode", order.getPostcode());
+            orderInfo.put("state", order.getState());
+            orderInfo.put("orderTime", order.getOrderTime());
+            ArrayList<Map<String, Object>> products = new ArrayList<>();
+            for(OrderDetail orderDetail: orderDetails) {
+                Map<String, Object> product = new LinkedHashMap<>(3);
+                product.put("id", orderDetail.getOrderId().getProduct().getId());
+                product.put("size", orderDetail.getOrderId().getSize());
+                product.put("qty", orderDetail.getQuantity());
+                products.add(product);
+            }
+            orderInfo.put("products", products);
+            res.add(orderInfo);
+        }
+        return res;
+    }
 }
