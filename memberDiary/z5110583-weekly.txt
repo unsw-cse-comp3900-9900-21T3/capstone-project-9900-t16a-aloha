@@ -60,11 +60,24 @@ Plan sprint 3
 
 28/10/2021
 
-Last week: week5
+Last week: week6
 Finish sprint 2
 
-This week: week6
+This week: week7
 Getting to finish sprint 3, including accessibility, search function and order payment.
 
-Next week: week7
+Next week: week8
 Demo B for sprint 2 and 3 
+
+----------------------------------------------------------------------------------------------------
+
+03/11/2021
+
+Last week: week7
+Finish sprint 3, and Demo B
+
+This week: week8
+Demo B, Getting to finish sprint 4, including orders, order history
+
+Next week: week9
+Finish all sprints
