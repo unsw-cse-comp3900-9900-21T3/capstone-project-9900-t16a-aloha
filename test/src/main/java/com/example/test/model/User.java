@@ -39,6 +39,8 @@ public class User {
     private String lastVisited;
     @Column(name = "lastpurchased")
     private String lastPurchased;
+    @Column(name = "preferred")
+    private String preferred;
 
     @OneToMany(mappedBy = "shoppingCartId.user")
     private Set<ShoppingCart> shoppingCart;
@@ -165,5 +167,13 @@ public class User {
 
     public void setLastPurchased(String lastPurchased) {
         this.lastPurchased = lastPurchased;
+    }
+
+    public String getPreferred() {
+        return preferred;
+    }
+
+    public void setPreferred(String preferred) {
+        this.preferred = preferred;
     }
 }
