@@ -122,10 +122,19 @@ function initPayPalButton(moneyAmt) {
             JSON.stringify(orderData, null, 2)
           );
 
-          // Show a success message within this page, e.g.
-          //   const element = document.getElementById("paypal-button-container");
-          //   element.innerHTML = "";
-          //   element.innerHTML = "<h3>Thank you for your payment!</h3>";
+          
+          //TODO  send create order request
+          const url = `http://localhost:8080/test/creatOrder/${sessionStorage.getItem("userID")}`;
+          let sendJs = { firstname:firstName.value,
+                        lastname:lastName.value,
+                        telephone:phone.value,
+                        street:address.value,
+                        city:city.value,
+                        state:state.value,
+                        postcode:zip.value}
+          
+          
+          
           location.href = "./finished.html";
           // actions.redirect("http://localhost:7999/finished.html");
           // Or go to another URL:  actions.redirect('thank_you.html');

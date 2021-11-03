@@ -12,16 +12,21 @@ const pDescription = document.getElementById("user-product-page-desc");
 const imgList = document.getElementById("user-product-img-list");
 const imgTemplate = document.getElementById("add-product-img-template");
 const editMainImg = document.getElementById("user-product-main-img");
+const ratingList = document.getElementById("rating-list");
 
 const addCartBtn = document.getElementById("user-addcart-product-btn");
+const outOfStk = document.getElementById("user-product-detail-out-of-stk");
+
 let pid;
 let stockPair = new Map();
 const getProductDetail = async (productId) => {
   removeAllChilds(imgList);
+  removeAllChilds(ratingList);
   pSize.value = "default";
   pQty.value = "";
   pid = productId;
   stockPair.clear();
+  outOfStk.style.display = "none";
   try {
     const url = `http://localhost:8080/admin/search/id/${productId}`;
     const response = await fetch(url, {
@@ -38,6 +43,26 @@ const getProductDetail = async (productId) => {
     if (d.status === "fail") {
       alert("Something Wrong");
     } else {
+      // rating
+      let i = 0;
+      
+      while (i < parseInt(d.avgRating,10)){
+        const Star = document.createElement("i");
+        Star.classList.add("bi");
+        Star.classList.add("bi-star-fill");
+        Star.classList.add("col-1");
+        ratingList.appendChild(Star);
+        i++;
+      }
+      while (i < 5){
+        const emptyStar = document.createElement("i");
+        emptyStar.classList.add("bi");
+        emptyStar.classList.add("bi-star");
+        emptyStar.classList.add("col-1");
+        ratingList.appendChild(emptyStar);
+        i++;
+      }
+      // others
       pTitle.innerText = d.name;
 
       pPrice.innerText = "$" + d.price;
@@ -64,12 +89,19 @@ const getProductDetail = async (productId) => {
           // console.log(stk.stock);
           // console.log(stk.storgeid.size);
           if (stk.storgeid.product.id === productId) {
-            stockPair.set(stk.storgeid.size.toString(), stk.stock.toString());
+            if (stk.stock.toString() != 0){
+              stockPair.set(stk.storgeid.size.toString(), stk.stock.toString());
+            }
           }
         });
         console.log(stockPair);
       } catch (err) {
         console.error(`Error: ${err}`);
+      }
+      if (stockPair.size == 0){
+        outOfStk.style.display = "block";
+      } else {
+        outOfStk.style.display = "none";
       }
       // pSize.value = "";
       // pQty.value = "";

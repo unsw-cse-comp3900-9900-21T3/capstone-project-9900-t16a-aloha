@@ -1,10 +1,14 @@
+import { getAllOrders } from "./orderHistory.js";
 const accountAddressBtn = document.getElementById("account-address-btn");
 const accountAccountBtn = document.getElementById("account-account-btn");
+const accountOrderBtn = document.getElementById("account-order-btn");
 
 const accountIconUsername = document.getElementById("account-icon-username");
 
 const acctAddrPage = document.getElementById("address-subpage");
 const acctAcctPage = document.getElementById("accout-subpage");
+const acctOrderPage = document.getElementById("order-subpage");
+
 const acctEmail = document.getElementById("account-email");
 
 const acctFName = document.getElementById("account-first-name");
@@ -78,22 +82,39 @@ const preLoadAddr = async () => {
     console.error(`Error: ${err}`);
   }
 };
-export { preLoadAddr, preLoadAcct };
+
+const preLoadOrder = ()=>{
+  console.log("preloadorder");
+  getAllOrders();
+}
+export { preLoadAddr, preLoadAcct ,preLoadOrder};
 preLoadAddr();
 preLoadAcct();
+
 const gotoAddr = () => {
   acctAddrPage.style.display = "block";
   acctAcctPage.style.display = "none";
+  acctOrderPage.style.display = "none";
   preLoadAddr();
 };
 const gotoAcct = () => {
   acctAcctPage.style.display = "block";
   acctAddrPage.style.display = "none";
+  acctOrderPage.style.display = "none";
   preLoadAcct();
 };
+
+
+const gotoOrder = () =>{
+  acctAcctPage.style.display = "none";
+  acctAddrPage.style.display = "none";
+  acctOrderPage.style.display = "block";
+  preLoadOrder();
+}
+
 accountAddressBtn.addEventListener("click", gotoAddr);
 accountAccountBtn.addEventListener("click", gotoAcct);
-
+accountOrderBtn.addEventListener("click", gotoOrder);
 // Account info POST request
 
 const acctChangeBtn = document.getElementById("account-change-btn");

@@ -478,6 +478,7 @@
                 <button
                   type="button"
                   class="list-group-item list-group-item-action"
+                  id="account-order-btn"
                 >
                   My Orders
                 </button>
@@ -656,6 +657,16 @@
                   Change
                 </button>
               </div>
+            </div>
+          </div>
+          <div class="col-7 ms-auto" id="order-subpage">
+            <div class="row">
+              <h1>MY ORDERS</h1>
+              <small class="text-muted">View your orders</small>
+              <hr class="m-2" />
+            </div>
+            <div class="row overflow-auto">
+              <div class="accordion" id="order-history-list"></div>
             </div>
           </div>
         </div>
@@ -1292,82 +1303,16 @@
                 </h3>
               </div>
             </div>
-            <div class="row mb-5">
-              <div type="button " class="col-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  class="bi bi-star-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                  />
-                </svg>
-              </div>
-              <div type="button" class="col-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  class="bi bi-star-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                  />
-                </svg>
-              </div>
-              <div type="button" class="col-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  class="bi bi-star-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                  />
-                </svg>
-              </div>
-              <div type="button" class="col-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  class="bi bi-star-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
-                  />
-                </svg>
-              </div>
-              <div type="button" class="col-1">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  class="bi bi-star"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
-                  />
-                </svg>
-              </div>
-            </div>
+            <div class="row mb-5" id="rating-list"></div>
 
             <div class="row mb-3">
               <div class="form-group">
                 <h5 id="user-product-detail-price">$99.99</h5>
+              </div>
+              <div class="form-group">
+                <h5 style="color: #d9534f" id="user-product-detail-out-of-stk">
+                  Out of stock
+                </h5>
               </div>
             </div>
             <div class="row mb-5">
@@ -1714,6 +1659,93 @@
           ></button>
         </div>
       </li>
+
+      <div class="accordion-item" id="order-history-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseOne"
+            aria-expanded="false"
+            aria-controls="collapseOne"
+          >
+            <div class="row">
+              <div class="row">
+                <div class="d-flex justify-content-between">
+                  <h5 class="order-history-item-number">Order #999</h5>
+                  <span class="order-history-item-name text-muted"
+                    >First Name Last Name</span
+                  >
+                </div>
+              </div>
+              <div class="row">
+                <div class="d-flex justify-content-between">
+                  <label class="order-history-item-addr">Address</label>
+                  <label class="order-history-item-phone">Phone</label>
+                </div>
+                <div class="">
+                  <label class="order-history-item-city">City</label>
+                  <label class="order-history-item-state">State</label>
+                  <label class="order-history-item-zip">Zip</label>
+                </div>
+              </div>
+            </div>
+
+            <h5>$99.99</h5>
+          </button>
+        </h2>
+        <div
+          id="collapseOne"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingOne"
+          data-bs-parent="#accordionExample"
+        >
+          <div class="accordion-body">
+            <ul class="list-group list-group-flush order-product-list"></ul>
+          </div>
+        </div>
+      </div>
+
+      <li
+        class="list-group-item d-flex justify-content-between"
+        id="order-product-item"
+      >
+        <div>
+          <img
+            src="assets/shoe.png"
+            width="50"
+            height="50"
+            style="
+              display: block;
+              max-width: 80px;
+              max-height: 100px;
+              width: auto;
+              height: auto;
+            "
+          />
+        </div>
+        <div
+          class="d-flex flex-column justify-content-between"
+          style="width: 250px"
+        >
+          <h6 class="shop-name">Shoe Name Shoe Name Shoe Name Shoe Name</h6>
+          <small class="text-muted shop-price">$ 99.99</small>
+        </div>
+        <div class="d-flex flex-column justify-content-between">
+          <h6>Qty : <small class="text-muted shop-qty">2</small></h6>
+
+          <h6>
+            Size:
+            <small class="text-muted shop-size">US 7</small>
+          </h6>
+        </div>
+        <div
+          class="d-flex flex-column justify-content-between align-items-center"
+        >
+          <h6 class="total-price">$ 99.99</h6>
+        </div>
+      </li>
     </div>
     <div class="cursor"></div>
     <script>
@@ -1769,6 +1801,20 @@
           AfterPay.transfer({ token: "Basic YWFhOmJiYg==" });
           console.log("Payment Finished");
           setTimeout(() => {
+            //TODO  send create order request
+            const url = `http://localhost:8080/test/creatOrder/${sessionStorage.getItem(
+              "userID"
+            )}`;
+            let sendJs = {
+              firstname: firstName.value,
+              lastname: lastName.value,
+              telephone: phone.value,
+              street: address.value,
+              city: city.value,
+              state: state.value,
+              postcode: zip.value,
+            };
+
             location.href = "./finished.html";
           }, 2000);
         });
