@@ -28,13 +28,16 @@ CREATE TABLE `orderhistory` (
   CONSTRAINT `order_fk1` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- ----------------------------
+-- Table structure for orderdetail
+-- ----------------------------
 DROP TABLE IF EXISTS `orderdetail`;
 CREATE TABLE `orderdetail` (
   `orderID` int NOT NULL,
   `productID` varchar(50) NOT NULL,
   `size` decimal(3,1) NOT NULL,
   `quantity` int NOT NULL,
-  PRIMARY KEY (`orderID`,`productID`),
+  PRIMARY KEY (`orderID`,`productID`,`size`) USING BTREE,
   KEY `orderid_fk2` (`productID`),
   CONSTRAINT `orderid_fk1` FOREIGN KEY (`orderID`) REFERENCES `orderhistory` (`orderID`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `orderid_fk2` FOREIGN KEY (`productID`) REFERENCES `product` (`productID`) ON DELETE CASCADE ON UPDATE CASCADE
