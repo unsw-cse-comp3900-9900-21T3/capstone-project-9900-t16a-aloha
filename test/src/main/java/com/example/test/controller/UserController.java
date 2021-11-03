@@ -1,8 +1,8 @@
 package com.example.test.controller;
 
 import com.example.test.model.*;
-import com.example.test.repository.ProductRepository;
-import com.example.test.repository.WishlistRepository;
+import com.example.test.repository.*;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.net.http.HttpRequest;
@@ -11,8 +11,6 @@ import java.util.*;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.test.repository.ShoppingCartRepository;
-import com.example.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -35,6 +33,15 @@ public class UserController {
 
     @Autowired
     private WishlistRepository wishlistRepository;
+
+    @Autowired
+    private OrderHistoryRepository orderHistoryRepository;
+
+    @Autowired
+    private StorgeRepository storgeRepository;
+
+    @Autowired
+    OrderDetailRepository orderDetailRepository;
 
     @GetMapping(path = "/all")
     @CrossOrigin
@@ -550,6 +557,85 @@ public class UserController {
             wishlist.put("price", product.getPrice());
             res.add(wishlist);
         }
+        return res;
+    }
+
+    @PostMapping(path = "/creatOrder/{id}")
+    @CrossOrigin
+    public @ResponseBody Map<String, Object> createOrder(@PathVariable(name = "id") Integer userid, @RequestBody OrderHistory order) {
+        Map<String, Object> res = new LinkedHashMap<>();
+        Date date = new Date();
+        ArrayList<ShoppingCart> items = new ArrayList<>();
+        OrderHistory orderHistory = new OrderHistory();
+        // insert data into order history table
+        try {
+
+            Iterable<ShoppingCart> shoppingCarts =  shoppingCartRepository.findByShoppingCartId_User_Id(userid);
+            float cost = 0;
+            // calculate total cost
+            for(ShoppingCart s: shoppingCarts) {
+                items.add(s);
+                ShoppingCartId shoppingCartId = s.getShoppingCartId();
+                Product product = shoppingCartId.getProduct();
+                int quantity = s.getQuantity();
+                cost += quantity * product.getPrice();
+            }
+            // while shopping cart is empty
+            if (items.size() == 0) {
+                res.put("status", "fail");
+                res.put("msg", "Shopping cart is empty");
+                return res;
+            }
+            // save result to order history table
+            order.setTotalCost(cost);
+            order.setUserId(userid);
+            order.setOrderTime(date);
+            orderHistory = orderHistoryRepository.save(order);
+            orderHistoryRepository.flush();
+
+
+
+        }
+        catch (Exception e) {
+            res.put("status", "fail");
+            res.put("msg", e.getMessage());
+            return res;
+        }
+        //insert data into order detail table;
+        try {
+
+            for(ShoppingCart s: items) {
+                // remove from shopping cart
+                ShoppingCartId shoppingCartId = s.getShoppingCartId();
+                shoppingCartRepository.deleteById(shoppingCartId);
+                // reduce the stock
+                StorgeId storgeId = new StorgeId();
+                storgeId.setProduct(shoppingCartId.getProduct());
+                storgeId.setSize(shoppingCartId.getSize());
+                Optional<Storge> optional = storgeRepository.findById(storgeId);
+                Storge storge = optional.get();
+                int stock = storge.getStock();
+                storge.setStock(stock - s.getQuantity());
+                storgeRepository.save(storge);
+                // insert into order detail
+                OrderId orderId = new OrderId();
+                orderId.setOrderHistory(orderHistory);
+                orderId.setProduct(shoppingCartId.getProduct());
+                orderId.setSize(shoppingCartId.getSize());
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setOrderId(orderId);
+                orderDetail.setQuantity(s.getQuantity());
+                orderDetailRepository.save(orderDetail);
+            }
+
+
+        }
+        catch (Exception e) {
+            res.put("status", "fail");
+            res.put("msg", e.getMessage());
+            return res;
+        }
+        res.put("status", "success");
         return res;
     }
 }

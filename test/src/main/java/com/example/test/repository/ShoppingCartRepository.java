@@ -8,4 +8,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, ShoppingCartId> {
     Iterable<ShoppingCart> findByShoppingCartId_User_Id(Integer id);
+
 }
