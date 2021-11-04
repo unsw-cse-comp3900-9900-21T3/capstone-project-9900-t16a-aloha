@@ -153,7 +153,7 @@ loadMoreBtn.addEventListener("click", () => {
     filterIndex++;
     priceBrandLoadMore(filterIndex);
   } else {
-    loadMoreUserSearch(offset);
+    loadMoreProductList(offset);
     offset++;
   }
 });

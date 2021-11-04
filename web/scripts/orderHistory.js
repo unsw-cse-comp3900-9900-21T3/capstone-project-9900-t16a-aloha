@@ -67,7 +67,7 @@ const getAllOrders = async () => {
         orderProduct.getElementsByClassName("shop-price")[0].innerText =
           "$ " + pDetail.price;
         orderProduct.getElementsByClassName("total-price")[0].innerText =
-          "$ " + parseFloat(pDetail.price) * parseInt(p.qty, 10);
+          "$ " + (parseFloat(pDetail.price) * parseInt(p.qty, 10)).toFixed(2);
         totalPrice += parseFloat(pDetail.price) * parseInt(p.qty, 10);
         orderProduct.getElementsByClassName("shop-qty")[0].innerText = p.qty;
         orderProduct.getElementsByClassName("shop-size")[0].innerText =
@@ -83,7 +83,7 @@ const getAllOrders = async () => {
           .appendChild(orderProduct);
       }
       anOrder.getElementsByClassName("order-total-price")[0].innerText =
-        "$" + totalPrice;
+        "$" + totalPrice.toFixed(2);
       orderItemParent.appendChild(anOrder);
     }
   } catch (err) {

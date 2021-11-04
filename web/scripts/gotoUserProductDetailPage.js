@@ -1,7 +1,5 @@
-import { gotoMain } from "./gotoMain.js";
+// import { gotoMain } from "./gotoMain.js";
 import { createUId, removeAllChilds } from "./helper.js";
-const backBtn = document.getElementById("user-product-page-back-btn");
-backBtn.addEventListener("click", gotoMain);
 
 const pBrand = document.getElementById("user-product-detail-brand");
 const pTitle = document.getElementById("user-product-detail-name");
@@ -45,8 +43,8 @@ const getProductDetail = async (productId) => {
     } else {
       // rating
       let i = 0;
-      
-      while (i < parseInt(d.avgRating,10)){
+
+      while (i < parseInt(d.avgRating, 10)) {
         const Star = document.createElement("i");
         Star.classList.add("bi");
         Star.classList.add("bi-star-fill");
@@ -54,7 +52,7 @@ const getProductDetail = async (productId) => {
         ratingList.appendChild(Star);
         i++;
       }
-      while (i < 5){
+      while (i < 5) {
         const emptyStar = document.createElement("i");
         emptyStar.classList.add("bi");
         emptyStar.classList.add("bi-star");
@@ -89,7 +87,7 @@ const getProductDetail = async (productId) => {
           // console.log(stk.stock);
           // console.log(stk.storgeid.size);
           if (stk.storgeid.product.id === productId) {
-            if (stk.stock.toString() != 0){
+            if (stk.stock.toString() != 0) {
               stockPair.set(stk.storgeid.size.toString(), stk.stock.toString());
             }
           }
@@ -98,7 +96,7 @@ const getProductDetail = async (productId) => {
       } catch (err) {
         console.error(`Error: ${err}`);
       }
-      if (stockPair.size == 0){
+      if (stockPair.size == 0) {
         outOfStk.style.display = "block";
       } else {
         outOfStk.style.display = "none";

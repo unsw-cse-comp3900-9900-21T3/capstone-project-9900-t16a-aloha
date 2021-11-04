@@ -1,14 +1,14 @@
-import { preLoadAddr, preLoadAcct ,preLoadOrder} from "./account.js";
+import { preLoadAddr, preLoadAcct, preLoadOrder } from "./account.js";
 import { gotoMain } from "./gotoMain.js";
 import { getUserSearchProductList } from "./userSearchPage.js";
 
 import { getProductDetail } from "./gotoUserProductDetailPage.js";
 // nav bars element
-const mainBtn = document.getElementById("left-top-main");
+
 const navDropdownAddr = document.getElementById("nav-dropdown-addr");
 const navDropdownAcct = document.getElementById("nav-dropdown-acct");
-const navDropdownOrder = document.getElementById("nav-dropdown-order")
-const justForYouLink = document.getElementById("user-main-page-link");
+const navDropdownOrder = document.getElementById("nav-dropdown-order");
+
 const userSearchPageLink = document.getElementById("user-search-page-link");
 const logoutBtn = document.getElementsByClassName("nav-dropdown-logout");
 const aboutLink = document.getElementById("user-about-page-link");
@@ -32,11 +32,9 @@ const userProductDetailPage = document.getElementById(
 );
 // main page init
 
-mainBtn.addEventListener("click", gotoMain);
-justForYouLink.addEventListener("click", gotoMain);
 // go to account Addr
 const gotoAccountAddr = () => {
-  acctOrderPage.style.display = "none"
+  acctOrderPage.style.display = "none";
   acctAddrPage.style.display = "block";
   acctAcctPage.style.display = "none";
   searchPage.style.display = "none";
@@ -52,7 +50,7 @@ const gotoAccountAddr = () => {
 
 // go to account account
 const gotoAccountAcct = () => {
-  acctOrderPage.style.display = "none"
+  acctOrderPage.style.display = "none";
   acctAddrPage.style.display = "none";
   acctAcctPage.style.display = "block";
   searchPage.style.display = "none";
@@ -68,7 +66,7 @@ const gotoAccountAcct = () => {
 
 // go to account account
 const gotoAccountOrder = () => {
-  acctOrderPage.style.display = "block"
+  acctOrderPage.style.display = "block";
   acctAddrPage.style.display = "none";
   acctAcctPage.style.display = "none";
   searchPage.style.display = "none";
@@ -82,7 +80,6 @@ const gotoAccountOrder = () => {
   preLoadOrder();
 };
 
-
 const gotoUserSearchPage = () => {
   userSearchPage.style.display = "block";
   userSearchBar.style.display = "block";
@@ -91,7 +88,7 @@ const gotoUserSearchPage = () => {
   userProductDetailPage.style.display = "none";
   acctAddrPage.style.display = "none";
   acctAcctPage.style.display = "none";
-  acctOrderPage.style.display = "none"
+  acctOrderPage.style.display = "none";
   searchPage.style.display = "none";
   accountPage.style.display = "none";
   userAboutPage.style.display = "none";
@@ -104,7 +101,7 @@ const gotoUserProductDetailPageDom = (pid) => {
   userSearchPage.style.display = "none";
   userSearchBar.style.display = "none";
   acctAddrPage.style.display = "none";
-  acctOrderPage.style.display = "none"
+  acctOrderPage.style.display = "none";
   acctAcctPage.style.display = "none";
   searchPage.style.display = "none";
   accountPage.style.display = "none";
@@ -118,7 +115,7 @@ const gotoAbout = () => {
   userAboutPage.style.display = "block";
 
   userSearchPage.style.display = "none";
-  acctOrderPage.style.display = "none"
+  acctOrderPage.style.display = "none";
   userSearchBar.style.display = "none";
   acctAddrPage.style.display = "none";
   acctAcctPage.style.display = "none";

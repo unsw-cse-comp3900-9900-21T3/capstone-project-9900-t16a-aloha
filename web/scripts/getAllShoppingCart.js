@@ -67,7 +67,7 @@ const getAllShoppingCart = async () => {
           "US " + p.size;
 
         newItem.getElementsByClassName("total-price")[0].innerText =
-          "$" + parseFloat(priceOfP) * parseInt(p.quantity, 10);
+          "$" + (parseFloat(priceOfP) * parseInt(p.quantity, 10)).toFixed(2);
         newItem
           .getElementsByClassName("del-shopping-cart-item")[0]
           .addEventListener("click", async (e) => {

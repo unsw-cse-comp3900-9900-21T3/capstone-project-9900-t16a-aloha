@@ -1,4 +1,5 @@
 import { getProductList } from "./adminProductList.js";
+import { getRecommend } from "./getRecommend.js";
 // admin/user header
 const adminHeader = document.getElementById("admin-header");
 const userHeader = document.getElementById("user-header");
@@ -38,7 +39,7 @@ const gotoMain = () => {
   } else {
     // customer
     // 1. show recommend
-
+    getRecommend();
     adminHeader.style.display = "none";
     userHeader.style.display = "block";
     searchPage.style.display = "none";
@@ -49,6 +50,13 @@ const gotoMain = () => {
   }
 };
 gotoMain();
+
+const backBtn = document.getElementById("user-product-page-back-btn");
+backBtn.addEventListener("click", gotoMain);
+const mainBtn = document.getElementById("left-top-main");
+mainBtn.addEventListener("click", gotoMain);
+const justForYouLink = document.getElementById("user-main-page-link");
+justForYouLink.addEventListener("click", gotoMain);
 // add product detail
 // searchPage.style.display = "none";
 // searchBar.style.display = "none";

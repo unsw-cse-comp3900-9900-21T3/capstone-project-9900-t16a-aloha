@@ -49,8 +49,8 @@ checkoutBtn.addEventListener("click", async () => {
     }
     const money = document.getElementById("total-amount-check").innerText;
     const amt = money.substring(1);
-    initPayPalButton(parseFloat(amt));
-    sessionStorage.setItem("totalAmt", amt);
+    initPayPalButton(parseFloat(amt).toFixed(2));
+    sessionStorage.setItem("totalAmt", parseFloat(amt).toFixed(2));
   } catch (err) {
     console.log(err);
   }
