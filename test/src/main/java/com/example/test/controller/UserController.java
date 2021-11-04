@@ -636,6 +636,7 @@ public class UserController {
             return res;
         }
         res.put("status", "success");
+        res.put("orderid", orderHistory.getId());
         return res;
     }
 
