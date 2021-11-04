@@ -27,7 +27,7 @@ const getAllOrders = () => {
     // for (let order in d.orders){
 
     // }
-    console.log("?????");
+
     let d = {
       orderId: "abc",
       phone: "423526851",

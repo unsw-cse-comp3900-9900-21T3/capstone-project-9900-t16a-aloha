@@ -114,7 +114,7 @@ function initPayPalButton(moneyAmt) {
       },
 
       onApprove: function (data, actions) {
-        return actions.order.capture().then(function (orderData) {
+        return actions.order.capture().then(async function (orderData) {
           // Full available details
           console.log(
             "Capture result",
@@ -122,19 +122,41 @@ function initPayPalButton(moneyAmt) {
             JSON.stringify(orderData, null, 2)
           );
 
-          
-          //TODO  send create order request
-          const url = `http://localhost:8080/test/creatOrder/${sessionStorage.getItem("userID")}`;
-          let sendJs = { firstname:firstName.value,
-                        lastname:lastName.value,
-                        telephone:phone.value,
-                        street:address.value,
-                        city:city.value,
-                        state:state.value,
-                        postcode:zip.value}
-          
-          
-          
+          try {
+            //TODO  send create order request
+            const url = `http://localhost:8080/test/creatOrder/${sessionStorage.getItem(
+              "userID"
+            )}`;
+            let sendJs = {
+              firstname: firstName.value,
+              lastname: lastName.value,
+              telephone: phone.value,
+              street: address.value,
+              city: city.value,
+              state: state.value,
+              postcode: zip.value,
+            };
+            sessionStorage.setItem("orderAddr", JSON.stringify(sendJs));
+            const response = await fetch(url, {
+              method: "post",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify(sendJs),
+            });
+            const jsData = await response.text();
+
+            const d = JSON.parse(jsData);
+            console.log("Completed! create order", d);
+            if (d.status === "fail") {
+              alert("Something Wrong");
+            } else {
+              sessionStorage.setItem("orderid", d.orderid);
+            }
+          } catch (err) {
+            console.log(err);
+          }
+
           location.href = "./finished.html";
           // actions.redirect("http://localhost:7999/finished.html");
           // Or go to another URL:  actions.redirect('thank_you.html');

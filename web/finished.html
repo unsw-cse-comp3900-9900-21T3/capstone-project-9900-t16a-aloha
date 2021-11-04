@@ -23,7 +23,7 @@
           <ul class="list-group list-group-flush">
             <li class="list-group-item d-flex justify-content-between">
               <div>Order number:</div>
-              <div>888</div>
+              <div id="orderid">888</div>
             </li>
             <li class="list-group-item d-flex justify-content-between">
               <div>Total:</div>
@@ -32,10 +32,10 @@
             <li class="list-group-item d-flex justify-content-between">
               <div>Shipping to:</div>
               <div class="text-end">
-                <h4>10 Defries Ave</h4>
-                <h5>zetland</h5>
-                <h5>NSW</h5>
-                <h6>Australia</h6>
+                <h4 id="street">10 Defries Ave</h4>
+                <h5 id="city">zetland</h5>
+                <h5 id="state">NSW</h5>
+                <h5 id="zip"></h5>
               </div>
             </li>
           </ul>
@@ -44,8 +44,27 @@
       <a href="main.html" class="card-link">Back</a>
     </div>
     <script>
+      document.getElementById("orderid").innerText =
+        sessionStorage.getItem("orderid");
+
       document.getElementById("order-total-amt").innerText =
         "$" + sessionStorage.getItem("totalAmt");
+
+      document.getElementById("street").innerText = JSON.parse(
+        sessionStorage.getItem("orderAddr")
+      ).street;
+      document.getElementById("city").innerText = JSON.parse(
+        sessionStorage.getItem("orderAddr")
+      ).city;
+      document.getElementById("street").innerText = JSON.parse(
+        sessionStorage.getItem("orderAddr")
+      ).street;
+      document.getElementById("state").innerText = JSON.parse(
+        sessionStorage.getItem("orderAddr")
+      ).state;
+      document.getElementById("zip").innerText = JSON.parse(
+        sessionStorage.getItem("orderAddr")
+      ).postcode;
     </script>
   </body>
 </html>
