@@ -10,6 +10,9 @@ import org.springframework.data.repository.CrudRepository;
 import javax.persistence.criteria.CriteriaBuilder;
 
 public interface ProductRepository extends JpaRepository<Product, String> {
+
+    @Query(nativeQuery=true, value="SELECT *  FROM product ORDER BY RAND() LIMIT 1")
+    Product findRandom();
     //Product findById(String productID);
     Page<Product> findByIdAndIsDeleted(Pageable page, String id, Integer isDeleted);
     Page<Product> findByIdAndVisibilityAndIsDeleted(Pageable page, String id, Integer visibility, Integer isDeleted);

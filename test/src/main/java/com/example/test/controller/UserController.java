@@ -41,7 +41,10 @@ public class UserController {
     private StorgeRepository storgeRepository;
 
     @Autowired
-    OrderDetailRepository orderDetailRepository;
+    private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private RecommendRepository recommendRepository;
 
     @GetMapping(path = "/all")
     @CrossOrigin
@@ -669,5 +672,40 @@ public class UserController {
             res.add(orderInfo);
         }
         return res;
+    }
+
+    @GetMapping(path = "/getRecommend/{id}")
+    @CrossOrigin
+    public @ResponseBody Recommend getRecommend(@PathVariable(name = "id") Integer userid) {
+        User user = userRepository.findById(userid).get();
+        Product p = productRepository.findRandom();
+        Iterable<Wishlist> wishlists = wishlistRepository.findByWishlistId_User_Id(userid);
+        String pid = user.getPreferred();
+        int size = 0;
+        for(Wishlist w: wishlists) {
+            size++;
+        }
+        if(size !=0) {
+            for(Wishlist w:wishlists) {
+                user.setPreferred(w.getWishlistId().getProduct().getId());
+                userRepository.save(user);
+                pid = user.getPreferred();
+                break;
+            }
+        }
+        else if(user.getPreferred() == null) {
+            if (user.getLastVisited() == null) {
+                pid = p.getId();
+                user.setPreferred(pid);
+            }
+            else {
+                user.setPreferred(user.getLastVisited());
+                pid = user.getLastVisited();
+            }
+            userRepository.save(user);
+        }
+
+        Recommend r = recommendRepository.findById(pid).get();
+        return r;
     }
 }
