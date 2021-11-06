@@ -207,6 +207,7 @@ export const gotoEditProductPage = (productId) => {
 };
 
 const addPreview = async () => {
+  console.log(imgsArray);
   if (imgList.childNodes.length === 8) {
     alert("No more than 8 imgs");
     return;
@@ -243,6 +244,7 @@ delImgBtn.addEventListener("click", () => {
     const imgDel = subImg.getElementsByTagName("img")[0];
     if (imgDel.src === editMainImg.src) {
       subImg.remove();
+      break;
     }
   }
   // 2. change main img src

@@ -41,9 +41,9 @@ const getRecommend = async () => {
           const jsData = await response.text();
           const e = JSON.parse(jsData);
 
-          const isExistP = document.getElementById(e.id);
+          // const isExistP = document.getElementById(e.id);
 
-          if (e.isDeleted === 0 && !isExistP) {
+          if (true) {
             const productTempNew = productTemplate.cloneNode(true);
 
             productTempNew.id = e.id;

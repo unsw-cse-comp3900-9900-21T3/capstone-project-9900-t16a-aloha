@@ -84,7 +84,7 @@ const getAllShoppingCart = async () => {
 
         shoppingcartParent.appendChild(newItem);
       }
-      totalAmt.innerText = "$" + tAmt;
+      totalAmt.innerText = "$" + parseFloat(tAmt).toFixed(2);
     }
   } catch (err) {
     console.log(err);

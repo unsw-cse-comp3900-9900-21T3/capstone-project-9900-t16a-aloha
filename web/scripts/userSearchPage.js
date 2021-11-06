@@ -37,9 +37,10 @@ const getUserSearchProductList = async () => {
     } else {
       const items = d.content;
       items.forEach((e) => {
-        const isExistP = document.getElementById(e.id);
+        console.log(e);
+        // const isExistP = document.getElementById(e.id);
 
-        if (e.isDeleted === 0 && !isExistP) {
+        if (true) {
           const productTempNew = productTemplate.cloneNode(true);
 
           // // set delete button
@@ -161,9 +162,9 @@ const loadMoreUserSearch = async (offset) => {
       }
 
       items.forEach((e) => {
-        const isExistP = document.getElementById(e.id);
+        // const isExistP = document.getElementById(e.id);
 
-        if (e.isDeleted === 0 && !isExistP) {
+        if (true) {
           const productTempNew = productTemplate.cloneNode(true);
 
           // // set delete button
@@ -279,7 +280,7 @@ const priceBrand = async (filterIndex) => {
       items.forEach((e) => {
         const isExistP = document.getElementById(e.id);
 
-        if (e.isDeleted === 0 && !isExistP) {
+        if (true) {
           const productTempNew = productTemplate.cloneNode(true);
 
           productTempNew.id = e.id;
