@@ -429,12 +429,21 @@ public class UserController {
         shoppingCartId.setProduct(p);
         shoppingCartId.setSize(size);
         shoppingCartId.setUser(u);
+        Optional<ShoppingCart> optionalShoppingCart = shoppingCartRepository.findById(shoppingCartId);
+        ShoppingCart shoppingCart;
+        if (optionalShoppingCart.isPresent()) {
+            shoppingCart = optionalShoppingCart.get();
+            int quantity1 = shoppingCart.getQuantity();
+            shoppingCart.setQuantity(quantity1+quantity);
 
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.setShoppingCartId(shoppingCartId);
-        shoppingCart.setQuantity(quantity);
-
+        }
+        else {
+            shoppingCart = new ShoppingCart();
+            shoppingCart.setShoppingCartId(shoppingCartId);
+            shoppingCart.setQuantity(quantity);
+        }
         shoppingCartRepository.save(shoppingCart);
+
 
         resBody.put("status", "succeed");
         resBody.put("msg", "added to the shoppingcart");
