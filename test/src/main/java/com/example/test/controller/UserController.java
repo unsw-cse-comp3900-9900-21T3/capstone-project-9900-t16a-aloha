@@ -429,15 +429,36 @@ public class UserController {
         shoppingCartId.setProduct(p);
         shoppingCartId.setSize(size);
         shoppingCartId.setUser(u);
+        // check storage
+        StorgeId storgeId = new StorgeId();
+        storgeId.setSize(size);
+        storgeId.setProduct(p);
+        Optional<Storge> optionalStorge = storgeRepository.findById(storgeId);
+        if(!optionalStorge.isPresent()) {
+            resBody.put("status", "fail");
+            resBody.put("msg", "product stock information is unavailable");
+            return resBody;
+        }
+        Storge storge = optionalStorge.get();
         Optional<ShoppingCart> optionalShoppingCart = shoppingCartRepository.findById(shoppingCartId);
         ShoppingCart shoppingCart;
         if (optionalShoppingCart.isPresent()) {
             shoppingCart = optionalShoppingCart.get();
             int quantity1 = shoppingCart.getQuantity();
+            if(quantity1 + quantity > storge.getStock()) {
+                resBody.put("status", "fail");
+                resBody.put("msg", "out of stock");
+                return resBody;
+            }
             shoppingCart.setQuantity(quantity1+quantity);
 
         }
         else {
+            if(quantity > storge.getStock()) {
+                resBody.put("status", "fail");
+                resBody.put("msg", "out of stock");
+                return resBody;
+            }
             shoppingCart = new ShoppingCart();
             shoppingCart.setShoppingCartId(shoppingCartId);
             shoppingCart.setQuantity(quantity);
