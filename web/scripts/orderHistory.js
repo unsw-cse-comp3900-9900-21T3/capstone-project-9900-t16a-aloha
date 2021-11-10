@@ -56,12 +56,98 @@ const getAllOrders = async () => {
             "content-type": "application/json",
           },
         });
-
+        const hoverEffect = (e) => {
+          let i = 1;
+          for (let n of document.getElementById(
+            d.orderid + "_" + p.id + "_" + p.size + "_ratingstars"
+          ).childNodes) {
+            if (i <= parseInt(e.target.classList[0], 10)) {
+              n.classList.remove("bi-star");
+              n.classList.add("bi-star-fill");
+            } else {
+              n.classList.add("bi-star");
+              n.classList.remove("bi-star-fill");
+            }
+            i++;
+          }
+        };
+        const leaveEffect = () => {
+          for (let n of document.getElementById(
+            d.orderid + "_" + p.id + "_" + p.size + "_ratingstars"
+          ).childNodes) {
+            n.classList.add("bi-star");
+            n.classList.remove("bi-star-fill");
+          }
+        };
+        const clickEffect = (e) => {
+          let i = 1;
+          for (let n of document.getElementById(
+            d.orderid + "_" + p.id + "_" + p.size + "_ratingstars"
+          ).childNodes) {
+            n.removeEventListener("mouseover", hoverEffect);
+            if (i <= parseInt(e.target.classList[0], 10)) {
+              n.classList.remove("bi-star");
+              n.classList.add("bi-star-fill");
+            } else {
+              n.classList.add("bi-star");
+              n.classList.remove("bi-star-fill");
+            }
+            i++;
+          }
+          document
+            .getElementById(
+              d.orderid + "_" + p.id + "_" + p.size + "_ratingstars"
+            )
+            .removeEventListener("mouseleave", leaveEffect);
+          // todo send rating
+          const rating = parseInt(e.target.classList[0], 10);
+        };
         const jsData = await response.text();
         const pDetail = JSON.parse(jsData);
 
         const orderProduct = orderProductTemp.cloneNode(true);
-        orderProduct.id = d.orderid + "_" + p.id;
+        let i = 0;
+        const ratingList = document.createElement("div");
+        ratingList.id = d.orderid + "_" + p.id + "_" + p.size + "_ratingstars";
+        // TODO get rated rating
+        const rated = false;
+        if (rated) {
+          // while (i < parseInt(d.avgRating, 10)) {
+          //   const Star = document.createElement("i");
+          //   Star.classList.add("bi");
+          //   Star.classList.add("bi-star-fill");
+          //   Star.classList.add("col-1");
+          //   ratingList.appendChild(Star);
+          //   i++;
+          // }
+          // while (i < 5) {
+          //   const emptyStar = document.createElement("i");
+          //   emptyStar.classList.add("bi");
+          //   emptyStar.classList.add("bi-star");
+          //   emptyStar.classList.add("col-1");
+          //   ratingList.appendChild(emptyStar);
+          //   i++;
+          // }
+        } else {
+          while (i < 5) {
+            const emptyStar = document.createElement("i");
+            emptyStar.classList.add(i + 1);
+            emptyStar.classList.add("bi");
+            emptyStar.classList.add("bi-star");
+            emptyStar.classList.add("me-1");
+            emptyStar.setAttribute("type", "button");
+            emptyStar.addEventListener("mouseover", hoverEffect);
+            emptyStar.addEventListener("click", clickEffect);
+            ratingList.appendChild(emptyStar);
+            ratingList.addEventListener("mouseleave", leaveEffect);
+            i++;
+          }
+        }
+        // ratingList.addEventListener();
+        orderProduct
+          .getElementsByClassName("rating-stars")[0]
+          .appendChild(ratingList);
+        orderProduct.id = d.orderid + "_" + p.id + "_" + p.size;
         orderProduct.getElementsByClassName("shop-name")[0].innerText =
           pDetail.name;
         orderProduct.getElementsByClassName("shop-price")[0].innerText =
