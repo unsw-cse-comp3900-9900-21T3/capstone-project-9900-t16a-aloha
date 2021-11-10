@@ -53,6 +53,9 @@ public class Product {
     @OneToMany(mappedBy = "shoppingCartId.product")
     private Set<ShoppingCart> shoppingCart;
 
+    @OneToMany(mappedBy = "product")
+    private Set<Review> reviews;
+
     public Product() {
 
     }

@@ -2,6 +2,7 @@ package com.example.test.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "orderhistory")
@@ -40,6 +41,9 @@ public class OrderHistory {
 
     @Column(name = "totalcost")
     private float totalCost;
+
+    @OneToOne(mappedBy = "orderHistory")
+    private Review review;
 
     public OrderHistory() {};
 

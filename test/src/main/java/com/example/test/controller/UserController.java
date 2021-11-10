@@ -46,12 +46,14 @@ public class UserController {
     @Autowired
     private RecommendRepository recommendRepository;
 
+    @Autowired
+    private ReviewRepository reviewRepository;
+
     @GetMapping(path = "/all")
     @CrossOrigin
     public @ResponseBody Iterable<User> getAllUser() {
         return userRepository.findAll();
     }
-    
 
     //=============================================================================
     // user register and login section
@@ -737,5 +739,66 @@ public class UserController {
 
         Recommend r = recommendRepository.findById(pid).get();
         return r;
+    }
+
+    @GetMapping(path = "/user/getReview/")
+    public @ResponseBody Map<String, Object> addReview(@RequestParam(name = "orderid") Integer orderId) {
+        Map<String, Object> res = new LinkedHashMap<>();
+        Optional<OrderHistory> optionalOrderHistory = orderHistoryRepository.findById(orderId);
+        if (optionalOrderHistory.isEmpty()) {
+            res.put("status", "fail");
+            res.put("msg", "order doesn't exist");
+            return res;
+        }
+
+        OrderHistory orderHistory = optionalOrderHistory.get();
+        Review review = reviewRepository.findByOrderHistory(orderHistory);
+        res.put("productId", review.getProduct().getId());
+        res.put("rate", review.getRating());
+        res.put("size", review.getSize());
+        return res;
+    }
+
+    @PostMapping(path = "/user/postReview/")
+    public @ResponseBody Map<String, Object> postReview(@RequestParam(name = "productid") String productId,
+                                                        @RequestParam(name = "orderid") Integer orderId,
+                                                        @RequestParam(name = "size") Float size,
+                                                        @RequestParam(name = "rating") Float rate) {
+        Map<String, Object> res = new LinkedHashMap<>();
+        // check if enought information is given
+        if (productId == null || orderId == null || size == null || rate == null) {
+            res.put("status", "fail");
+            res.put("msg", "information given missing, need to provide orderId, productId, and size");
+            return res;
+        }
+
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty()) {
+            res.put("status", "fail");
+            res.put("msg", "cannot find the product");
+            return res;
+        }
+
+        Optional<OrderHistory> optionalOrder = orderHistoryRepository.findById(orderId);
+        if (optionalOrder.isEmpty()) {
+            res.put("status", "fail");
+            res.put("msg", "cannot find the order");
+            return res;
+        }
+
+        Product product = optionalProduct.get();
+        OrderHistory orderHistory = optionalOrder.get();
+
+        Review review = new Review();
+        review.setOrderHistory(orderHistory);
+        review.setProduct(product);
+        review.setSize(size);
+        review.setRating(rate);
+        reviewRepository.save(review);
+
+        res.put("status", "success");
+        res.put("msg", "review is updated");
+
+        return res;
     }
 }

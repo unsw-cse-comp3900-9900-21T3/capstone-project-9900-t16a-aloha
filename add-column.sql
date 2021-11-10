@@ -1,3 +1,7 @@
+-- --------
+-- !!! this table information is already covered inside database-init.sql
+-- --------
+
 -- ----------------------------
 -- add a column in table product
 -- 0: not deleted
