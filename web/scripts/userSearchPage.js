@@ -4,7 +4,7 @@ import { getAllWishList } from "./getAllWishList.js";
 const productTemplate = document.getElementById("product-temp");
 const productList = document.getElementById("user-search-page-products");
 
-// const addCartBtn = document.getElementById("user-addcart-product-btn");
+const instockFilter = document.getElementById("user-search-instock-checkbox");
 const loadMoreBtn = document.getElementById("search-load-more-btn");
 
 const selectBrand = document.getElementById("user-search-brand");
@@ -454,5 +454,11 @@ searchBtn.addEventListener("click", () => {
   filterIndex = 0;
   priceBrand(filterIndex);
 });
-
+// TODO stock filter
+instockFilter.addEventListener("change", () => {
+  loadMoreBtn.style.display = "initial";
+  offset = 1;
+  filterIndex = 0;
+  priceBrand(filterIndex);
+});
 export { getUserSearchProductList };
