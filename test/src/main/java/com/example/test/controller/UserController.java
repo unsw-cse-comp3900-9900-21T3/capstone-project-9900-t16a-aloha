@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 
 
 @Controller
@@ -289,7 +290,8 @@ public class UserController {
                                                      @RequestParam(name = "pageindex", required = false, defaultValue = "0") Integer pageIndex,
                                                      @RequestParam(name = "pagesize", required = false, defaultValue = "8") Integer pageSize,
                                                      @RequestParam(name = "sortby", required = false) String sortby,
-                                                     @RequestParam(name = "order", required = false, defaultValue = "desc") String order) {
+                                                     @RequestParam(name = "order", required = false, defaultValue = "desc") String order,
+                                                     @RequestParam(name = "instock", required = false, defaultValue = "false") String instock) {
         Pageable paging;
         if(sortby == null || (!sortby.equals("name") && !sortby.equals("price"))) {
             paging = PageRequest.of(pageIndex, pageSize);
@@ -304,69 +306,86 @@ public class UserController {
         }
         // id
         if (id != null) {
+            if(instock.equals("true")) return productRepository.findByIdAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging,id,1,0,0);
             return productRepository.findByIdAndVisibilityAndIsDeleted(paging,id,1,0);
         }
         // name
         if (name != null && brand == null && minPrice == null && maxPrice == null) {
+            if(instock.equals("true")) return productRepository.findDistinctByNameContainsAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, name, 1, 0,0);
             return productRepository.findByNameContainsAndVisibilityAndIsDeleted(paging, name, 1, 0);
         }
         // brand
         if (name == null && brand != null && minPrice == null && maxPrice == null) {
+            if(instock.equals("true")) return productRepository.findDistinctByBrandAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, brand, 1, 0,0);
             return productRepository.findByBrandAndVisibilityAndIsDeleted(paging, brand, 1, 0);
         }
         // < max price
         if (name == null && brand == null && minPrice == null && maxPrice !=null) {
+            if(instock.equals("true")) return productRepository.findDistinctByPriceIsLessThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging,maxPrice,1,0,0);
             return productRepository.findByPriceIsLessThanAndVisibilityAndIsDeleted(paging, maxPrice,1,0);
         }
         // > min price
         if  (name == null && brand == null && minPrice != null && maxPrice ==null) {
+            if(instock.equals("true")) return productRepository.findDistinctByPriceIsGreaterThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, minPrice,1,0,0);
             return productRepository.findByPriceIsGreaterThanAndVisibilityAndIsDeleted(paging, minPrice, 1, 0);
         }
         // min price - max price
         if  (name == null && brand == null && minPrice != null && maxPrice !=null) {
+            if(instock.equals("true")) return productRepository.findDistinctByPriceBetweenAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, minPrice, maxPrice, 1, 0, 0);
             return productRepository.findByPriceBetweenAndVisibilityAndIsDeleted(paging,minPrice,maxPrice,1,0);
         }
         // name and brand
         if (name != null && brand != null && minPrice == null && maxPrice == null) {
+            if(instock.equals("true")) return productRepository.findDistinctByNameContainsAndBrandAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, name, brand, 1, 0,0);
             return productRepository.findByNameContainsAndBrandAndVisibilityAndIsDeleted(paging, name, brand, 1, 0);
         }
         // name and < max price
         if (name != null && brand == null && minPrice == null && maxPrice !=null) {
+            if(instock.equals("true")) return productRepository.findDistinctByNameContainsAndPriceIsLessThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, name, maxPrice, 1, 0,0);
             return productRepository.findByNameContainsAndPriceIsLessThanAndVisibilityAndIsDeleted(paging, name, maxPrice, 1, 0);
         }
         // name and > min price
         if (name != null && brand == null && minPrice != null && maxPrice ==null) {
+            if(instock.equals("true")) return productRepository.findDistinctByNameContainsAndPriceIsGreaterThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, name, minPrice, 1, 0,0);
             return productRepository.findByNameContainsAndPriceIsGreaterThanAndVisibilityAndIsDeleted(paging, name, minPrice, 1, 0);
         }
         // name and min price - max price
         if (name != null && brand == null && minPrice != null && maxPrice !=null) {
+            if(instock.equals("true")) return productRepository.findDistinctByNameContainsAndPriceIsBetweenAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, name, minPrice, maxPrice,1 , 0, 0);
             return productRepository.findByNameContainsAndPriceIsBetweenAndVisibilityAndIsDeleted(paging, name, minPrice, maxPrice,1 , 0);
         }
         // brand and < max price
         if (name == null && brand != null && minPrice == null && maxPrice !=null) {
+            if(instock.equals("true")) return productRepository.findDistinctByBrandAndPriceIsLessThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, brand, maxPrice, 1, 0, 0);
             return productRepository.findByBrandAndPriceIsLessThanAndVisibilityAndIsDeleted(paging, brand, maxPrice, 1, 0);
         }
         // brand and > min price
         if (name == null && brand != null && minPrice != null && maxPrice ==null) {
+            if(instock.equals("true")) return productRepository.findDistinctByBrandAndPriceIsGreaterThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, brand, minPrice, 1, 0,0);
             return productRepository.findByBrandAndPriceIsGreaterThanAndVisibilityAndIsDeleted(paging, brand, minPrice, 1, 0);
         }
         // brand and min price - max price
         if (name == null && brand != null && minPrice != null && maxPrice !=null) {
+            if(instock.equals("true")) return productRepository.findDistinctByBrandAndPriceIsBetweenAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, brand, minPrice,maxPrice, 1, 0,0);
             return productRepository.findByBrandAndPriceIsBetweenAndVisibilityAndIsDeleted(paging, brand, minPrice,maxPrice, 1, 0);
         }
         // name and brand and < max price
         if (name != null && brand != null && minPrice == null && maxPrice != null) {
+            if(instock.equals("true")) return productRepository.findDistinctByNameContainsAndBrandAndPriceIsLessThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, name, brand, maxPrice,1, 0,0);
             return productRepository.findByNameContainsAndBrandAndPriceIsLessThanAndVisibilityAndIsDeleted(paging, name, brand, maxPrice,1, 0);
         }
         // name and brand and > min price
         if (name != null && brand != null && minPrice != null && maxPrice == null) {
+            if(instock.equals("true")) return productRepository.findDistinctByNameContainsAndBrandAndPriceIsGreaterThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, name, brand, maxPrice,1, 0,0);
             return productRepository.findByNameContainsAndBrandAndPriceIsGreaterThanAndVisibilityAndIsDeleted(paging, name, brand, maxPrice,1, 0);
         }
         // name and brand and min price - max price
         if (name != null && brand != null && minPrice != null && maxPrice != null) {
+            if(instock.equals("true")) return productRepository.findDistinctByNameContainsAndBrandAndPriceIsBetweenAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging, name, brand, minPrice, maxPrice,1, 0,0);
             return productRepository.findByNameContainsAndBrandAndPriceIsBetweenAndVisibilityAndIsDeleted(paging, name, brand, minPrice, maxPrice,1, 0);
         }
-        return productRepository.findAllByVisibility(paging, 1);
+        if(instock.equals("true")) return productRepository.findDistinctAllByVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging,1 , 0,0);
+        return productRepository.findAllByVisibilityAndIsDeleted(paging, 1, 0);
     }
 
     //=============================================================================
@@ -907,4 +926,13 @@ public class UserController {
 
         return res;
     }
+    @GetMapping(path = "/instock")
+    @CrossOrigin
+    public @ResponseBody Page<Product> instock(@RequestParam(name = "maxprice") Float maxPrice,@RequestParam Integer stock) {
+        PageRequest paging = PageRequest.of(0 , 8);
+        //return productRepository.findByPriceIsLessThanAndVisibilityAndIsDeletedAndStorge_stock(paging,maxPrice,1,0,122);
+        return productRepository.findDistinctByPriceIsLessThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging,maxPrice,1,0,0);
+
+    }
+
 }
