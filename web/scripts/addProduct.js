@@ -88,7 +88,6 @@ const addProductToDB = async () => {
   }
   try {
     let id = "_" + Math.random().toString(36).substr(2, 9);
-    // TODO stock management
 
     const url = `http://localhost:8080/admin/add/${id}?visibility=${
       pisVisible.checked ? 1 : 0

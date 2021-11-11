@@ -26,7 +26,9 @@ const getProductDetail = async (productId) => {
   stockPair.clear();
   outOfStk.style.display = "none";
   try {
-    const url = `http://localhost:8080/admin/search/id/${productId}`;
+    const url = `http://localhost:8080/admin/search/id/${productId}?uid=${sessionStorage.getItem(
+      "userID"
+    )}`;
     const response = await fetch(url, {
       method: "get",
       headers: {

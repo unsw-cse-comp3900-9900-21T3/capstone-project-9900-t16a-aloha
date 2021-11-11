@@ -52,7 +52,7 @@ const getProductById = async (productId) => {
       pBrand.value = d.brand;
       pDescription.value = d.description;
       isVisible.checked = d.visibility == 1 ? true : false;
-      // TODO  get stock API
+
       try {
         const url = "http://localhost:8080/admin/showallstorge";
         const response = await fetch(url, {
@@ -132,8 +132,6 @@ const changeProductPost = async () => {
       return;
     }
   }
-
-  // TODO visibility
 
   const url = `http://localhost:8080/admin/update/?id=${pId}&name=${encodeURIComponent(
     pTitle.value

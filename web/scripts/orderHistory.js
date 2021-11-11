@@ -56,6 +56,8 @@ const getAllOrders = async () => {
             "content-type": "application/json",
           },
         });
+        const jsData = await response.text();
+        const pDetail = JSON.parse(jsData);
         const hoverEffect = (e) => {
           let i = 1;
           for (let n of document.getElementById(
@@ -79,7 +81,7 @@ const getAllOrders = async () => {
             n.classList.remove("bi-star-fill");
           }
         };
-        const clickEffect = (e) => {
+        const clickEffect = async (e) => {
           let i = 1;
           for (let n of document.getElementById(
             d.orderid + "_" + p.id + "_" + p.size + "_ratingstars"
@@ -101,33 +103,53 @@ const getAllOrders = async () => {
             .removeEventListener("mouseleave", leaveEffect);
           // todo send rating
           const rating = parseInt(e.target.classList[0], 10);
+          const urlforrating = `http://localhost:8080/test/user/postReview/?productid=${p.id}&orderid=${d.orderid}&size=${p.size}&rating=${rating}`;
+          const res = await fetch(urlforrating, {
+            method: "post",
+            headers: {
+              "content-type": "application/json",
+            },
+          });
+          const jsData = await res.text();
+          const ress = JSON.parse(jsData);
+          console.log(ress);
         };
-        const jsData = await response.text();
-        const pDetail = JSON.parse(jsData);
 
         const orderProduct = orderProductTemp.cloneNode(true);
         let i = 0;
         const ratingList = document.createElement("div");
         ratingList.id = d.orderid + "_" + p.id + "_" + p.size + "_ratingstars";
         // TODO get rated rating
+        const getratingUrl = `http://localhost:8080/test/user/getReview/?orderid=${d.orderid}`;
+        const resp = await fetch(getratingUrl, {
+          method: "get",
+          headers: {
+            "content-type": "application/json",
+          },
+        });
+        const js = await resp.text();
+        const orderDetail = JSON.parse(js);
         const rated = false;
         if (rated) {
-          // while (i < parseInt(d.avgRating, 10)) {
-          //   const Star = document.createElement("i");
-          //   Star.classList.add("bi");
-          //   Star.classList.add("bi-star-fill");
-          //   Star.classList.add("col-1");
-          //   ratingList.appendChild(Star);
-          //   i++;
-          // }
-          // while (i < 5) {
-          //   const emptyStar = document.createElement("i");
-          //   emptyStar.classList.add("bi");
-          //   emptyStar.classList.add("bi-star");
-          //   emptyStar.classList.add("col-1");
-          //   ratingList.appendChild(emptyStar);
-          //   i++;
-          // }
+          if (p.id == orderDetail.productId && p.size == orderDetail.size) {
+            let i = 0;
+            while (i < parseInt(orderDetail.rate, 10)) {
+              const Star = document.createElement("i");
+              Star.classList.add("bi");
+              Star.classList.add("bi-star-fill");
+              Star.classList.add("col-1");
+              ratingList.appendChild(Star);
+              i++;
+            }
+            while (i < 5) {
+              const emptyStar = document.createElement("i");
+              emptyStar.classList.add("bi");
+              emptyStar.classList.add("bi-star");
+              emptyStar.classList.add("col-1");
+              ratingList.appendChild(emptyStar);
+              i++;
+            }
+          }
         } else {
           while (i < 5) {
             const emptyStar = document.createElement("i");

@@ -19,6 +19,7 @@ const getUserSearchProductList = async () => {
   offset = 1;
   filterIndex = 0;
   loadMoreBtn.style.display = "initial";
+  instockFilter.checked = false;
   try {
     const url = "http://localhost:8080/test/user/product";
 
@@ -223,7 +224,8 @@ loadMoreBtn.addEventListener("click", () => {
     selectBrand.value != "" ||
     selectPrice.value != "" ||
     sortBy.value != "" ||
-    searchInput.value != ""
+    searchInput.value != "" ||
+    instockFilter.checked
   ) {
     filterIndex++;
     priceBrandLoadMore(filterIndex);
@@ -256,7 +258,9 @@ const priceBrand = async (filterIndex) => {
   } else if (sortBy.value == "priceDesc") {
     url += "&sortby=price" + "&order=desc";
   }
-
+  if (instockFilter.checked == true) {
+    url += "&instock=true";
+  }
   if (searchInput.value != "") {
     url += "&name=" + searchInput.value;
   }
@@ -352,7 +356,9 @@ const priceBrandLoadMore = async (filterIndex) => {
   } else if (sortBy.value == "priceDesc") {
     url += "&sortby=price" + "&order=desc";
   }
-
+  if (instockFilter.checked == true) {
+    url += "&instock=true";
+  }
   if (searchInput.value != "") {
     url += "&name=" + searchInput.value;
   }

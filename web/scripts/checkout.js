@@ -123,7 +123,6 @@ function initPayPalButton(moneyAmt) {
           );
 
           try {
-            //TODO  send create order request
             const url = `http://localhost:8080/test/creatOrder/${sessionStorage.getItem(
               "userID"
             )}`;
