@@ -913,6 +913,13 @@ public class UserController {
         Product product = optionalProduct.get();
         OrderHistory orderHistory = optionalOrder.get();
 
+        Review duplicateReview = reviewRepository.findByOrderHistoryAndProduct(orderHistory, product);
+        if (duplicateReview != null) {
+            res.put("status", "fail");
+            res.put("msg", "order with this product is already reviewed");
+            return res;
+        }
+
         Review review = new Review();
         review.setOrderHistory(orderHistory);
         review.setProduct(product);
