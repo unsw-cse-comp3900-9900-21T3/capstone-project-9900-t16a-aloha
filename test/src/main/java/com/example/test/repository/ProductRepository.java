@@ -58,4 +58,6 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findByNameContainsAndIsDeleted(Pageable page, String name, Integer isDeleted);
     // admin sort
     Page<Product> findByPriceIsLessThanAndIsDeletedOrderByNameDesc(Pageable page, Float maxPrice, Integer isDeleted);
+
+
 }

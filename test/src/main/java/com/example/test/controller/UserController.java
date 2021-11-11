@@ -846,6 +846,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/user/getReview/")
+    @CrossOrigin
     public @ResponseBody Map<String, Object> addReview(@RequestParam(name = "orderid") Integer orderId) {
         Map<String, Object> res = new LinkedHashMap<>();
         Optional<OrderHistory> optionalOrderHistory = orderHistoryRepository.findById(orderId);
@@ -864,6 +865,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/user/postReview/")
+    @CrossOrigin
     public @ResponseBody Map<String, Object> postReview(@RequestParam(name = "productid") String productId,
                                                         @RequestParam(name = "orderid") Integer orderId,
                                                         @RequestParam(name = "size") Float size,
