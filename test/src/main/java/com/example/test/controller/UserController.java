@@ -776,23 +776,69 @@ public class UserController {
             userRepository.save(user);
         }
         if(lastView != null && !lastView.equals(userFav)) {
+            items.clear();
             Recommend recommend1 = recommendRepository.findById(lastView).get();
             Recommend recommend2 = recommendRepository.findById(userFav).get();
             Recommend res = new Recommend();
-            res.setId(lastView);
-            res.setS1(recommend1.getS1());
-            res.setS2(recommend1.getS2());
-            res.setS3(recommend1.getS3());
-            res.setS4(recommend1.getS4());
-            res.setS5(recommend2.getS1());
-            res.setS6(recommend2.getS2());
-            res.setS7(recommend2.getS3());
-            res.setS8(recommend2.getS4());
+            ArrayList<String> recommends = new ArrayList<>();
+            items.add(recommend1.getS1());
+            items.add(recommend1.getS2());
+            items.add(recommend1.getS3());
+            items.add(recommend1.getS4());
+            items.add(recommend2.getS1());
+            items.add(recommend2.getS2());
+            items.add(recommend2.getS3());
+            items.add(recommend2.getS4());
+            recommends.addAll(items);
+            while(items.size() < 8) {
+                Random random = new Random();
+                int n = random.nextInt(items.size());
+                Recommend r = recommendRepository.findById(recommends.get(n)).get();
+                if(items.add(r.getS1())) {
+                    recommends.add(r.getS1());
+                }
 
+            }
+            res.setId(lastView);
+            res.setS1(recommends.get(0));
+            res.setS2(recommends.get(1));
+            res.setS3(recommends.get(2));
+            res.setS4(recommends.get(3));
+            res.setS5(recommends.get(4));
+            res.setS6(recommends.get(5));
+            res.setS7(recommends.get(6));
+            res.setS8(recommends.get(7));
             return res;
         }
         else {
             Recommend res = recommendRepository.findById(userFav).get();
+            ArrayList<String> recommends = new ArrayList<>();
+            items.add(res.getS1());
+            items.add(res.getS2());
+            items.add(res.getS3());
+            items.add(res.getS4());
+            items.add(res.getS5());
+            items.add(res.getS6());
+            items.add(res.getS7());
+            items.add(res.getS8());
+            recommends.addAll(items);
+            while(items.size() < 8) {
+                Random random = new Random();
+                int n = random.nextInt(items.size());
+                Recommend r = recommendRepository.findById(recommends.get(n)).get();
+                if(items.add(r.getS1())) {
+                    recommends.add(r.getS1());
+                }
+
+            }
+            res.setS1(recommends.get(0));
+            res.setS2(recommends.get(1));
+            res.setS3(recommends.get(2));
+            res.setS4(recommends.get(3));
+            res.setS5(recommends.get(4));
+            res.setS6(recommends.get(5));
+            res.setS7(recommends.get(6));
+            res.setS8(recommends.get(7));
             return res;
         }
 
