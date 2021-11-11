@@ -1,12 +1,10 @@
 package com.example.test.controller;
 
-import com.example.test.model.ImgUrl;
-import com.example.test.model.Product;
-import com.example.test.model.Storge;
-import com.example.test.model.StorgeId;
+import com.example.test.model.*;
 import com.example.test.repository.ProductRepository;
 import com.example.test.repository.ShoppingCartRepository;
 import com.example.test.repository.StorgeRepository;
+import com.example.test.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +28,9 @@ public class AdminController {
 
     @Autowired
     StorgeRepository storgeRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     /**
      * show product with pagination
@@ -151,7 +152,12 @@ public class AdminController {
      */
     @GetMapping(path = "/search/id/{id}")
     @CrossOrigin
-    public @ResponseBody Product searchByID(@PathVariable("id") String id) {
+    public @ResponseBody Product searchByID(@PathVariable("id") String id, @RequestParam(required = false) Integer uid) {
+        if(uid !=null) {
+            User u = userRepository.findById(uid).get();
+            u.setLastVisited(id);
+            userRepository.save(u);
+        }
         return productRepository.findById(id).get();
     }
 
