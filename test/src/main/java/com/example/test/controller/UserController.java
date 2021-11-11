@@ -845,23 +845,42 @@ public class UserController {
 
     }
 
+    // Annotation: empty
     @GetMapping(path = "/user/getReview/")
     @CrossOrigin
-    public @ResponseBody Map<String, Object> addReview(@RequestParam(name = "orderid") Integer orderId) {
-        Map<String, Object> res = new LinkedHashMap<>();
+    public @ResponseBody ArrayList<Map<String, Object>> getReview(@RequestParam(name = "orderid") Integer orderId) {
+        ArrayList<Map<String, Object>> res = new ArrayList<>();
+        // check if the order was placed before leave the review
         Optional<OrderHistory> optionalOrderHistory = orderHistoryRepository.findById(orderId);
         if (optionalOrderHistory.isEmpty()) {
-            res.put("status", "fail");
-            res.put("msg", "order doesn't exist");
+            Map<String, Object> singleResponse= new LinkedHashMap<>();
+            singleResponse.put("status", "fail");
+            singleResponse.put("msg", "order not placed yet");
+            res.add(singleResponse);
             return res;
         }
 
         OrderHistory orderHistory = optionalOrderHistory.get();
-        Review review = reviewRepository.findByOrderHistory(orderHistory);
-        res.put("productId", review.getProduct().getId());
-        res.put("rate", review.getRating());
-        res.put("size", review.getSize());
-        return res;
+
+        Iterable<OrderDetail> orderDetails = orderDetailRepository.findByOrderId_OrderHistory_Id(orderId);
+        for (OrderDetail orderDetail : orderDetails) {
+            Map<String, Object> singleResponse = new LinkedHashMap<>();
+
+            Product product = orderDetail.getOrderId().getProduct();
+            Review review = reviewRepository.findByOrderHistoryAndProduct(orderHistory, product);
+            if (review == null) {
+                singleResponse.put("productid", product.getId());
+                singleResponse.put("size", orderDetail.getOrderId().getSize());
+                singleResponse.put("rating", -1);
+            } else {
+                singleResponse.put("productid", product.getId());
+                singleResponse.put("size", review.getSize());
+                singleResponse.put("rating", review.getRating());
+            }
+            res.add(singleResponse);
+         }
+
+         return res;
     }
 
     @PostMapping(path = "/user/postReview/")
@@ -877,7 +896,6 @@ public class UserController {
             res.put("msg", "information given missing, need to provide orderId, productId, and size");
             return res;
         }
-
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (optionalProduct.isEmpty()) {
             res.put("status", "fail");

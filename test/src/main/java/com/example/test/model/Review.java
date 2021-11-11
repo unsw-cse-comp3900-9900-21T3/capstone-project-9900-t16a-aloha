@@ -1,16 +1,18 @@
 package com.example.test.model;
 
 import javax.persistence.*;
+import java.util.PrimitiveIterator;
+import java.util.Set;
 
 @Entity
 @Table(name = "review")
 public class Review {
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "reviewid")
     private Integer reviewId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "orderid", nullable = false)
     private OrderHistory orderHistory;
 

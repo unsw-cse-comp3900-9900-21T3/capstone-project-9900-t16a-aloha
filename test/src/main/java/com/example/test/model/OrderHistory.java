@@ -42,8 +42,8 @@ public class OrderHistory {
     @Column(name = "totalcost")
     private float totalCost;
 
-    @OneToOne(mappedBy = "orderHistory")
-    private Review review;
+    @OneToMany(mappedBy = "orderHistory")
+    private Set<Review> reviews;
 
     public OrderHistory() {};
 
