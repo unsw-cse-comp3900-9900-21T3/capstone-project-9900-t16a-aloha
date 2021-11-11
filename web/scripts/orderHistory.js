@@ -95,7 +95,10 @@ const getAllOrders = async () => {
               n.classList.remove("bi-star-fill");
             }
             i++;
+            n.removeEventListener("click", clickEffect);
+            n.disabled = true;
           }
+
           document
             .getElementById(
               d.orderid + "_" + p.id + "_" + p.size + "_ratingstars"
@@ -128,27 +131,36 @@ const getAllOrders = async () => {
           },
         });
         const js = await resp.text();
-        const orderDetail = JSON.parse(js);
-        const rated = false;
-        if (rated) {
-          if (p.id == orderDetail.productId && p.size == orderDetail.size) {
-            let i = 0;
-            while (i < parseInt(orderDetail.rate, 10)) {
-              const Star = document.createElement("i");
-              Star.classList.add("bi");
-              Star.classList.add("bi-star-fill");
-              Star.classList.add("col-1");
-              ratingList.appendChild(Star);
-              i++;
-            }
-            while (i < 5) {
-              const emptyStar = document.createElement("i");
-              emptyStar.classList.add("bi");
-              emptyStar.classList.add("bi-star");
-              emptyStar.classList.add("col-1");
-              ratingList.appendChild(emptyStar);
-              i++;
-            }
+        let orderDetail = JSON.parse(js);
+
+        orderDetail = orderDetail.filter((e) => {
+          if (e.productid == p.id && parseInt(e.size, 10) == p.size) {
+            return true;
+          }
+        });
+        console.log("???" + orderDetail[0].rating);
+        if (orderDetail[0].rating != -1) {
+          let i = 0;
+
+          console.log(parseInt(orderDetail[0].rating, 10));
+          while (i < parseInt(orderDetail[0].rating, 10)) {
+            const Star = document.createElement("i");
+
+            Star.classList.add("bi");
+            Star.classList.add("bi-star-fill");
+            Star.classList.add("me-1");
+            Star.disabled = true;
+            ratingList.appendChild(Star);
+            i++;
+          }
+          while (i < 5) {
+            const emptyStar = document.createElement("i");
+            emptyStar.disabled = true;
+            emptyStar.classList.add("bi");
+            emptyStar.classList.add("bi-star");
+            emptyStar.classList.add("me-1");
+            ratingList.appendChild(emptyStar);
+            i++;
           }
         } else {
           while (i < 5) {
