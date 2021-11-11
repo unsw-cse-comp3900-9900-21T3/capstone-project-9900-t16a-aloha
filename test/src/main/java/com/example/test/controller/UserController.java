@@ -711,34 +711,92 @@ public class UserController {
     public @ResponseBody Recommend getRecommend(@PathVariable(name = "id") Integer userid) {
         User user = userRepository.findById(userid).get();
         Product p = productRepository.findRandom();
-        Iterable<Wishlist> wishlists = wishlistRepository.findByWishlistId_User_Id(userid);
-        String pid = user.getPreferred();
-        int size = 0;
-        for(Wishlist w: wishlists) {
-            size++;
-        }
-        if(size !=0) {
-            for(Wishlist w:wishlists) {
-                user.setPreferred(w.getWishlistId().getProduct().getId());
-                userRepository.save(user);
-                pid = user.getPreferred();
-                break;
+        String userFav = user.getPreferred();
+        String lastView = user.getLastVisited();
+        Set<String> items = new HashSet<>(8);
+        Iterable<OrderHistory> orderHistories = orderHistoryRepository.findByUserIdOrderByOrderTimeDesc(userid);
+        ArrayList<String> orderItems = new ArrayList<>(8);
+        for(OrderHistory o: orderHistories) {
+            Iterable<OrderDetail> orderDetails= orderDetailRepository.findByOrderId_OrderHistory_Id(o.getId());
+            for(OrderDetail od: orderDetails) {
+                String pid = od.getOrderId().getProduct().getId();
+                if (!items.contains(pid)) {
+                    items.add(pid);
+                    orderItems.add(pid);
+                }
             }
         }
-        else if(user.getPreferred() == null) {
-            if (user.getLastVisited() == null) {
-                pid = p.getId();
-                user.setPreferred(pid);
+        items.clear();
+        Iterable<Wishlist> wishlists = wishlistRepository.findByWishlistId_User_Id(userid);
+        ArrayList<String> wishItems = new ArrayList<>(8);
+        for(Wishlist w: wishlists) {
+            String pid = w.getWishlistId().getProduct().getId();
+            if(!items.contains(pid)) {
+                wishItems.add(pid);
+            }
+        }
+        items.clear();
+        if(wishItems.size() !=0) {
+            Random random = new Random();
+            int n = random.nextInt(wishItems.size());
+            if(userFav == null) {
+                userFav = wishItems.get(n);
+                user.setPreferred(userFav);
+                userRepository.save(user);
             }
             else {
-                user.setPreferred(user.getLastVisited());
-                pid = user.getLastVisited();
+                if (!wishItems.contains(userFav)) {
+                    userFav = wishItems.get(n);
+                    user.setPreferred(userFav);
+                    userRepository.save(user);
+                }
             }
+        }
+        else {
+            ArrayList<String> union = new ArrayList<>(8);
+            if(lastView != null) {
+                union.add(lastView);
+                items.add(lastView);
+            }
+            for(String s: orderItems) {
+                if(!items.contains(s)) {
+                    union.add(s);
+                    items.add(s);
+                }
+            }
+            if (union.size() == 0) {
+                userFav = p.getId();
+            }
+            else {
+                Random random = new Random();
+                int n = random.nextInt(union.size());
+                userFav = union.get(n);
+            }
+            user.setPreferred(userFav);
             userRepository.save(user);
         }
+        if(lastView != null && !lastView.equals(userFav)) {
+            Recommend recommend1 = recommendRepository.findById(lastView).get();
+            Recommend recommend2 = recommendRepository.findById(userFav).get();
+            Recommend res = new Recommend();
+            res.setId(lastView);
+            res.setS1(recommend1.getS1());
+            res.setS2(recommend1.getS2());
+            res.setS3(recommend1.getS3());
+            res.setS4(recommend1.getS4());
+            res.setS5(recommend2.getS1());
+            res.setS6(recommend2.getS2());
+            res.setS7(recommend2.getS3());
+            res.setS8(recommend2.getS4());
 
-        Recommend r = recommendRepository.findById(pid).get();
-        return r;
+            return res;
+        }
+        else {
+            Recommend res = recommendRepository.findById(userFav).get();
+            return res;
+        }
+
+
     }
 
     @GetMapping(path = "/user/getReview/")
