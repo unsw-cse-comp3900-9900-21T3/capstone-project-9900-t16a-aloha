@@ -21,11 +21,98 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="modal" id="reset-password-modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Reset Password</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="resetemail" class="form-label mt-4"
+                >Email address</label
+              >
+              <div class="input-group">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="resetemail"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter email"
+                />
+                <button
+                  class="btn btn-secondary mb-3"
+                  type="button"
+                  style="width: 150px"
+                  id="sendCode-btn"
+                >
+                  Send code
+                </button>
+              </div>
+              <div id="code-success" style="color: darkcyan; display: none">
+                Successfully send!
+              </div>
+              <label for="verify-code" class="form-label mt-4"
+                >Verify Code</label
+              >
+            </div>
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                id="verify-code"
+                placeholder="code"
+              />
+
+              <label for="exampleInputPassword1" class="form-label mt-4"
+                >Password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="exampleInputPassword1"
+                placeholder="Password"
+              />
+              <label for="exampleInputPassword2" class="form-label mt-4"
+                >Confirm Password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="exampleInputPassword2"
+                placeholder="Confirm Password"
+              />
+            </div>
+          </div>
+          <div class="modal-footer my-1 d-flex">
+            <div id="code-fail" style="color: red; display: none">
+              Successfully send!
+            </div>
+            <button
+              type="button"
+              id="reset-password-btn"
+              class="btn-sm btn-primary"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div focus class="modal" id="err-modal">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Error</h5>
+            <h5 class="modal-title">Notify</h5>
             <button
               type="button"
               class="btn-close"
@@ -91,7 +178,7 @@
         <div class="btn-container">
           <button id="sign-in">Log In</button>
         </div>
-        <a class="btn-container" href="#" id="forget-pwd-ling"
+        <a class="btn-container mt-2" href="#" id="forget-pwd-ling"
           >Forgot Password?</a
         >
       </div>

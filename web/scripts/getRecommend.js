@@ -29,60 +29,66 @@ const getRecommend = async () => {
         if (productList.childNodes.length === 8) {
           break;
         }
-
+        if (p == "s9" || p == "s10") {
+          continue;
+        }
         if (p != "id") {
-          const url = `http://localhost:8080/admin/search/id/${d[p]}`;
-          const response = await fetch(url, {
-            method: "get",
-            headers: {
-              "content-type": "application/json",
-            },
-          });
-          const jsData = await response.text();
-          const e = JSON.parse(jsData);
+          try {
+            const url = `http://localhost:8080/admin/search/id/${d[p]}`;
+            const response = await fetch(url, {
+              method: "get",
+              headers: {
+                "content-type": "application/json",
+              },
+            });
+            const jsData = await response.text();
+            const e = JSON.parse(jsData);
 
-          // const isExistP = document.getElementById(e.id);
+            // const isExistP = document.getElementById(e.id);
 
-          if (true) {
-            const productTempNew = productTemplate.cloneNode(true);
+            if (true) {
+              const productTempNew = productTemplate.cloneNode(true);
 
-            productTempNew.id = e.id;
+              productTempNew.id = e.id;
 
-            productTempNew.getElementsByClassName("card-text")[0].innerText =
-              e.name;
-            productTempNew.getElementsByClassName("badge")[0].innerText =
-              "$" + e.price;
+              productTempNew.getElementsByClassName("card-text")[0].innerText =
+                e.name;
+              productTempNew.getElementsByClassName("badge")[0].innerText =
+                "$" + e.price;
 
-            const imgUrlArrays = JSON.parse(e.imgURL);
-            // console.log(imgUrlArrays);
-            if (e.imgURL == "[]" || !e.imgURL) {
-              productTempNew.getElementsByClassName("card-img-top")[0].src =
-                "assets/shoe.png";
-            } else {
-              productTempNew.getElementsByClassName("card-img-top")[0].src =
-                imgUrlArrays[0];
-            }
+              const imgUrlArrays = JSON.parse(e.imgURL);
+              // console.log(imgUrlArrays);
+              if (e.imgURL == "[]" || !e.imgURL) {
+                productTempNew.getElementsByClassName("card-img-top")[0].src =
+                  "assets/shoe.png";
+              } else {
+                productTempNew.getElementsByClassName("card-img-top")[0].src =
+                  imgUrlArrays[0];
+              }
 
-            // wishlist  heart condition
-            const inWishList = getAllWishList();
-            inWishList.then((items) => {
-              items.forEach((p) => {
-                if (productTempNew.id == p.productID) {
-                  productTempNew
-                    .getElementsByClassName("toggle-wishlist")[0]
-                    .classList.remove("bi-heart");
-                  productTempNew
-                    .getElementsByClassName("toggle-wishlist")[0]
-                    .classList.add("bi-heart-fill");
-                }
+              // wishlist  heart condition
+              const inWishList = getAllWishList();
+              inWishList.then((items) => {
+                items.forEach((p) => {
+                  if (productTempNew.id == p.productID) {
+                    productTempNew
+                      .getElementsByClassName("toggle-wishlist")[0]
+                      .classList.remove("bi-heart");
+                    productTempNew
+                      .getElementsByClassName("toggle-wishlist")[0]
+                      .classList.add("bi-heart-fill");
+                  }
+                });
               });
-            });
 
-            // goto detail pages
-            productTempNew.addEventListener("click", () => {
-              gotoUserProductDetailPageDom(productTempNew.id);
-            });
-            productList.appendChild(productTempNew);
+              // goto detail pages
+              productTempNew.addEventListener("click", () => {
+                gotoUserProductDetailPageDom(productTempNew.id);
+              });
+              productList.appendChild(productTempNew);
+            }
+          } catch (err) {
+            console.log(err);
           }
         }
       }

@@ -89,7 +89,7 @@ signInBtn.addEventListener("click", async (_) => {
     const d = JSON.parse(jsData);
     console.log("Completed!", d);
     if (d.status === "fail") {
-      alert(d.msg);
+      showModal(d.msg);
     } else {
       // TODO  backend new pack
       // admin
@@ -101,5 +101,116 @@ signInBtn.addEventListener("click", async (_) => {
     }
   } catch (err) {
     console.error(`Error: ${err}`);
+  }
+});
+const resetModal = new bootstrap.Modal(
+  document.getElementById("reset-password-modal"),
+  {
+    focus: true,
+    Keyboard: true,
+  }
+);
+
+const showForget = document.getElementById("forget-pwd-ling");
+showForget.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (
+    !Array.from(
+      document.getElementById("reset-password-modal").classList
+    ).includes("show")
+  ) {
+    resetModal.show();
+  }
+});
+document
+  .getElementById("reset-password-modal")
+  .addEventListener("show.bs.modal", () => {
+    codeSuccess.style.display = "none";
+    resetemail.value = "";
+    verifycode.value = "";
+    resetpwd.value = "";
+    resetpwdconfirm.value = "";
+    codeFail.style.display = "none";
+  });
+const sendCodeBtn = document.getElementById("sendCode-btn");
+const resetBtn = document.getElementById("reset-password-btn");
+const codeSuccess = document.getElementById("code-success");
+const codeFail = document.getElementById("code-fail");
+const verifycode = document.getElementById("verify-code");
+const resetpwd = document.getElementById("exampleInputPassword1");
+const resetpwdconfirm = document.getElementById("exampleInputPassword2");
+const resetemail = document.getElementById("resetemail");
+sendCodeBtn.addEventListener("click", async () => {
+  codeSuccess.style.display = "none";
+  codeFail.style.display = "none";
+  if (resetemail.value == "") {
+    codeSuccess.innerText = "Please enter email";
+    codeSuccess.style.display = "block";
+    codeSuccess.style.color = "red";
+    return;
+  }
+  try {
+    console.log(
+      `http://localhost:8080/test/sendemail?email=${resetemail.value}`
+    );
+    const response = await fetch(
+      `http://localhost:8080/test/sendemail?email=${resetemail.value}`,
+      {
+        method: "get",
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+
+    const jsData = await response.text();
+    if (jsData != "success") {
+      codeSuccess.innerText = jsData;
+      codeSuccess.style.display = "block";
+      codeSuccess.style.color = "red";
+    } else {
+      codeSuccess.innerText = "success";
+      codeSuccess.style.display = "block";
+      codeSuccess.style.color = "darkcyan";
+    }
+  } catch (err) {
+    showModal(err.msg);
+  }
+});
+
+resetBtn.addEventListener("click", async () => {
+  if (
+    verifycode.value == "" ||
+    resetpwd.value == "" ||
+    resetpwdconfirm.value == "" ||
+    resetemail.value == ""
+  ) {
+    codeFail.style.display = "block";
+    codeFail.innerText = "Please fill all fields";
+    return;
+  }
+  if (resetpwd.value != resetpwdconfirm.value) {
+    codeFail.style.display = "block";
+    codeFail.innerText = "Please enter same password";
+    return;
+  }
+  try {
+    const response = await fetch(
+      `http://localhost:8080/test/resetpwd?email=${resetemail.value}&code=${verifycode.value}&password=${resetpwdconfirm.value}`,
+      {
+        method: "get",
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+    const jsData = await response.text();
+    if (jsData == "success") {
+      resetModal.hide();
+      showModal("Successfully Changed");
+    }
+    console.log(jsData);
+  } catch (err) {
+    console.log(err);
   }
 });
