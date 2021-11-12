@@ -796,30 +796,32 @@ public class UserController {
         }
         if(lastView != null && !lastView.equals(userFav) && !lastView.startsWith("_")) {
             items.clear();
-            Recommend recommend1 = recommendRepository.findById(lastView).get();
-            Recommend recommend2 = recommendRepository.findById(userFav).get();
-
+//            Recommend recommend1 = recommendRepository.findById(lastView).get();
+//            Recommend recommend2 = recommendRepository.findById(userFav).get();
+            Random random = new Random();
+            int n = random.nextInt(2);
+            String finalRecommend = n == 1? lastView: userFav;
+            Recommend recommend1 = recommendRepository.findById(finalRecommend).get();
             Recommend res = new Recommend();
             ArrayList<String> recommends = new ArrayList<>();
             items.add(recommend1.getS1());
             items.add(recommend1.getS2());
             items.add(recommend1.getS3());
             items.add(recommend1.getS4());
-            items.add(recommend2.getS1());
-            items.add(recommend2.getS2());
-            items.add(recommend2.getS3());
-            items.add(recommend2.getS4());
+            items.add(recommend1.getS5());
+            items.add(recommend1.getS6());
+            items.add(recommend1.getS7());
+            items.add(recommend1.getS8());
             recommends.addAll(items);
             while(recommends.size() < 8) {
-                Random random = new Random();
-                int n = random.nextInt(items.size());
+                n = random.nextInt(items.size());
                 Recommend r = recommendRepository.findById(recommends.get(n)).get();
                 //if(items.add(r.getS1())) {
                 recommends.add(r.getS1());
                 //}
 
             }
-            res.setId(lastView);
+            res.setId(finalRecommend);
             res.setS1(recommends.get(0));
             res.setS2(recommends.get(1));
             res.setS3(recommends.get(2));
