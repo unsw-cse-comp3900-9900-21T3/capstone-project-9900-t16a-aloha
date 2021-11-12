@@ -999,10 +999,12 @@ public class UserController {
 
     @GetMapping(path = "/sendemail")
     @CrossOrigin
-    public @ResponseBody String sendEmail(@RequestParam(name = "id") Integer userid) {
-        if(!userRepository.findById(userid).isPresent()) {
+    public @ResponseBody String sendEmail(@RequestParam(name = "email") String email) {
+        User user = userRepository.findByEmail(email);
+        if( user == null) {
             return "User does not exist";
         }
+        int userid = user.getId();
         if(codeMap.containsKey("tm"+userid)) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
@@ -1018,7 +1020,6 @@ public class UserController {
                 return "Please re-send the email 1 minute later";
             }
         }
-        User user = userRepository.findById(userid).get();
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         String code = genCode(6);
         simpleMailMessage.setFrom(sender);
@@ -1048,16 +1049,18 @@ public class UserController {
 
     @GetMapping(path = "/resetpwd")
     @CrossOrigin
-    public @ResponseBody String resetPassword(@RequestParam(name = "id") Integer userid, @RequestParam(name = "code") String code, @RequestParam(name = "password") String password) {
-        if(!userRepository.findById(userid).isPresent()) {
+    public @ResponseBody String resetPassword(@RequestParam(name = "email") String email, @RequestParam(name = "code") String code, @RequestParam(name = "password") String password) {
+        User user = userRepository.findByEmail(email);
+        if(user == null) {
             return "User does not exist";
         }
+        int userid = user.getId();
         String hash = "hash"+ userid;
         String timeStamp = "tm"+ userid;
         if(codeMap.size() == 0 || !codeMap.containsKey(hash)) {
             return "Please verify your email first";
         }
-        User user = userRepository.findById(userid).get();
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
         Date currentTime = calendar.getTime();
@@ -1073,6 +1076,7 @@ public class UserController {
             if(lastCode.equals(code)) {
                 user.setPassword(password);
                 userRepository.save(user);
+                codeMap.put(hash, "set");
                 return "success";
             }
             else {
