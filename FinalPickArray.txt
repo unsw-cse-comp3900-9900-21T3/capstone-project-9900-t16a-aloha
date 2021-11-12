@@ -1,0 +1,33 @@
+FinalPickArray = []
+numWishToChoose = 5
+potential_products = []
+
+if (!orderHistory.empty()){
+    Random random = new Random();
+    int randIndex = random.nextInt(orderHistory.size());
+    FinalPickArray.push(orderHistory[randIndex])
+}
+
+FinalPickArray.push(last_view);
+FinalPickArray.push(random_product);
+
+i=0
+for (i < wishlist.size() && i< numWishToChoose){
+    Random random = new Random();
+    int randIndex = random.nextInt(wishItems.size());
+    FinalPickArray.push(wishItems[randIndex])
+    temp = fetch(wishItems[randIndex])
+    potential_products.push(temp[0:5])
+    i++;
+}
+
+count = FinalPickArray.length;
+while(count < 10){
+    Random random = new Random();
+    int randIndex = random.nextInt(potential_products.length);
+    FinalPickArray.push(potential_products[randIndex]);
+    count++;
+}
+
+
+

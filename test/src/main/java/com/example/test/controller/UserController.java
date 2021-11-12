@@ -728,6 +728,108 @@ public class UserController {
     @GetMapping(path = "/getRecommend/{id}")
     @CrossOrigin
     public @ResponseBody Recommend getRecommend(@PathVariable(name = "id") Integer userid) {
+        List<String> finalPickArray = new ArrayList<>();
+        int numWishToChoose = 5;
+        List<String> potentialProducts = new ArrayList<>();
+
+        Set<String> items = new HashSet<>(8);
+        Iterable<OrderHistory> orderHistories = orderHistoryRepository.findByUserIdOrderByOrderTimeDesc(userid);
+        ArrayList<String> orderItems = new ArrayList<>(8);
+
+        // pick random item from history
+        for (OrderHistory o : orderHistories) {
+            Iterable<OrderDetail> orderDetails = orderDetailRepository.findByOrderId_OrderHistory_Id(o.getId());
+            for (OrderDetail od : orderDetails) {
+                String pid = od.getOrderId().getProduct().getId();
+                if (!items.contains(pid)) {
+                    items.add(pid);
+                    orderItems.add(pid);
+                }
+            }
+        }
+        items.clear();
+
+        if (!orderItems.isEmpty()) {
+            Random random = new Random();
+            int n = random.nextInt(orderItems.size());
+            finalPickArray.add(orderItems.get(n));
+        }
+
+        // add last review
+        User user = userRepository.findById(userid).get();
+        String lastView = user.getLastVisited();
+        if (!lastView.equals("")) {
+            finalPickArray.add(lastView);
+        }
+
+        // add random one from recommend
+        Recommend r = recommendRepository.findRandom();
+        finalPickArray.add(r.getId());
+        r = recommendRepository.findRandom();
+        potentialProducts.add(r.getId());
+
+        Iterable<Wishlist> wishlists = wishlistRepository.findByWishlistId_User_Id(userid);
+        ArrayList<String> wishItems = new ArrayList<>(8);
+        for (Wishlist w : wishlists) {
+            String pid = w.getWishlistId().getProduct().getId();
+            if (!items.contains(pid)) {
+                wishItems.add(pid);
+            }
+        }
+
+        int i = 0;
+        while (i < wishItems.size() && i < numWishToChoose) {
+            Random random = new Random();
+            int n = random.nextInt(wishItems.size());
+
+            String productId = wishItems.get(n);
+            finalPickArray.add(productId);
+
+            Optional<Recommend> optionalRecommends = recommendRepository.findById(productId);
+            if (optionalRecommends.isEmpty()) {
+                int loop = 4;
+                while (loop > 0) {
+                    Recommend recom = recommendRepository.findRandom();
+                    potentialProducts.add(recom.getId());
+                    --loop;
+                }
+            } else {
+                Recommend recommend = optionalRecommends.get();
+                potentialProducts.add(recommend.getS1());
+                potentialProducts.add(recommend.getS2());
+                potentialProducts.add(recommend.getS3());
+                potentialProducts.add(recommend.getS4());
+            }
+            ++i;
+        }
+
+        int count = finalPickArray.size();
+        while (count < 10) {
+            Random random = new Random();
+            int n = random.nextInt(potentialProducts.size());
+            finalPickArray.add(potentialProducts.get(n));
+            ++count;
+        }
+
+        if (!(user.getPreferred()).equals("")) {
+            finalPickArray.add(user.getPreferred());
+        }
+        Random random = new Random();
+        int n = random.nextInt(finalPickArray.size());
+
+        user.setPreferred(finalPickArray.get(n));
+        userRepository.save(user);
+        return recommendRepository.findById(finalPickArray.get(n)).get();
+    }
+
+    //=============================================================================
+    // recommend section
+    //=============================================================================
+
+    /*
+    @GetMapping(path = "/getRecommend/{id}")
+    @CrossOrigin
+    public @ResponseBody Recommend getRecommend(@PathVariable(name = "id") Integer userid) {
         User user = userRepository.findById(userid).get();
         Product p = productRepository.findRandom();
         String userFav = user.getPreferred();
@@ -735,9 +837,9 @@ public class UserController {
         Set<String> items = new HashSet<>(8);
         Iterable<OrderHistory> orderHistories = orderHistoryRepository.findByUserIdOrderByOrderTimeDesc(userid);
         ArrayList<String> orderItems = new ArrayList<>(8);
-        for(OrderHistory o: orderHistories) {
-            Iterable<OrderDetail> orderDetails= orderDetailRepository.findByOrderId_OrderHistory_Id(o.getId());
-            for(OrderDetail od: orderDetails) {
+        for (OrderHistory o : orderHistories) {
+            Iterable<OrderDetail> orderDetails = orderDetailRepository.findByOrderId_OrderHistory_Id(o.getId());
+            for (OrderDetail od : orderDetails) {
                 String pid = od.getOrderId().getProduct().getId();
                 if (!items.contains(pid)) {
                     items.add(pid);
@@ -748,45 +850,42 @@ public class UserController {
         items.clear();
         Iterable<Wishlist> wishlists = wishlistRepository.findByWishlistId_User_Id(userid);
         ArrayList<String> wishItems = new ArrayList<>(8);
-        for(Wishlist w: wishlists) {
+        for (Wishlist w : wishlists) {
             String pid = w.getWishlistId().getProduct().getId();
-            if(!items.contains(pid)) {
+            if (!items.contains(pid)) {
                 wishItems.add(pid);
             }
         }
         items.clear();
-        if(wishItems.size() !=0) {
+        if (wishItems.size() != 0) {
             Random random = new Random();
             int n = random.nextInt(wishItems.size());
-            if(userFav == null) {
+            if (userFav == null) {
                 userFav = wishItems.get(n);
                 user.setPreferred(userFav);
                 userRepository.save(user);
-            }
-            else {
+            } else {
                 if (!wishItems.contains(userFav)) {
                     userFav = wishItems.get(n);
                     user.setPreferred(userFav);
                     userRepository.save(user);
                 }
             }
-        }
-        else {
+        } else {
             ArrayList<String> union = new ArrayList<>(8);
-            if(lastView != null) {
+            if (lastView != null) {
                 union.add(lastView);
                 items.add(lastView);
             }
-            for(String s: orderItems) {
-                if(!items.contains(s)) {
+            for (String s : orderItems) {
+                if (!items.contains(s)) {
                     union.add(s);
                     items.add(s);
                 }
             }
             if (union.size() == 0) {
                 userFav = p.getId();
-            }
-            else {
+            } else {
                 Random random = new Random();
                 int n = random.nextInt(union.size());
                 userFav = union.get(n);
@@ -794,7 +893,7 @@ public class UserController {
             user.setPreferred(userFav);
             userRepository.save(user);
         }
-        if(lastView != null && !lastView.equals(userFav)) {
+        if (lastView != null && !lastView.equals(userFav)) {
             items.clear();
             Recommend recommend1 = recommendRepository.findById(lastView).get();
             Recommend recommend2 = recommendRepository.findById(userFav).get();
@@ -809,11 +908,11 @@ public class UserController {
             items.add(recommend2.getS3());
             items.add(recommend2.getS4());
             recommends.addAll(items);
-            while(items.size() < 8) {
+            while (items.size() < 8) {
                 Random random = new Random();
                 int n = random.nextInt(items.size());
                 Recommend r = recommendRepository.findById(recommends.get(n)).get();
-                if(items.add(r.getS1())) {
+                if (items.add(r.getS1())) {
                     recommends.add(r.getS1());
                 }
 
@@ -828,8 +927,7 @@ public class UserController {
             res.setS7(recommends.get(6));
             res.setS8(recommends.get(7));
             return res;
-        }
-        else {
+        } else {
             Recommend res = recommendRepository.findById(userFav).get();
             ArrayList<String> recommends = new ArrayList<>();
             items.add(res.getS1());
@@ -841,11 +939,11 @@ public class UserController {
             items.add(res.getS7());
             items.add(res.getS8());
             recommends.addAll(items);
-            while(items.size() < 8) {
+            while (items.size() < 8) {
                 Random random = new Random();
                 int n = random.nextInt(items.size());
                 Recommend r = recommendRepository.findById(recommends.get(n)).get();
-                if(items.add(r.getS1())) {
+                if (items.add(r.getS1())) {
                     recommends.add(r.getS1());
                 }
 
@@ -863,6 +961,10 @@ public class UserController {
 
 
     }
+
+     */
+
+
 
     // Annotation: empty
     @GetMapping(path = "/user/getReview/")
