@@ -10,6 +10,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -1002,6 +1003,21 @@ public class UserController {
         if(!userRepository.findById(userid).isPresent()) {
             return "User does not exist";
         }
+        if(codeMap.containsKey("tm"+userid)) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
+            Calendar calendar = Calendar.getInstance();
+            Date currentTime = calendar.getTime();
+            Date startTime;
+            try {
+                startTime = simpleDateFormat.parse(codeMap.get("tm"+userid).toString());
+            } catch (ParseException e) {
+                return e.getMessage();
+            }
+            int minutes =  (int) ((currentTime.getTime()- startTime.getTime())/(1000 * 60));
+            if(minutes <=1) {
+                return "Please re-send the email 1 minute later";
+            }
+        }
         User user = userRepository.findById(userid).get();
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         String code = genCode(6);
@@ -1013,7 +1029,6 @@ public class UserController {
             javaMailSender.send(simpleMailMessage);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.MINUTE, 10);
             String currentTime = simpleDateFormat.format(calendar.getTime());
             // md5 encryption
 //            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
@@ -1043,10 +1058,31 @@ public class UserController {
             return "Please verify your email first";
         }
         User user = userRepository.findById(userid).get();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
-        String currentTime = simpleDateFormat.format(calendar.getTime());
-        return "";
+        Date currentTime = calendar.getTime();
+        Date startTime;
+        try {
+            startTime = simpleDateFormat.parse(codeMap.get(timeStamp).toString());
+        } catch (ParseException e) {
+            return e.getMessage();
+        }
+        int minutes =  (int) ((currentTime.getTime()- startTime.getTime())/(1000 * 60));
+        if (minutes <= 10 && minutes >= 0) {
+            String lastCode = codeMap.get(hash).toString();
+            if(lastCode.equals(code)) {
+                user.setPassword(password);
+                userRepository.save(user);
+                return "success";
+            }
+            else {
+                return "Wrong code";
+            }
+        }
+        else {
+            return "The code has expired";
+        }
+
 
     }
 
