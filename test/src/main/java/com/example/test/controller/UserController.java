@@ -831,7 +831,13 @@ public class UserController {
             return res;
         }
         else {
-            Recommend res = recommendRepository.findById(userFav).get();
+            Recommend res;
+            if(userFav.startsWith("_")) {
+                res = recommendRepository.findRandom();
+            }
+            else {
+                res = recommendRepository.findById(userFav).get();
+            }
             ArrayList<String> recommends = new ArrayList<>();
             items.add(res.getS1());
             items.add(res.getS2());
