@@ -3,10 +3,15 @@ package com.example.test.controller;
 import com.example.test.model.*;
 import com.example.test.repository.*;
 import org.aspectj.weaver.ast.Or;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.auth0.jwt.JWT;
@@ -14,10 +19,16 @@ import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.mail.SimpleMailMessage;
 
+
+import javax.persistence.Column;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.xml.bind.DatatypeConverter;
 
 
 @Controller
@@ -49,6 +60,14 @@ public class UserController {
 
     @Autowired
     private ReviewRepository reviewRepository;
+
+    @Value("${mail.fromMail.sender}")
+    private String sender;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    private Map<String, Object> codeMap = new HashMap<>();
 
     @GetMapping(path = "/all")
     @CrossOrigin
@@ -864,12 +883,21 @@ public class UserController {
                 userFav = wishItems.get(n);
                 user.setPreferred(userFav);
                 userRepository.save(user);
+<<<<<<< HEAD
             } else {
                 if (!wishItems.contains(userFav)) {
                     userFav = wishItems.get(n);
                     user.setPreferred(userFav);
                     userRepository.save(user);
                 }
+=======
+            }
+            else {
+                userFav = wishItems.get(n);
+                user.setPreferred(userFav);
+                userRepository.save(user);
+
+>>>>>>> 67f09b455b34a041f31c4b1e1db0e3d8388aa2e1
             }
         } else {
             ArrayList<String> union = new ArrayList<>(8);
@@ -893,21 +921,30 @@ public class UserController {
             user.setPreferred(userFav);
             userRepository.save(user);
         }
+<<<<<<< HEAD
         if (lastView != null && !lastView.equals(userFav)) {
+=======
+        if(lastView != null && !lastView.equals(userFav) && !lastView.startsWith("_")) {
+>>>>>>> 67f09b455b34a041f31c4b1e1db0e3d8388aa2e1
             items.clear();
-            Recommend recommend1 = recommendRepository.findById(lastView).get();
-            Recommend recommend2 = recommendRepository.findById(userFav).get();
+//            Recommend recommend1 = recommendRepository.findById(lastView).get();
+//            Recommend recommend2 = recommendRepository.findById(userFav).get();
+            Random random = new Random();
+            int n = random.nextInt(2);
+            String finalRecommend = n == 1? lastView: userFav;
+            Recommend recommend1 = recommendRepository.findById(finalRecommend).get();
             Recommend res = new Recommend();
             ArrayList<String> recommends = new ArrayList<>();
             items.add(recommend1.getS1());
             items.add(recommend1.getS2());
             items.add(recommend1.getS3());
             items.add(recommend1.getS4());
-            items.add(recommend2.getS1());
-            items.add(recommend2.getS2());
-            items.add(recommend2.getS3());
-            items.add(recommend2.getS4());
+            items.add(recommend1.getS5());
+            items.add(recommend1.getS6());
+            items.add(recommend1.getS7());
+            items.add(recommend1.getS8());
             recommends.addAll(items);
+<<<<<<< HEAD
             while (items.size() < 8) {
                 Random random = new Random();
                 int n = random.nextInt(items.size());
@@ -915,9 +952,17 @@ public class UserController {
                 if (items.add(r.getS1())) {
                     recommends.add(r.getS1());
                 }
+=======
+            while(recommends.size() < 8) {
+                n = random.nextInt(items.size());
+                Recommend r = recommendRepository.findById(recommends.get(n)).get();
+                //if(items.add(r.getS1())) {
+                recommends.add(r.getS1());
+                //}
+>>>>>>> 67f09b455b34a041f31c4b1e1db0e3d8388aa2e1
 
             }
-            res.setId(lastView);
+            res.setId(finalRecommend);
             res.setS1(recommends.get(0));
             res.setS2(recommends.get(1));
             res.setS3(recommends.get(2));
@@ -927,8 +972,20 @@ public class UserController {
             res.setS7(recommends.get(6));
             res.setS8(recommends.get(7));
             return res;
+<<<<<<< HEAD
         } else {
             Recommend res = recommendRepository.findById(userFav).get();
+=======
+        }
+        else {
+            Recommend res;
+            if(userFav.startsWith("_")) {
+                res = recommendRepository.findRandom();
+            }
+            else {
+                res = recommendRepository.findById(userFav).get();
+            }
+>>>>>>> 67f09b455b34a041f31c4b1e1db0e3d8388aa2e1
             ArrayList<String> recommends = new ArrayList<>();
             items.add(res.getS1());
             items.add(res.getS2());
@@ -939,6 +996,7 @@ public class UserController {
             items.add(res.getS7());
             items.add(res.getS8());
             recommends.addAll(items);
+<<<<<<< HEAD
             while (items.size() < 8) {
                 Random random = new Random();
                 int n = random.nextInt(items.size());
@@ -946,6 +1004,15 @@ public class UserController {
                 if (items.add(r.getS1())) {
                     recommends.add(r.getS1());
                 }
+=======
+            while(recommends.size() < 8) {
+                Random random = new Random();
+                int n = random.nextInt(items.size());
+                Recommend r = recommendRepository.findById(recommends.get(n)).get();
+                //if(items.add(r.getS1())) {
+                recommends.add(r.getS1());
+               // }
+>>>>>>> 67f09b455b34a041f31c4b1e1db0e3d8388aa2e1
 
             }
             res.setS1(recommends.get(0));
@@ -1061,5 +1128,110 @@ public class UserController {
         return productRepository.findDistinctByPriceIsLessThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging,maxPrice,1,0,0);
 
     }
+
+    private String genCode(int n) {
+        Random random = new Random();
+        StringBuffer stringBuffer = new StringBuffer();
+        for(int i = 0; i < n; ++i) {
+            int rand = random.nextInt(10);
+            stringBuffer.append(rand);
+        }
+        return stringBuffer.toString();
+    }
+
+    @GetMapping(path = "/sendemail")
+    @CrossOrigin
+    public @ResponseBody String sendEmail(@RequestParam(name = "email") String email) {
+        User user = userRepository.findByEmail(email);
+        if( user == null) {
+            return "User does not exist";
+        }
+        int userid = user.getId();
+        if(codeMap.containsKey("tm"+userid)) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
+            Calendar calendar = Calendar.getInstance();
+            Date currentTime = calendar.getTime();
+            Date startTime;
+            try {
+                startTime = simpleDateFormat.parse(codeMap.get("tm"+userid).toString());
+            } catch (ParseException e) {
+                return e.getMessage();
+            }
+            int minutes =  (int) ((currentTime.getTime()- startTime.getTime())/(1000 * 60));
+            if(minutes <=1) {
+                return "Please re-send the email 1 minute later";
+            }
+        }
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        String code = genCode(6);
+        simpleMailMessage.setFrom(sender);
+        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setSubject("Reset your password");
+        simpleMailMessage.setText("Hello, we have received your request of resetting password, your verify code is [" + code + "]. The code will be invalid in 10 minutes.");
+        try {
+            javaMailSender.send(simpleMailMessage);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
+            Calendar calendar = Calendar.getInstance();
+            String currentTime = simpleDateFormat.format(calendar.getTime());
+            // md5 encryption
+//            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+//            messageDigest.update(code.getBytes());
+//            byte[] digest = messageDigest.digest();
+//            String hashCode = DatatypeConverter.printHexBinary(digest).toUpperCase();
+            String hash = "hash"+userid;
+            String timeStamp = "tm"+userid;
+            codeMap.put(hash, code);
+            codeMap.put(timeStamp, currentTime);
+            return "success";
+        }
+        catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    @GetMapping(path = "/resetpwd")
+    @CrossOrigin
+    public @ResponseBody String resetPassword(@RequestParam(name = "email") String email, @RequestParam(name = "code") String code, @RequestParam(name = "password") String password) {
+        User user = userRepository.findByEmail(email);
+        if(user == null) {
+            return "User does not exist";
+        }
+        int userid = user.getId();
+        String hash = "hash"+ userid;
+        String timeStamp = "tm"+ userid;
+        if(codeMap.size() == 0 || !codeMap.containsKey(hash)) {
+            return "Please verify your email first";
+        }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        Date currentTime = calendar.getTime();
+        Date startTime;
+        try {
+            startTime = simpleDateFormat.parse(codeMap.get(timeStamp).toString());
+        } catch (ParseException e) {
+            return e.getMessage();
+        }
+        int minutes =  (int) ((currentTime.getTime()- startTime.getTime())/(1000 * 60));
+        if (minutes <= 10 && minutes >= 0) {
+            String lastCode = codeMap.get(hash).toString();
+            if(lastCode.equals(code)) {
+                user.setPassword(password);
+                userRepository.save(user);
+                codeMap.put(hash, "set");
+                return "success";
+            }
+            else {
+                return "Wrong code";
+            }
+        }
+        else {
+            return "The code has expired";
+        }
+
+
+    }
+
+
 
 }
