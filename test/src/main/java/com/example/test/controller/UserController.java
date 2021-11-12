@@ -3,10 +3,14 @@ package com.example.test.controller;
 import com.example.test.model.*;
 import com.example.test.repository.*;
 import org.aspectj.weaver.ast.Or;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.auth0.jwt.JWT;
@@ -14,10 +18,16 @@ import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.mail.SimpleMailMessage;
 
+
+import javax.persistence.Column;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.xml.bind.DatatypeConverter;
 
 
 @Controller
@@ -49,6 +59,14 @@ public class UserController {
 
     @Autowired
     private ReviewRepository reviewRepository;
+
+    @Value("${mail.fromMail.sender}")
+    private String sender;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    private Map<String, Object> codeMap = new HashMap<>();
 
     @GetMapping(path = "/all")
     @CrossOrigin
@@ -764,11 +782,10 @@ public class UserController {
                 userRepository.save(user);
             }
             else {
-                if (!wishItems.contains(userFav)) {
-                    userFav = wishItems.get(n);
-                    user.setPreferred(userFav);
-                    userRepository.save(user);
-                }
+                userFav = wishItems.get(n);
+                user.setPreferred(userFav);
+                userRepository.save(user);
+
             }
         }
         else {
@@ -968,5 +985,71 @@ public class UserController {
         return productRepository.findDistinctByPriceIsLessThanAndVisibilityAndIsDeletedAndStorge_stockIsGreaterThan(paging,maxPrice,1,0,0);
 
     }
+
+    private String genCode(int n) {
+        Random random = new Random();
+        StringBuffer stringBuffer = new StringBuffer();
+        for(int i = 0; i < n; ++i) {
+            int rand = random.nextInt(10);
+            stringBuffer.append(rand);
+        }
+        return stringBuffer.toString();
+    }
+
+    @GetMapping(path = "/sendemail")
+    @CrossOrigin
+    public @ResponseBody String sendEmail(@RequestParam(name = "id") Integer userid) {
+        if(!userRepository.findById(userid).isPresent()) {
+            return "User does not exist";
+        }
+        User user = userRepository.findById(userid).get();
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        String code = genCode(6);
+        simpleMailMessage.setFrom(sender);
+        simpleMailMessage.setTo(user.getEmail());
+        simpleMailMessage.setSubject("Reset your password");
+        simpleMailMessage.setText("Hello, we have received your request of resetting password, your verify code is [" + code + "]. The code will be invalid in 10 minutes.");
+        try {
+            javaMailSender.send(simpleMailMessage);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd,HH:mm:ss");
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MINUTE, 10);
+            String currentTime = simpleDateFormat.format(calendar.getTime());
+            // md5 encryption
+//            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+//            messageDigest.update(code.getBytes());
+//            byte[] digest = messageDigest.digest();
+//            String hashCode = DatatypeConverter.printHexBinary(digest).toUpperCase();
+            String hash = "hash"+userid;
+            String timeStamp = "tm"+userid;
+            codeMap.put(hash, code);
+            codeMap.put(timeStamp, currentTime);
+            return "success";
+        }
+        catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    @GetMapping(path = "/resetpwd")
+    @CrossOrigin
+    public @ResponseBody String resetPassword(@RequestParam(name = "id") Integer userid, @RequestParam(name = "code") String code, @RequestParam(name = "password") String password) {
+        if(!userRepository.findById(userid).isPresent()) {
+            return "User does not exist";
+        }
+        String hash = "hash"+ userid;
+        String timeStamp = "tm"+ userid;
+        if(codeMap.size() == 0 || !codeMap.containsKey(hash)) {
+            return "Please verify your email first";
+        }
+        User user = userRepository.findById(userid).get();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        Calendar calendar = Calendar.getInstance();
+        String currentTime = simpleDateFormat.format(calendar.getTime());
+        return "";
+
+    }
+
+
 
 }
