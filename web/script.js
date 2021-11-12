@@ -1,3 +1,4 @@
+import showModal from "./scripts/errmodal.js";
 const firstName = document.getElementById("first-name");
 const lastName = document.getElementById("last-name");
 const signUpEmail = document.getElementById("email");
@@ -11,13 +12,15 @@ signUpBtn.addEventListener("click", async (_) => {
     signUpEmail.value === "" ||
     signUpPass.value === ""
   ) {
-    alert("Please do not left empty fields for registration");
+    showModal("Please do not left empty fields for sign up");
+    // alert("Please do not left empty fields for registration");
     return;
   }
   if (
     !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(signUpEmail.value)
   ) {
-    alert("Please enter valid email address");
+    showModal("Please enter valid email address");
+    // alert("Please enter valid email address");
     return;
   }
   try {
@@ -47,9 +50,11 @@ signUpBtn.addEventListener("click", async (_) => {
     const d = JSON.parse(jsData);
     console.log("Completed!", d);
     if (d.status === "fail") {
-      alert(d.msg);
+      showModal(d.msg);
+      // alert(d.msg);
     } else {
-      alert("Sign Up successfully");
+      showModal("Sign Up successfully");
+      // alert("Sign Up successfully");
     }
   } catch (err) {
     console.error(`Error: ${err}`);

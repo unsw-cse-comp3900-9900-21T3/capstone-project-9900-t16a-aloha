@@ -1,5 +1,6 @@
 import { getProductList } from "./adminProductList.js";
 import { fileToDataUrl, createUId, removeAllChilds } from "./helper.js";
+import showModal from "./errmodal.js";
 // page DOM
 const searchPage = document.getElementById("product-search-page");
 const editProductPage = document.getElementById("edit-product-detail-page");
@@ -116,19 +117,22 @@ const changeProductPost = async () => {
   // price validation
   // quantity validation
   if (pTitle.value === "") {
-    alert("Please Enter Product Title");
+    showModal("Please Enter Product Title");
+    // alert("Please Enter Product Title");
     return;
   }
 
   if (!/^\d+(\.\d{1,2})?$/.test(pPrice.value)) {
-    alert("Please Enter Valid Price (Maximum 2 dicimal) e.g. 99.99");
+    showModal("Please Enter Valid Price (Maximum 2 dicimal) e.g. 99.99");
+    // alert("Please Enter Valid Price (Maximum 2 dicimal) e.g. 99.99");
     return;
   }
 
   console.log(pSize.value);
   if (pSize.value !== "default") {
     if (!/^\d+$/.test(pQty.value)) {
-      alert("Please Enter Valid Quantity");
+      showModal("Please Enter Valid Quantity");
+      // alert("Please Enter Valid Quantity");
       return;
     }
   }
@@ -182,7 +186,8 @@ const changeProductPost = async () => {
           }
         }
       }
-      alert("Edit successfully");
+      showModal("Edit successfully");
+      // alert("Edit successfully");
       gotoProductList();
     }
   } catch (err) {
@@ -207,7 +212,8 @@ export const gotoEditProductPage = (productId) => {
 const addPreview = async () => {
   console.log(imgsArray);
   if (imgList.childNodes.length === 8) {
-    alert("No more than 8 imgs");
+    showModal("No more than 8 imgs");
+    // alert("No more than 8 imgs");
     return;
   }
   const img = uploadImg.files[0];
@@ -232,7 +238,8 @@ const addPreview = async () => {
 uploadImg.addEventListener("change", addPreview);
 delImgBtn.addEventListener("click", () => {
   if (imgList.childNodes.length === 0) {
-    alert("No img to delete");
+    showModal("No img to delete");
+    // alert("No img to delete");
     return;
   }
 
@@ -262,7 +269,8 @@ delImgBtn.addEventListener("click", () => {
 ["keyup", "change"].forEach((evt) =>
   pQty.addEventListener(evt, () => {
     if (pSize.value === "default") {
-      alert("Please select size first");
+      showModal("Please select size first");
+      // alert("Please select size first");
       pQty.value = "";
     } else {
       stockPair.set(pSize.value, pQty.value);

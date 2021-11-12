@@ -1,4 +1,5 @@
 import { gotoMain } from "./gotoMain.js";
+import showModal from "./errmodal.js";
 const firstName = document.getElementById("address-first-name");
 const lastName = document.getElementById("address-last-name");
 const phone = document.getElementById("address-phone");
@@ -24,11 +25,13 @@ changeBtn.addEventListener("click", async (_) => {
     state.value === "" ||
     zip.value === ""
   ) {
-    alert("Please do not left empty fields");
+    showModal("Please do not left empty fields");
+    // alert("Please do not left empty fields");
     return;
   }
   if (!/^\d+$/.test(phone.value)) {
-    alert("Please enter valid phone number");
+    showModal("Please enter valid phone number");
+    // alert("Please enter valid phone number");
     return;
   }
 
@@ -62,7 +65,8 @@ changeBtn.addEventListener("click", async (_) => {
     } else {
       accountIconUsername.innerText =
         "Hello, " + firstName.value + " " + lastName.value;
-      alert("Changed Successfully!");
+      showModal("Changed Successfully!");
+      // alert("Changed Successfully!");
     }
   } catch (err) {
     console.error(`Error: ${err}`);

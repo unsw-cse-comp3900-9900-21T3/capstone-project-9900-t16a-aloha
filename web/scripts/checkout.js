@@ -1,3 +1,4 @@
+import showModal from "./errmodal.js";
 const checkoutBtn = document.getElementById("check-out-btn");
 const itemsList = document.getElementById("shopping-cart-list");
 const checkoutAddr = document.getElementById("checkout-address");
@@ -14,7 +15,8 @@ const shoppingcartParent = document.getElementById("shopping-cart-list");
 const inputList = [firstName, lastName, phone, address, city, state, zip];
 checkoutBtn.addEventListener("click", async () => {
   if (shoppingcartParent.childNodes.length === 0) {
-    alert("No items in shopping cart");
+    showModal("No items in shopping cart");
+    // alert("No items in shopping cart");
     return;
   }
   itemsList.style.display = "none";
@@ -71,7 +73,8 @@ const disableBtn = () => {
       btn.style.pointerEvents = "none";
       btn.style.opacity = "50%";
     }
-    alert("Please do not left empty fields");
+    showModal("Please do not left empty fields");
+    // alert("Please do not left empty fields");
     return;
   } else {
     for (let btn of document.getElementsByClassName("pay-btns")) {
@@ -86,7 +89,8 @@ const disableBtn = () => {
       btn.style.pointerEvents = "none";
       btn.style.opacity = "50%";
     }
-    alert("Please enter valid phone number");
+    showModal("Please enter valid phone number");
+    // alert("Please enter valid phone number");
     return;
   }
 };
@@ -168,20 +172,3 @@ function initPayPalButton(moneyAmt) {
     })
     .render("#paypal-button-container");
 }
-
-// if (
-//     firstName.value === "" ||
-//     lastName.value === "" ||
-//     phone.value === "" ||
-//     addr.value === "" ||
-//     city.value === "" ||
-//     state.value === "" ||
-//     zip.value === ""
-//   ) {
-//     alert("Please do not left empty fields");
-//     return;
-//   }
-//   if (!/^\d+$/.test(phone.value)) {
-//     alert("Please enter valid phone number");
-//     return;
-//   }

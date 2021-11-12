@@ -1,4 +1,5 @@
 import { getAllOrders } from "./orderHistory.js";
+import showModal from "./errmodal.js";
 const accountAddressBtn = document.getElementById("account-address-btn");
 const accountAccountBtn = document.getElementById("account-account-btn");
 const accountOrderBtn = document.getElementById("account-order-btn");
@@ -83,11 +84,11 @@ const preLoadAddr = async () => {
   }
 };
 
-const preLoadOrder = ()=>{
+const preLoadOrder = () => {
   console.log("preloadorder");
   getAllOrders();
-}
-export { preLoadAddr, preLoadAcct ,preLoadOrder};
+};
+export { preLoadAddr, preLoadAcct, preLoadOrder };
 preLoadAddr();
 preLoadAcct();
 
@@ -104,13 +105,12 @@ const gotoAcct = () => {
   preLoadAcct();
 };
 
-
-const gotoOrder = () =>{
+const gotoOrder = () => {
   acctAcctPage.style.display = "none";
   acctAddrPage.style.display = "none";
   acctOrderPage.style.display = "block";
   preLoadOrder();
-}
+};
 
 accountAddressBtn.addEventListener("click", gotoAddr);
 accountAccountBtn.addEventListener("click", gotoAcct);
@@ -124,11 +124,13 @@ acctChangeBtn.addEventListener("click", async (_) => {
     acctLName.value === "" ||
     acctEmail.value === ""
   ) {
-    alert("Please do not left empty fields");
+    showModal("Please do not left empty fields");
+    // alert("Please do not left empty fields");
     return;
   }
   if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(acctEmail.value)) {
-    alert("Please enter valid email address");
+    showModal("Please enter valid email address");
+    // alert("Please enter valid email address");
     return;
   }
 
@@ -158,7 +160,8 @@ acctChangeBtn.addEventListener("click", async (_) => {
     } else {
       accountIconUsername.innerText =
         "Hello, " + acctFName.value + " " + acctLName.value;
-      alert("Changed Successfully!");
+      showModal("Changed Successfully!");
+      // alert("Changed Successfully!");
     }
   } catch (err) {
     console.error(`Error: ${err}`);

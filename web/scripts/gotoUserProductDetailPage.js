@@ -1,6 +1,6 @@
 // import { gotoMain } from "./gotoMain.js";
 import { createUId, removeAllChilds } from "./helper.js";
-
+import showModal from "./errmodal.js";
 const pBrand = document.getElementById("user-product-detail-brand");
 const pTitle = document.getElementById("user-product-detail-name");
 const pPrice = document.getElementById("user-product-detail-price");
@@ -132,7 +132,8 @@ const getProductDetail = async (productId) => {
 ["keyup"].forEach((evt) =>
   pQty.addEventListener(evt, () => {
     if (pSize.value === "default") {
-      alert("Please select size first");
+      showModal("Please select size first");
+      // alert("Please select size first");
       pQty.value = "";
     } else {
       // check qty less than stk
@@ -140,14 +141,16 @@ const getProductDetail = async (productId) => {
         if (
           parseInt(pQty.value, 10) > parseInt(stockPair.get(pSize.value), 10)
         ) {
-          alert("We don't have this much stock.");
+          showModal("We don't have this much stock.");
+          // alert("We don't have this much stock.");
           pQty.value = "1";
         }
         if (stockPair.get(pSize.value) == 0) {
           pQty.value = "0";
         }
       } else {
-        alert("We run out of stock.");
+        showModal("We run out of stock.");
+        // alert("We run out of stock.");
         pQty.value = "0";
       }
     }
@@ -161,7 +164,8 @@ pSize.addEventListener("change", () => {
   if (stockPair.get(pSize.value)) {
     pQty.value = "1";
   } else {
-    alert("We run out of stock.");
+    showModal("We run out of stock.");
+    // alert("We run out of stock.");
     pQty.value = "0";
   }
 
@@ -173,22 +177,27 @@ addCartBtn.addEventListener("click", async () => {
   const url = `http://localhost:8080/test/user/shoppingcart/add?userid=${userId}&productid=${pid}&size=${pSize.value}&quantity=${pQty.value}`;
 
   try {
-    await fetch(url, {
+    const res = await fetch(url, {
       method: "post",
       headers: {
         "content-type": "application/json",
       },
     });
     if (!pQty.value) {
-      alert("Please enter valid qty");
+      showModal("Please enter valid qty");
+      // alert("Please enter valid qty");
       return;
     }
     if (pQty.value == 0) {
-      alert("We run out of stock.");
+      showModal("We run out of stock.");
+      // alert("We run out of stock.");
       return;
     }
 
-    alert("Added to cart Successfully!");
+    const jst = await res.text();
+    const js = JSON.parse(jst);
+    // alert(js.msg);
+    showModal(js.msg);
   } catch (err) {
     console.log(err);
   }

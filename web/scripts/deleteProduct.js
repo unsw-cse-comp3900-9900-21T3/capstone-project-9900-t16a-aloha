@@ -1,4 +1,5 @@
 import { getProductList } from "./adminProductList.js";
+import showModal from "./errmodal.js";
 const deleteBtns = document.getElementsByClassName(
   "product-list-page-card-delete"
 );
@@ -37,7 +38,8 @@ deleConfirmBtn.addEventListener("click", async (_) => {
     if (d.status === "fail") {
       alert("Something Wrong");
     } else {
-      alert("Deleted Successfully!");
+      // alert("Deleted Successfully!");
+      showModal("Deleted Successfully!");
       let elem = document.getElementById(id);
       elem.remove();
       // getProductList();
