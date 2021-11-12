@@ -809,13 +809,13 @@ public class UserController {
             items.add(recommend2.getS3());
             items.add(recommend2.getS4());
             recommends.addAll(items);
-            while(items.size() < 8) {
+            while(recommends.size() < 8) {
                 Random random = new Random();
                 int n = random.nextInt(items.size());
                 Recommend r = recommendRepository.findById(recommends.get(n)).get();
-                if(items.add(r.getS1())) {
-                    recommends.add(r.getS1());
-                }
+                //if(items.add(r.getS1())) {
+                recommends.add(r.getS1());
+                //}
 
             }
             res.setId(lastView);
@@ -841,13 +841,13 @@ public class UserController {
             items.add(res.getS7());
             items.add(res.getS8());
             recommends.addAll(items);
-            while(items.size() < 8) {
+            while(recommends.size() < 8) {
                 Random random = new Random();
                 int n = random.nextInt(items.size());
                 Recommend r = recommendRepository.findById(recommends.get(n)).get();
-                if(items.add(r.getS1())) {
-                    recommends.add(r.getS1());
-                }
+                //if(items.add(r.getS1())) {
+                recommends.add(r.getS1());
+               // }
 
             }
             res.setS1(recommends.get(0));
