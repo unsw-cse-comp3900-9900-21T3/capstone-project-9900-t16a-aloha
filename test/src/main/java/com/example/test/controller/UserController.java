@@ -794,10 +794,11 @@ public class UserController {
             user.setPreferred(userFav);
             userRepository.save(user);
         }
-        if(lastView != null && !lastView.equals(userFav)) {
+        if(lastView != null && !lastView.equals(userFav) && !lastView.startsWith("_")) {
             items.clear();
             Recommend recommend1 = recommendRepository.findById(lastView).get();
             Recommend recommend2 = recommendRepository.findById(userFav).get();
+
             Recommend res = new Recommend();
             ArrayList<String> recommends = new ArrayList<>();
             items.add(recommend1.getS1());
