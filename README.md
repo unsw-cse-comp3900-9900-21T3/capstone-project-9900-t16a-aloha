@@ -2,7 +2,7 @@
 capstone-project-9900-t16a-aloha created by GitHub Classroom
 
 
-#Front End Server
+# Front End Server
 
 There are no additional environments for running front-end. 
 
@@ -24,3 +24,15 @@ Visit on either:
 1. If you are running on UNSW CSE machine. It will ask you to install the http-server. 
 2. If you are running on your own machine, Nodejs is needed to run this command.
 3. Or you can use any other server to run the front-end. For example, python server.
+
+
+# Back End Server
+
+
+# Recommend 
+To generate the recommendation table, 
+1. open Jupiter notebook
+2. open file generateRecommendProducts.ipynb and run all
+
+
+It will generate a file called “no_duplicate_10_most_recommend.csv”.
