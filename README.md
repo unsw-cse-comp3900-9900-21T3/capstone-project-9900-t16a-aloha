@@ -44,7 +44,7 @@ Type following commands in terminal to install MySQL Server
 
 ### MySQL Configuration
 By default, MySQL must bu login in with `sudo` command, so we need to change the privileges.
-Running MySQL shell fisrt by typing
+Running MySQL shell first by typing
 
 `sudo mysql -uroot -p`
 
