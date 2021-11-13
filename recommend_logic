@@ -1,32 +1,32 @@
-'''
-    userFav => user favourite product ID fetched from User table
-    last_view => product ID that user last viewed
-    order_history_product_list => list of product ID that is from order history table
-    fetch() => fetch product ID from 10_most_recommend.csv table
+finalPickArray = []
+potential_products = []
+numWishToChoose = 5
 
-    random_pick() => return 1 ID
+FinalPickArray.push(last_view);
+FinalPickArray.push(random_product);
+
+IF orderHistory is NOT Empty
+THEN
+    FinalPickArray.add(orderHistory.random())
 
 
-    res = [ID1, ID2, ID3 ..., ID8] // list of final recommend 8 products
+i=0
+WHILE i < wishlist.size() && i< numWishToChoose
+DO
+    id = wishItems.random()
+    FinalPickArray.push(id)
+    idRelatedProduct = fetch(wishItems[randIndex])
+    potential_products.push(idRelatedProduct[0:5])
+    i++;
+DONE
 
-    if wishlist NOT empty :
-        if(userFav == ""):
-            userFav = random_pick(wishlist)
-        else:
-            if(userFav not in wishlist):
-                userFav = random_pick(wishlist)
 
-    else:
-        union = [last_view] + order_history_product_list
-        if(union IS empty):
-            userFav = random_pick(product_list)
-        else:
-            userFav = random_pick(union)
+count = FinalPickArray.length;
+WHILE count < 10
+DO
+    FinalPickArray.push(potential_products.random());
+    count++;
+DONE
 
-    if(last_view != "" and last_view != userFav):
-        res.append(fetch(last_viewed)[0:4])
-        res.append(fetch(userFav)[0:4])
-    else:
-        res.append(fetch(userFav)[0:8])
-        
-'''
+
+
