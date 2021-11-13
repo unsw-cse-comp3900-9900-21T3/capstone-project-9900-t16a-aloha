@@ -10,7 +10,7 @@ Chrome is recommended browser to use.
 
 The back-end server needs to start first to run front-end.
 
-Using **python** to start server is **recommended**.
+Using __python__ to start server is **recommended**.
 
 To run the front-end server useing python, go to web folder, and then run following
 
@@ -19,17 +19,6 @@ To run the front-end server useing python, go to web folder, and then run follow
 Visit on either:
   http://127.0.0.1:8000
 
-To run the front-end server useing nodejs, at the root folder of the project.
-
-`npx http-server web -p 7999`
-
-This will start a server to host the front-end web site. 
-
-Visit on either:
-  http://127.0.0.1:7999
-  http://192.168.1.168:7999
-  
- 
 
 
 
