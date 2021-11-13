@@ -10,7 +10,7 @@ Chrome is recommended browser to use.
 
 The back-end server needs to start first to run front-end.
 
-Using python to start server is recommended.
+Using **python** to start server is **recommended**.
 
 To run the front-end server useing python, go to web folder, and then run following
 
