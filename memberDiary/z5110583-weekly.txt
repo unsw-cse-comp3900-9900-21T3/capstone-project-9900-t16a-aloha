@@ -1,0 +1,97 @@
+30/09/2021
+
+Last week: week2
+We decided each members role in the team. I am the Front-end developer. I am responsbible for the 
+workflow part of the proposal. 
+
+This week: week3 
+Our first sprint starts yesterday. I am going to create login/sign-up page. 
+
+Next week: week4
+I am going to finish all sprint 1 related work including admin related pages, customer detail page.
+
+----------------------------------------------------------------------------------------------------
+
+06/010/2021
+
+Last week: week3
+Finished log in and sign up front end UI and API request to backend. 
+
+This week: week4
+Finish account page, product page, nav bar, search bar, address page, and corresponding API request 
+to backend.
+
+Next week: week5
+Demo A. Review sprint 1 and have group chat about sprint 2 part.
+
+
+----------------------------------------------------------------------------------------------------
+
+14/10/2021
+
+Last week: week4
+Finish account page, product page, nav bar, search bar, address page, and corresponding API request 
+to backend.
+
+This week: week5
+After DemoA, we had a meeting to review sprint 1. We also starts sprint 2. I am working on admin edit 
+product detail page. 
+
+Next week: week6
+Planning finish all sprint 2 for my part. including wishlist shopping cart, admin part, and customer 
+product view.
+
+----------------------------------------------------------------------------------------------------
+
+20/10/2021
+
+Last week: week5
+Finish Demo A, and admin edit product pages. Imgs Features.
+
+This week: week6
+Finish sprint 2 all front end work
+
+Next week: week7
+Plan sprint 3
+
+
+
+----------------------------------------------------------------------------------------------------
+
+28/10/2021
+
+Last week: week6
+Finish sprint 2
+
+This week: week7
+Getting to finish sprint 3, including accessibility, search function and order payment.
+
+Next week: week8
+Demo B for sprint 2 and 3 
+
+----------------------------------------------------------------------------------------------------
+
+03/11/2021
+
+Last week: week7
+Finish sprint 3, and Demo B
+
+This week: week8
+Demo B, Getting to finish sprint 4, including orders, order history
+
+Next week: week9
+Finish all sprints
+
+----------------------------------------------------------------------------------------------------
+
+13/11/2021
+
+Last week: week8
+Demo B, Getting to finish sprint 4, including orders, order history, and have a meeting after demo 
+talking about the final sprint
+
+This week: week9
+We finished all the sprint and start on final report.
+
+Next week: week10
+Final demo

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="style/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style/mystyle.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css"
+    />
+    <title>A Shoe</title>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  </head>
+  <body>
+    <div class="container text-center" style="position: relative; top: 20vh">
+      <div class="row mb-3"><h1>Thank you for shopping with us.</h1></div>
+      <div class="row mb-3"><h5>You will love our shoes!</h5></div>
+
+      <div class="card mb-3">
+        <div class="card-body p-10">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">
+              <div>Order number:</div>
+              <div id="orderid">888</div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <div>Total:</div>
+              <div id="order-total-amt">$888</div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <div>Shipping to:</div>
+              <div class="text-end">
+                <h4 id="street">10 Defries Ave</h4>
+                <h5 id="city">zetland</h5>
+                <h5 id="state">NSW</h5>
+                <h5 id="zip"></h5>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <a href="main.html" class="card-link">Back</a>
+    </div>
+    <script>
+      document.getElementById("orderid").innerText =
+        sessionStorage.getItem("orderid");
+
+      document.getElementById("order-total-amt").innerText =
+        "$" + sessionStorage.getItem("totalAmt");
+
+      document.getElementById("street").innerText = JSON.parse(
+        sessionStorage.getItem("orderAddr")
+      ).street;
+      document.getElementById("city").innerText = JSON.parse(
+        sessionStorage.getItem("orderAddr")
+      ).city;
+      document.getElementById("street").innerText = JSON.parse(
+        sessionStorage.getItem("orderAddr")
+      ).street;
+      document.getElementById("state").innerText = JSON.parse(
+        sessionStorage.getItem("orderAddr")
+      ).state;
+      document.getElementById("zip").innerText = JSON.parse(
+        sessionStorage.getItem("orderAddr")
+      ).postcode;
+    </script>
+  </body>
+</html>

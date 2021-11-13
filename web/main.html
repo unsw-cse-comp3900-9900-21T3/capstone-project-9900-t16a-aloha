@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="style/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style/mystyle.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css"
+    />
+    <title>A Shoe</title>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+    <df-messenger
+      intent="WELCOME"
+      chat-title="AlohaChatbot"
+      agent-id="2b084b15-a99e-4da4-8550-3d67a3875396"
+      language-code="en"
+      id="chat-bot"
+      style="display: none"
+    ></df-messenger>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://www.paypal.com/sdk/js?client-id=ARvp65p72sDDgR-StH1wAYT2ETOsUM1j0cCc_QMPYaXxBuzN_vjZPLIObw_KuWY9ULRLCBenQDhEfRCs&enable-funding=venmo&currency=AUD"
+      data-sdk-integration-source="button-factory"
+    ></script>
+
+    <script
+      type="text/javascript"
+      src="https://portal.sandbox.afterpay.com/afterpay.js"
+    ></script>
+  </head>
+  <body>
+    <div focus class="modal" id="err-modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Notify</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="err-modal-msg"></p>
+          </div>
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="delete-product-confirmation">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmation</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure to delete the product?</p>
+          </div>
+          <div class="modal-footer">
+            <button
+              id="modal-delete-product-btn"
+              type="button"
+              class="btn btn-danger"
+              data-bs-dismiss="modal"
+            >
+              Yes
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- shopping cart offcanvas -->
+    <div
+      class="offcanvas offcanvas-end"
+      tabindex="-1"
+      id="shopping-cart"
+      aria-labelledby="offcanvasRightLabel"
+    >
+      <div class="offcanvas-header border-bottom">
+        <h5 id="offcanvasRightLabel">Shopping Cart</h5>
+        <button
+          type="button"
+          class="btn-close text-reset"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <!-- shopping cart -->
+
+        <ul class="list-group list-group-flush" id="shopping-cart-list"></ul>
+
+        <!-- check out process -->
+        <div id="checkout-address">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label for="check-first-name">First Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="check-first-name"
+                placeholder="First Name"
+              />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="check-last-name">Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="check-last-name"
+                placeholder="Last Name"
+              />
+            </div>
+          </div>
+
+          <div class="row mt-2 g-3">
+            <div class="col-12">
+              <label for="check-phone" class="form-label">Phone</label>
+              <input
+                type="text"
+                class="form-control"
+                id="check-phone"
+                placeholder="Phone"
+              />
+            </div>
+            <div class="col-12">
+              <label for="check-address" class="form-label">Address</label>
+              <input
+                type="text"
+                class="form-control"
+                id="check-address"
+                placeholder="1234 What St"
+              />
+            </div>
+            <div class="col-md-5">
+              <label for="check-city" class="form-label">City</label>
+              <input type="text" class="form-control" id="check-city" />
+            </div>
+            <div class="col-md-4">
+              <label for="check-state" class="form-label">State</label>
+              <select id="check-state" class="form-select">
+                <option selected>NSW</option>
+                <option>VIC</option>
+                <option>QLD</option>
+                <option>SA</option>
+                <option>WA</option>
+                <option>TAS</option>
+                <option>NT</option>
+                <option>ACT</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label for="check-zip" class="form-label">Zip</label>
+              <input type="text" class="form-control" id="check-zip" />
+            </div>
+          </div>
+
+          <div class="row mt-5 g-3 pay-btns" id="smart-button-container">
+            <div style="text-align: center">
+              <div id="paypal-button-container"></div>
+            </div>
+          </div>
+          <div class="row g-3 pay-btns">
+            <div type="button" id="afterpay-button">
+              <img
+                height="55px"
+                width="100%"
+                style="
+                  max-width: 100%;
+                  max-height: 100%;
+                  object-fit: contain;
+                  background-color: black;
+                  border-radius: 5px;
+                "
+                src="assets/after.svg.svg"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="offcanvas-footer">
+        <div
+          class="d-flex flex-column"
+          style="background-color: black; color: white"
+        >
+          <div class="m-4 d-flex justify-content-between">
+            <h5 class="m-0" style="color: white">Total:</h5>
+            <div id="total-amount-check">$999</div>
+          </div>
+        </div>
+
+        <div class="d-grid">
+          <button id="check-out-btn" type="button" class="btn btn-primary">
+            check out
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- wish list offcanvas -->
+    <div
+      class="offcanvas offcanvas-end"
+      tabindex="-1"
+      id="wishlist"
+      aria-labelledby="offcanvasRightLabel"
+    >
+      <div class="offcanvas-header border-bottom">
+        <h5>WishList</h5>
+        <button
+          type="button"
+          class="btn-close text-reset"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <div
+          id="wish-list-parent"
+          class="row row-cols-2 g-2 g-lg-3 m-1 p-2"
+        ></div>
+      </div>
+    </div>
+
+    <div id="user-header">
+      <nav class="navbar navbar-expand-lg navbar-light border-bottom">
+        <div class="container-fluid">
+          <a type="button" class="navbar-brand" id="left-top-main">A Shoe</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarColor03"
+            aria-controls="navbarColor03"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a href="#" class="nav-link" id="user-main-page-link"
+                  >Just For YOU
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="user-search-page-link" href="#"
+                  >Search</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="user-about-page-link" href="#">About</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                  href="#"
+                  role="button"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="25"
+                    fill="currentColor"
+                    class="bi bi-person-circle"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path
+                      fill-rule="evenodd"
+                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                    /></svg
+                ></a>
+                <div class="dropdown-menu">
+                  <a type="button" class="dropdown-item" id="nav-dropdown-order"
+                    >My Orders</a
+                  >
+                  <a type="button" class="dropdown-item" id="nav-dropdown-addr"
+                    >My Address</a
+                  >
+                  <!-- <a type="button" class="dropdown-item" id="nav-dropdown-wish"
+                    >My WishList</a
+                  > -->
+                  <a type="button" class="dropdown-item" id="nav-dropdown-acct"
+                    >My Account</a
+                  >
+                  <div class="dropdown-divider"></div>
+                  <a type="button" class="dropdown-item nav-dropdown-logout"
+                    >Log out</a
+                  >
+                </div>
+              </li>
+              <li class="nav-item" href="#">
+                <a
+                  class="nav-link"
+                  data-bs-toggle="offcanvas"
+                  href="#shopping-cart"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="25"
+                    fill="currentColor"
+                    class="bi bi-bag"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"
+                    />
+                  </svg>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="offcanvas" href="#wishlist">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="23"
+                    height="23"
+                    fill="currentColor"
+                    class="bi bi-bookmark-heart"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 4.41c1.387-1.425 4.854 1.07 0 4.277C3.146 5.48 6.613 2.986 8 4.412z"
+                    />
+                    <path
+                      d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"
+                    />
+                  </svg>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div id="admin-header">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">A Shoe</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarColor03"
+            aria-controls="navbarColor03"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a type="button" class="nav-link" id="admin-add-shoe-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="25"
+                    fill="currentColor"
+                    class="bi bi-plus-square"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"
+                    />
+                    <path
+                      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+                    /></svg
+                  >Add SHOE
+                </a>
+              </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                  href="#"
+                  role="button"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="25"
+                    fill="currentColor"
+                    class="bi bi-person-circle"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path
+                      fill-rule="evenodd"
+                      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                    /></svg
+                ></a>
+                <div class="dropdown-menu">
+                  <a type="button" class="dropdown-item nav-dropdown-logout"
+                    >Log out</a
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div id="search-bar" style="display: block">
+      <div class="bg-light">
+        <div class="d-flex">
+          <input
+            id="admin-search-input"
+            class="form-control"
+            type="text"
+            placeholder="Search"
+          />
+
+          <select class="form-select w-50" id="admin-search-brand">
+            <option value="" disabled selected>Brand</option>
+            <option value="">None</option>
+            <option value="Nike">Nike</option>
+            <option value="Adidas">Adidas</option>
+          </select>
+          <select class="form-select w-50" id="admin-search-price">
+            <option value="" disabled selected>Price Range</option>
+            <option value="">None</option>
+            <option value="1">100<</option>
+            <option value="2">101-200</option>
+            <option value="3">200></option>
+          </select>
+          <select class="form-select w-50" id="admin-search-sortby">
+            <option value="" disabled selected>Sort By</option>
+            <option value="">None</option>
+            <option value="nameAsc">Name A-Z</option>
+            <option value="nameDesc">Name Z-A</option>
+            <option value="priceAsc">Price low-high</option>
+            <option value="priceDesc">Price high-low</option>
+          </select>
+          <button id="admin-search-btn" class="btn btn-secondary" type="button">
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <div class="container" id="account-page">
+        <div class="row m-3">
+          <div class="col-4 me-auto">
+            <div class="card">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="bi bi-person-circle"
+                fill="currentColor"
+                width="100%"
+                height="100%"
+                focusable="false"
+                role="img"
+                preserveAspectRatio="xMidYMid slice"
+                viewBox="-12 -10 40 30"
+              >
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                <path
+                  fill-rule="evenodd"
+                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                />
+              </svg>
+
+              <div class="card-body">
+                <p class="card-text text-center" id="account-icon-username">
+                  I am User name
+                </p>
+              </div>
+              <ul class="list-group list-group-flush">
+                <button
+                  type="button"
+                  class="list-group-item list-group-item-action"
+                  id="account-order-btn"
+                >
+                  My Orders
+                </button>
+                <button
+                  type="button"
+                  class="list-group-item list-group-item-action"
+                  id="account-address-btn"
+                >
+                  My Address
+                </button>
+                <!-- <button
+                  type="button"
+                  class="list-group-item list-group-item-action"
+                >
+                  My WishList
+                </button> -->
+                <button
+                  type="button"
+                  class="list-group-item list-group-item-action"
+                  id="account-account-btn"
+                >
+                  My Account
+                </button>
+              </ul>
+            </div>
+          </div>
+          <div class="col-7 ms-auto" id="accout-subpage">
+            <div class="row">
+              <h1>MY ACCOUNT</h1>
+              <small class="text-muted">View and edit your info</small>
+              <hr class="m-2" />
+            </div>
+            <div class="row">
+              <div class="form-group">
+                <label for="account-email" class="form-label mt-4"
+                  >Email address</label
+                >
+                <input
+                  type="email"
+                  class="form-control"
+                  id="account-email"
+                  placeholder="Enter email"
+                />
+
+                <!-- <label for="account-pwd" class="form-label mt-4"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  class="form-control"
+                  id="account-pwd"
+                  placeholder="Password"
+                /> -->
+
+                <label for="account-first-name" class="form-label mt-4"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="account-first-name"
+                  placeholder="First Name"
+                />
+
+                <label for="account-last-name" class="form-label mt-4"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="account-last-name"
+                  placeholder="Last Name"
+                />
+              </div>
+            </div>
+            <div class="row m-3"></div>
+            <div class="row justify-content-end me-auto">
+              <button
+                id="account-back-btn"
+                type="button"
+                class="btn btn-outline-secondary col-3 me-2"
+              >
+                Back
+              </button>
+              <button
+                id="account-change-btn"
+                type="button"
+                class="btn btn-primary col-3"
+              >
+                Change
+              </button>
+            </div>
+          </div>
+          <div class="col-7 ms-auto" id="address-subpage">
+            <div class="row">
+              <h1>MY ADDRESS</h1>
+              <small class="text-muted">View and edit your address</small>
+              <hr class="m-2" />
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="address-first-name">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address-first-name"
+                  placeholder="First Name"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="address-last-name">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address-last-name"
+                  placeholder="Last Name"
+                />
+              </div>
+            </div>
+
+            <div class="row mt-2 g-3">
+              <div class="col-12">
+                <label for="address-phone" class="form-label">Phone</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address-phone"
+                  placeholder="Phone"
+                />
+              </div>
+              <div class="col-12">
+                <label for="address-address" class="form-label">Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address-address"
+                  placeholder="1234 What St"
+                />
+              </div>
+              <div class="col-md-5">
+                <label for="address-city" class="form-label">City</label>
+                <input type="text" class="form-control" id="address-city" />
+              </div>
+              <div class="col-md-4">
+                <label for="address-state" class="form-label">State</label>
+                <select id="address-state" class="form-select">
+                  <option selected>NSW</option>
+                  <option>VIC</option>
+                  <option>QLD</option>
+                  <option>SA</option>
+                  <option>WA</option>
+                  <option>TAS</option>
+                  <option>NT</option>
+                  <option>ACT</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="address-zip" class="form-label">Zip</label>
+                <input type="text" class="form-control" id="address-zip" />
+              </div>
+              <div class="row m-3"></div>
+
+              <div class="row justify-content-end me-auto">
+                <button
+                  id="address-back-btn"
+                  type="button"
+                  class="btn btn-outline-secondary col-3 me-2"
+                >
+                  Back
+                </button>
+                <button
+                  id="address-change-btn"
+                  type="button"
+                  class="btn btn-primary col-3"
+                >
+                  Change
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-7 ms-auto" id="order-subpage">
+            <div class="row">
+              <h1>MY ORDERS</h1>
+              <small class="text-muted">View your orders</small>
+              <hr class="m-2" />
+            </div>
+            <div class="row overflow-auto">
+              <div class="accordion" id="order-history-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container" id="product-search-page">
+        <div
+          id="admin-product-list-parent"
+          class="row row-cols-auto g-2 g-lg-3 m-1 p-2"
+        ></div>
+
+        <div class="text-center mb-3">
+          <button
+            id="admin-load-more"
+            type="button"
+            class="btn btn-outline-primary load-more-btns"
+          >
+            Load More
+          </button>
+        </div>
+      </div>
+
+      <div class="container" id="add-product-detail-page">
+        <div class="row m-3">
+          <div class="col-6 me-auto">
+            <div class="card main-img" style="width: 32rem; height: 40rem">
+              <img
+                id="admin-main-img"
+                src="assets/shoe.png"
+                style="max-width: 100%; height: 100%"
+              />
+              <div class="main-img-hover-button">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm product-list-page-card-delete"
+                  style="background-color: transparent"
+                  id="add-del-product-img"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-trash"
+                    viewBox="0 0 16 16"
+                    style="color: #d9534f"
+                  >
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                    ></path>
+                    <path
+                      fill-rule="evenodd"
+                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 ms-auto">
+            <div class="row mb-3">
+              <div class="form-group">
+                <label for="add-product-page-brand" class="form-label"
+                  >Brand</label
+                >
+                <input
+                  id="add-product-page-brand"
+                  class="h3 form-control"
+                  type="text"
+                  placeholder="Shoe Brand"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group">
+                <label for="add-product-page-title" class="form-label"
+                  >Title</label
+                >
+                <input
+                  id="add-product-page-title"
+                  class="h3 form-control"
+                  type="text"
+                  placeholder="Shoe name"
+                />
+              </div>
+            </div>
+            <div class="row mb-3" style="display: none">
+              <div type="button " class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="form-group">
+                <label for="add-product-page-price" class="form-label"
+                  >Price</label
+                >
+                <input
+                  id="add-product-page-price"
+                  class="h6 form-control"
+                  type="text"
+                  placeholder="$ "
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group col-md-6">
+                <label for="add-product-detail-qty">Quantity</label>
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  id="add-product-detail-qty"
+                  placeholder="Quantity"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="add-product-detail-size">Size</label>
+                <select
+                  type="text"
+                  class="form-control"
+                  id="add-product-detail-size"
+                >
+                  <option value="default" selected disabled>Select Size</option>
+                  <option value="6">US 6</option>
+                  <option value="7">US 7</option>
+                  <option value="8">US 8</option>
+                  <option value="9">US 9</option>
+                  <option value="10">US 10</option>
+                  <option value="11">US 11</option>
+                  <option value="12">US 12</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- <div class="row mb-3 p-3">
+              <button class="btn btn-primary">ADD TO CART</button>
+            </div> -->
+            <div class="row mb-3">
+              <div class="form-group">
+                <label for="add-product-page-desc" class="form-label"
+                  >Description</label
+                >
+                <textarea
+                  id="add-product-page-desc"
+                  class="form-control"
+                  rows="3"
+                  placeholder="Type the description..."
+                ></textarea>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="ms-3 form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="product-detail-condition"
+                />
+                <label class="form-check-label" for="product-detail-condition"
+                  >Set this product to be visible to your customers</label
+                >
+              </div>
+            </div>
+            <div class="row m-1">
+              <button
+                id="add-product-page-back-btn"
+                class="btn btn-outline-secondary col-3 me-auto"
+              >
+                BACK
+              </button>
+              <button
+                id="admin-add-product-btn"
+                class="btn btn-primary col-3 ms-auto"
+              >
+                ADD
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row ms-3">
+          <div class="col-4">
+            <span class="d-flex" id="admin-add-product-img-list"> </span>
+          </div>
+          <div class="col-1 d-flex justify-content-center">
+            <label
+              for="upload-img"
+              type="button"
+              style="max-height: 5rem"
+              id="upload-icon-label"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="60"
+                height="60"
+                fill="currentColor"
+                class="bi bi-file-plus"
+                viewBox="0 0 16 16"
+                style="opacity: 0.8"
+              >
+                <path
+                  d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5V6z"
+                ></path>
+                <path
+                  d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"
+                ></path>
+              </svg>
+            </label>
+            <input
+              id="upload-img"
+              type="file"
+              accept="image/*"
+              style="display: none"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="container" id="edit-product-detail-page">
+        <div class="row m-3">
+          <div class="col-6 me-auto">
+            <div class="card main-img" style="width: 32rem; height: 40rem">
+              <img
+                id="admin-edit-main-img"
+                src="assets/shoe.png"
+                style="width: 100%; height: 100%"
+              />
+              <div class="main-img-hover-button">
+                <button
+                  type="button"
+                  class="btn btn-secondary btn-sm product-list-page-card-delete"
+                  style="background-color: transparent"
+                  id="edit-del-product-img"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-trash"
+                    viewBox="0 0 16 16"
+                    style="color: #d9534f"
+                  >
+                    <path
+                      d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                    ></path>
+                    <path
+                      fill-rule="evenodd"
+                      d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 ms-auto">
+            <div class="row mb-3">
+              <div class="form-group">
+                <label for="edit-product-page-brand" class="form-label"
+                  >Brand</label
+                >
+                <input
+                  id="edit-product-page-brand"
+                  class="h3 form-control"
+                  type="text"
+                  placeholder="Shoe Brand"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group">
+                <label for="edit-product-page-title" class="form-label"
+                  >Title</label
+                >
+                <input
+                  id="edit-product-page-title"
+                  class="h3 form-control"
+                  type="text"
+                  placeholder="Shoe name"
+                />
+              </div>
+            </div>
+            <div class="row mb-3" style="display: none">
+              <div type="button " class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"
+                  />
+                </svg>
+              </div>
+              <div type="button" class="col-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  class="bi bi-star"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="form-group">
+                <label for="edit-product-page-price" class="form-label"
+                  >Price</label
+                >
+                <input
+                  id="edit-product-page-price"
+                  class="h6 form-control"
+                  type="text"
+                  placeholder="$AU "
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group col-md-6">
+                <label for="edit-product-detail-qty">Quantity</label>
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  id="edit-product-detail-qty"
+                  placeholder="Quantity"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="edit-product-detail-size">Size</label>
+                <select
+                  type="text"
+                  class="form-control"
+                  id="edit-product-detail-size"
+                >
+                  <option value="default" selected disabled>Select Size</option>
+                  <option value="6">US 6</option>
+                  <option value="7">US 7</option>
+                  <option value="8">US 8</option>
+                  <option value="9">US 9</option>
+                  <option value="10">US 10</option>
+                  <option value="11">US 11</option>
+                  <option value="12">US 12</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- <div class="row mb-3 p-3">
+              <button class="btn btn-primary">ADD TO CART</button>
+            </div> -->
+            <div class="row mb-3">
+              <div class="form-group">
+                <label for="edit-product-page-desc" class="form-label"
+                  >Description</label
+                >
+                <textarea
+                  id="edit-product-page-desc"
+                  class="form-control"
+                  rows="3"
+                  placeholder="Type the description..."
+                ></textarea>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="ms-3 form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="edit-product-detail-condition"
+                />
+                <label
+                  class="form-check-label"
+                  for="edit-product-detail-condition"
+                  >Set this product to be visible to your customers</label
+                >
+              </div>
+            </div>
+            <div class="row m-1">
+              <button
+                id="edit-product-page-back-btn"
+                class="btn btn-outline-secondary col-3 me-auto"
+              >
+                BACK
+              </button>
+              <button
+                id="admin-edit-product-btn"
+                class="btn btn-primary col-3 ms-auto"
+              >
+                CHANGE
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row ms-3">
+          <div class="col-4">
+            <span class="d-flex" id="admin-edit-product-img-list"> </span>
+          </div>
+          <div class="col-1 d-flex justify-content-center">
+            <label
+              for="edit-upload-img"
+              type="button"
+              style="max-height: 5rem"
+              id="edit-upload-icon-label"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="60"
+                height="60"
+                fill="currentColor"
+                class="bi bi-file-plus"
+                viewBox="0 0 16 16"
+                style="opacity: 0.8"
+              >
+                <path
+                  d="M8.5 6a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V10a.5.5 0 0 0 1 0V8.5H10a.5.5 0 0 0 0-1H8.5V6z"
+                ></path>
+                <path
+                  d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1z"
+                ></path>
+              </svg>
+            </label>
+            <input
+              id="edit-upload-img"
+              type="file"
+              accept="image/*"
+              style="display: none"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="container mag-to-fluid" id="recommend-page">
+        <div
+          id="recommend-page-products"
+          class="row row-cols-auto g-2 g-lg-3 m-1 p-2"
+        ></div>
+
+        <!-- <div class="text-center mb-3">
+          <button type="button" class="btn btn-outline-primary load-more-btns">
+            Load More
+          </button>
+        </div> -->
+      </div>
+
+      <div id="user-search-bar" style="display: none">
+        <div class="bg-light">
+          <div class="d-flex">
+            <input
+              id="user-search-input"
+              class="form-control"
+              type="text"
+              placeholder="Search"
+            />
+            <div class="form-control w-50">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="user-search-instock-checkbox"
+              />
+              <label class="form-check-label" for="flexSwitchCheckChecked"
+                >In Stock</label
+              >
+            </div>
+            <select class="form-select w-50" id="user-search-brand">
+              <option value="" disabled selected>Brand</option>
+              <option value="">None</option>
+              <option value="Nike">Nike</option>
+              <option value="Adidas">Adidas</option>
+            </select>
+            <select class="form-select w-50" id="user-search-price">
+              <option value="" disabled selected>Price Range</option>
+              <option value="">None</option>
+              <option value="1">100<</option>
+              <option value="2">101-200</option>
+              <option value="3">200></option>
+            </select>
+            <select class="form-select w-50" id="user-search-sortby">
+              <option value="" disabled selected>Sort By</option>
+              <option value="">None</option>
+              <option value="nameAsc">Name A-Z</option>
+              <option value="nameDesc">Name Z-A</option>
+              <option value="priceAsc">Price low-high</option>
+              <option value="priceDesc">Price high-low</option>
+            </select>
+            <button
+              id="user-search-btn"
+              class="btn btn-secondary"
+              type="button"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="container mag-to-fluid" id="user-search-page">
+        <div
+          id="user-search-page-products"
+          class="row row-cols-auto g-2 g-lg-3 m-1 p-2"
+        ></div>
+
+        <div class="text-center m-3">
+          <button
+            id="search-load-more-btn"
+            type="button"
+            class="btn btn-outline-primary load-more-btns"
+          >
+            Load More
+          </button>
+        </div>
+      </div>
+
+      <!-- user product detail -->
+      <div class="container" id="user-product-detail-page">
+        <div class="row m-3">
+          <div class="col-6 me-auto">
+            <div class="card main-img" style="width: 32rem; height: 40rem">
+              <img
+                id="user-product-main-img"
+                src="assets/shoe.png"
+                style="width: 100%; height: 100%"
+              />
+            </div>
+          </div>
+          <div class="col-6 ms-auto products-text">
+            <div class="row mb-3">
+              <div class="form-group">
+                <h5 id="user-product-detail-brand">NIKE</h5>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-group">
+                <h3 id="user-product-detail-name">
+                  shoe name shoe name shoe name
+                </h3>
+              </div>
+            </div>
+            <div class="row mb-5" id="rating-list"></div>
+
+            <div class="row mb-3">
+              <div class="form-group">
+                <h5 id="user-product-detail-price">$99.99</h5>
+              </div>
+              <div class="form-group">
+                <h5 style="color: #d9534f" id="user-product-detail-out-of-stk">
+                  Out of stock
+                </h5>
+              </div>
+            </div>
+            <div class="row mb-5">
+              <div class="form-group col-md-6">
+                <label for="user-product-detail-qty">Quantity</label>
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  id="user-product-detail-qty"
+                  placeholder="Quantity"
+                />
+              </div>
+              <div class="form-group col-md-6">
+                <label for="user-product-detail-size">Size</label>
+                <select
+                  type="text"
+                  class="form-control"
+                  id="user-product-detail-size"
+                >
+                  <option value="default" selected disabled>Select Size</option>
+                  <option value="6">US 6</option>
+                  <option value="7">US 7</option>
+                  <option value="8">US 8</option>
+                  <option value="9">US 9</option>
+                  <option value="10">US 10</option>
+                  <option value="11">US 11</option>
+                  <option value="12">US 12</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- <div class="row mb-3 p-3">
+              <button class="btn btn-primary">ADD TO CART</button>
+            </div> -->
+            <div class="row mb-5">
+              <div class="form-group">
+                <label for="user-product-page-desc" class="form-label"
+                  >Description</label
+                >
+                <p class="border-top" id="user-product-page-desc">
+                  Let your shoe game shimmer in the Nike Air Force 1 '07
+                  Essential. It takes the classic AF-1 design to the next level
+                  with its premium leather upper and iridescent Swoosh.
+                </p>
+              </div>
+            </div>
+
+            <div class="row m-1">
+              <button
+                id="user-product-page-back-btn"
+                class="btn btn-outline-secondary col-3 me-auto"
+              >
+                BACK
+              </button>
+              <button
+                id="user-addcart-product-btn"
+                class="btn btn-primary col-3 ms-auto"
+              >
+                ADD TO CART
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row ms-3">
+          <div class="col-5">
+            <span class="d-flex" id="user-product-img-list"> </span>
+          </div>
+        </div>
+      </div>
+
+      <div id="user-about-page" class="container text-center">
+        <div class="m-5" id="about-img"></div>
+        <div class="">
+          <h2>Who We Are</h2>
+          <br />
+          <br />
+          <div
+            id="carouselExampleControls"
+            class="carousel carousel-dark slide"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <h4>
+                  "The best shoes online shopping website ever!"<br /><span
+                    class="text-muted"
+                    >Peng Yang, Front-end developer</span
+                  >
+                </h4>
+              </div>
+              <div class="carousel-item">
+                <h4>
+                  "We know what you want"<br /><span class="text-muted"
+                    >Yao Yuan, Recommend system Engineer</span
+                  >
+                </h4>
+              </div>
+              <div class="carousel-item">
+                <h4>
+                  "tremendous shoes"<br /><span class="text-muted"
+                    >Tim, back-end developer</span
+                  >
+                </h4>
+              </div>
+
+              <div class="carousel-item">
+                <h4>
+                  "Simple is best"<br /><span class="text-muted"
+                    >Sam, back-end developer</span
+                  >
+                </h4>
+              </div>
+              <div class="carousel-item">
+                <h4>
+                  "One word... Amazing!!"<br /><span class="text-muted"
+                    >Han, Database enginner</span
+                  >
+                </h4>
+              </div>
+            </div>
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#carouselExampleControls"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#carouselExampleControls"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div
+      id="accessibility-menu"
+      style="position: fixed; top: 18vh; font-size: 1.2rem"
+    >
+      <button
+        data-bs-toggle="collapse"
+        href="#access-btns"
+        class="btn btn-primary"
+      >
+        <i class="bi bi-caret-down-square"></i>
+      </button>
+      <div class="collapse" id="access-btns">
+        <div
+          class="btn-group-vertical"
+          role="group"
+          aria-label="Vertical button group"
+        >
+          <button type="button" class="btn btn-primary" id="access-zoom-btn">
+            <i class="bi bi-zoom-in"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary eye-care-btns"
+            style="background-color: #faf9de"
+          >
+            <i class="bi bi-eyeglasses" style="color: black"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary eye-care-btns"
+            style="background-color: #fff2e2"
+          >
+            <i class="bi bi-eyeglasses" style="color: black"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary eye-care-btns"
+            style="background-color: #fde6e0"
+          >
+            <i class="bi bi-eyeglasses" style="color: black"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary eye-care-btns"
+            style="background-color: #e3edcd"
+          >
+            <i class="bi bi-eyeglasses" style="color: black"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="template" style="display: none">
+      <div
+        class="col product-card d-flex justify-content-center"
+        id="admin-product-list-temp"
+      >
+        <div
+          type="button"
+          class="card product-card-inside"
+          style="height: 24rem; width: 16rem"
+        >
+          <img
+            src="assets/shoe.png"
+            style="object-fit: cover; height: 20rem; width: 100%"
+            class="card-img-top"
+            alt="..."
+          />
+
+          <div
+            class="card-body d-flex justify-content-between"
+            style="height: 4rem"
+          >
+            <h6 class="card-text">Some</h6>
+            <div>
+              <div class="badge bg-dark">$99.99</div>
+            </div>
+          </div>
+          <div class="card-hover-button">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm product-list-page-card-delete"
+              style="background-color: transparent"
+              data-bs-toggle="modal"
+              data-bs-target="#delete-product-confirmation"
+              onclick="stopProp(event)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-trash"
+                viewBox="0 0 16 16"
+                style="color: #d9534f"
+              >
+                <path
+                  d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                ></path>
+                <path
+                  fill-rule="evenodd"
+                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="col product-card d-flex justify-content-center"
+        id="product-temp"
+      >
+        <div type="button" class="card" style="height: 24rem; width: 16rem">
+          <img
+            src="assets/shoe.png"
+            style="object-fit: cover; height: 20rem; width: 100%"
+            class="card-img-top"
+            alt="..."
+          />
+
+          <div
+            class="card-body d-flex justify-content-between"
+            style="height: 4rem"
+          >
+            <h6 class="card-text">Some</h6>
+            <div>
+              <div class="badge bg-dark">$99.99</div>
+            </div>
+          </div>
+
+          <div class="card-hover-button">
+            <button
+              type="button"
+              class="btn btn-secondary btn-sm product-list-page-card-wish"
+              style="background-color: transparent"
+              onclick="stopProp(event)"
+            >
+              <i
+                type="button"
+                class="bi bi-heart toggle-wishlist"
+                style="color: #d9534f; font-size: 1.3rem"
+              ></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="add-product-img-template"
+        class="me-1"
+        style="height: 70px; width: 56px"
+      >
+        <img
+          class="product-sub-img"
+          type="button"
+          src="#"
+          style="width: 100%; height: 100%"
+        />
+      </div>
+
+      <li
+        class="list-group-item d-flex justify-content-between"
+        id="shopping-cart-item"
+      >
+        <div>
+          <img
+            src="assets/shoe.png"
+            width="50"
+            height="50"
+            style="
+              display: block;
+              max-width: 80px;
+              max-height: 100px;
+              width: auto;
+              height: auto;
+            "
+          />
+        </div>
+        <div
+          class="d-flex flex-column justify-content-between"
+          style="width: 250px"
+        >
+          <h6 class="shop-name">Shoe Name Shoe Name Shoe Name Shoe Name</h6>
+          <small class="text-muted shop-price">$ 99.99</small>
+        </div>
+        <div class="d-flex flex-column justify-content-between">
+          <h6>Qty : <small class="text-muted shop-qty">2</small></h6>
+
+          <h6>Size: <small class="text-muted shop-size">US 7</small></h6>
+        </div>
+        <div
+          class="d-flex flex-column justify-content-between align-items-center"
+        >
+          <h6 class="total-price">$ 99.99</h6>
+          <button
+            type="button"
+            class="btn-close del-shopping-cart-item"
+            aria-label="Close"
+          ></button>
+        </div>
+      </li>
+
+      <div class="accordion-item" id="order-history-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseOne"
+            aria-expanded="false"
+            aria-controls="collapseOne"
+          >
+            <div class="row">
+              <div class="row">
+                <div class="d-flex justify-content-between">
+                  <h5 class="order-history-item-number">Order #999</h5>
+                  <span class="order-history-item-name text-muted"
+                    >First Name Last Name</span
+                  >
+                </div>
+              </div>
+              <div class="row">
+                <div class="d-flex justify-content-between">
+                  <label class="order-history-item-addr">Address</label>
+                  <label class="order-history-item-phone">Phone</label>
+                </div>
+                <div class="">
+                  <label class="order-history-item-city">City</label>
+                  <label class="order-history-item-state">State</label>
+                  <label class="order-history-item-zip">Zip</label>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="order-total-price">$99.99</h5>
+          </button>
+        </h2>
+        <div
+          id="collapseOne"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingOne"
+        >
+          <div class="accordion-body">
+            <ul class="list-group list-group-flush order-product-list"></ul>
+          </div>
+        </div>
+      </div>
+
+      <li
+        class="list-group-item d-flex justify-content-between"
+        id="order-product-item"
+      >
+        <div>
+          <img
+            class="order-product-item-img"
+            src="assets/shoe.png"
+            width="50"
+            height="50"
+            style="
+              display: block;
+              max-width: 80px;
+              max-height: 100px;
+              width: auto;
+              height: auto;
+            "
+          />
+        </div>
+        <div
+          class="d-flex flex-column justify-content-between"
+          style="width: 250px"
+        >
+          <h6 class="shop-name">Shoe Name Shoe Name Shoe Name Shoe Name</h6>
+          <small class="text-muted shop-price">$ 99.99</small>
+        </div>
+        <div class="d-flex flex-column justify-content-between">
+          <h6>Qty : <small class="text-muted shop-qty">2</small></h6>
+
+          <h6>
+            Size:
+            <small class="text-muted shop-size">US 7</small>
+          </h6>
+        </div>
+        <div
+          class="
+            d-flex
+            flex-column
+            justify-content-between
+            align-items-center
+            rating-stars
+          "
+        >
+          <h6 class="total-price">$ 99.99</h6>
+        </div>
+      </li>
+    </div>
+    <div class="cursor"></div>
+    <script>
+      function stopProp(event) {
+        event.stopPropagation();
+      }
+    </script>
+    <script type="text/javascript">
+      document
+        .getElementById("afterpay-button")
+        .addEventListener("click", async function () {
+          const firstName = document.getElementById("check-first-name");
+          const lastName = document.getElementById("check-last-name");
+          const phone = document.getElementById("check-phone");
+          const address = document.getElementById("check-address");
+          const city = document.getElementById("check-city");
+          const state = document.getElementById("check-state");
+          const zip = document.getElementById("check-zip");
+
+          if (
+            firstName.value === "" ||
+            lastName.value === "" ||
+            phone.value === "" ||
+            address.value === "" ||
+            city.value === "" ||
+            state.value === "" ||
+            zip.value === ""
+          ) {
+            alert("Please do not left empty fields");
+            return;
+          }
+          if (!/^\d+$/.test(phone.value)) {
+            alert("Please enter valid phone number");
+            return;
+          }
+
+          AfterPay.initialize({ countryCode: "AU" });
+          // To avoid triggering browser anti-popup rules, the AfterPay.open()
+          // function must be directly called inside the click event listener
+          AfterPay.open();
+          // If you don't already have a checkout token at this point, you can
+          // AJAX to your backend to retrieve one here. The spinning animation
+          // will continue until `AfterPay.transfer` is called.
+          // If you fail to get a token you can call AfterPay.close()
+          AfterPay.onComplete = function (event) {
+            if (event.data.status == "SUCCESS") {
+              // The consumer confirmed the payment schedule.
+              // The token is now ready to be captured from your server backend.
+            } else {
+              // The consumer cancelled the payment or closed the popup window.
+            }
+          };
+          AfterPay.transfer({ token: "Basic YWFhOmJiYg==" });
+          console.log("Payment Finished");
+          setTimeout(async () => {
+            try {
+              const url = `http://localhost:8080/test/creatOrder/${sessionStorage.getItem(
+                "userID"
+              )}`;
+              let sendJs = {
+                firstname: firstName.value,
+                lastname: lastName.value,
+                telephone: phone.value,
+                street: address.value,
+                city: city.value,
+                state: state.value,
+                postcode: zip.value,
+              };
+              sessionStorage.setItem("orderAddr", JSON.stringify(sendJs));
+              const response = await fetch(url, {
+                method: "post",
+                headers: {
+                  "content-type": "application/json",
+                },
+                body: JSON.stringify(sendJs),
+              });
+              const jsData = await response.text();
+
+              const d = JSON.parse(jsData);
+              console.log("Completed! create order", d);
+              if (d.status === "fail") {
+                alert("Something Wrong");
+              } else {
+                sessionStorage.setItem("orderid", d.orderid);
+              }
+            } catch (err) {
+              console.log(err);
+            }
+
+            location.href = "./finished.html";
+          }, 2000);
+        });
+    </script>
+    <script type="module" src="scripts/gotoMain.js"></script>
+    <script type="module" src="scripts/getRecommend.js"></script>
+    <script type="module" src="scripts/checkout.js"></script>
+    <script type="module" src="scripts/accessbility.js"></script>
+    <script type="module" src="scripts/getAllShoppingCart.js"></script>
+    <script type="module" src="scripts/recommendPage.js"></script>
+    <script type="module" src="scripts/main.js"></script>
+    <script type="module" src="scripts/adminProductList.js"></script>
+    <script type="module" src="scripts/addProduct.js"></script>
+    <script type="module" src="scripts/editProduct.js"></script>
+    <script type="module" src="scripts/deleteProduct.js"></script>
+    <script type="module" src="scripts/account.js"></script>
+    <script type="module" src="scripts/address.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

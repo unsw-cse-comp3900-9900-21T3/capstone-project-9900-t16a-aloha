@@ -1,0 +1,98 @@
+body {
+  margin: 0px;
+  display: flex;
+  /* font-family: "Noto Sans", sans-serif; */
+  font-family: "Noto Sans Mono", monospace;
+}
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+#welcome-img {
+  background-image: url("assets/welcome.jpg");
+  background-size: cover;
+  height: 100vh;
+  flex: 1;
+}
+#input-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+h1 {
+  flex: 0.7;
+  font-size: 5em;
+  font-weight: 300;
+  margin: 0;
+  padding: 7vh 0 0 0;
+}
+#sign-up-section {
+  flex: 1;
+  width: 100%;
+}
+#login-section {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+h3 {
+  text-align: center;
+  font-weight: 300;
+}
+
+.detail {
+  height: 10vh;
+  width: 100%;
+  display: flex;
+  /* grid-template-rows: auto;
+  grid-template-columns: 40% 40%; */
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+#login-section .detail {
+  height: 10vh;
+}
+.input-box {
+  margin: 0 4% 0 4%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 140px;
+}
+.input-name {
+  font-weight: 100;
+}
+
+input {
+  border-radius: 0;
+  border: 1px solid #c4c4c4;
+}
+
+.btn-container {
+  display: flex;
+  /* padding-right: 7%; */
+  /* flex-direction: row-reverse; */
+  justify-content: center;
+}
+button {
+  width: 200px;
+  height: 30px;
+  border-radius: 0;
+  border: 1px solid #c4c4c4;
+  background-color: #c4c4c4;
+  color: white;
+}
+button:hover {
+  opacity: 0.5;
+}
+
+@media (max-width: 700px) {
+  #welcome-img {
+    display: none;
+  }
+}

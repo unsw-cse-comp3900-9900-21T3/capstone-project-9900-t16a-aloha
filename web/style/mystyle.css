@@ -1,0 +1,157 @@
+#product-search-page,
+#accout-subpage,
+#edit-product-detail-page,
+#user-product-detail-page {
+  display: none;
+}
+.product-card:hover .card {
+  box-shadow: 5px 5px 5px grey;
+  transition: 0.5s ease-out;
+  transform: scale(1.05);
+  opacity: 0.8;
+}
+
+.product-card:hover .card-hover-button {
+  /* box-shadow: 1px 1px 1px 1px grey; */
+  transition: 0.6s ease-in-out;
+  transform: scale(1.05);
+  opacity: 1;
+}
+.main-img:hover .main-img-hover-button {
+  transition: 0.6s ease-in-out;
+  transform: scale(1.05);
+  opacity: 1;
+}
+.main-img-hover-button {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  left: 90%;
+  text-align: center;
+}
+.card-hover-button {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  left: 80%;
+  text-align: center;
+}
+.product-sub-img:hover {
+  box-shadow: 3px 3px 3px grey;
+  transition: 0.3s ease-out;
+  transform: scale(1.03);
+  opacity: 0.8;
+}
+#upload-icon-label:hover svg {
+  transition: 0.3s ease-out;
+  transform: scale(1.04);
+}
+
+.offcanvas {
+  width: 40vw;
+}
+
+#about-img {
+  background-image: url("../assets/about.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 50vh;
+  flex: 1;
+}
+
+.product-card.zoomin {
+  transform: scale(1.4);
+  margin: 2rem 3.4rem 9rem 3.4rem;
+  transform-origin: 0 0;
+}
+
+.load-more-btns.zoomin {
+  transform: scale(1.4);
+  margin: 5.4rem;
+}
+.products-text.zoomin {
+  transform: scale(1.2);
+  font-size: 1.3rem;
+  transform-origin: 0 0;
+}
+
+html.zoomin {
+  cursor: url("../assets/cursor.svg"), auto;
+}
+
+/* idea from https://www.youtube.com/watch?v=rfpRZ2t_BrQ&t=402s */
+
+.zoomin.cursor {
+  z-index: 1100;
+  width: 50px;
+  height: 50px;
+  border: 1px solid whitesmoke;
+  border-radius: 50%;
+  position: absolute;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+  animation: cursorAnim 0.5s infinite alternate;
+  pointer-events: none;
+}
+
+.zoomin.cursor::after {
+  content: "";
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  border: 13px solid grey;
+  border-radius: 50%;
+  opacity: 0.7;
+  top: -1px;
+  left: -1px;
+  animation: cursorAnim2 0.5s infinite alternate;
+}
+
+@keyframes cursorAnim {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.7);
+  }
+}
+
+@keyframes cursorAnim2 {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.4);
+  }
+}
+
+@keyframes cursorAnim3 {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(3);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.zoomin.expand {
+  animation: cursorAnim3 0.5s forwards;
+  border: 1px solid red;
+}
+
+@keyframes append-animate {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.product-card {
+  animation: append-animate 1s linear;
+}
