@@ -766,7 +766,6 @@ public class UserController {
                 }
             }
         }
-        System.out.println("hlo");
         items.clear();
 
         if (!orderItems.isEmpty()) {
@@ -780,7 +779,6 @@ public class UserController {
         if (user.getLastVisited() != null) {
             finalPickArray.add(user.getLastVisited());
         }
-        System.out.println("hll");
 
         // add random one from recommend
         Recommend r = recommendRepository.findRandom();
@@ -796,7 +794,7 @@ public class UserController {
                 wishItems.add(pid);
             }
         }
-        System.out.println("yolos");
+
         int i = 0;
         while (i < wishItems.size() && i < numWishToChoose) {
             Random random = new Random();
@@ -822,7 +820,6 @@ public class UserController {
             }
             ++i;
         }
-        System.out.println("yoyo");
 
         int count = finalPickArray.size();
         while (count < 10) {
@@ -832,18 +829,14 @@ public class UserController {
             ++count;
         }
 
-        System.out.println("samnn");
-
         if (user.getPreferred() != null) {
             finalPickArray.add(user.getPreferred());
         }
         Random random = new Random();
         int n = random.nextInt(finalPickArray.size());
-        System.out.println("yamm");
 
-        // user.setPreferred(finalPickArray.get(n));
-        // userRepository.save(user);
-
+        user.setPreferred(finalPickArray.get(n));
+        userRepository.save(user);
         return recommendRepository.findById(finalPickArray.get(n)).get();
     }
 
@@ -1121,11 +1114,32 @@ public class UserController {
         review.setRating(rate);
         reviewRepository.save(review);
 
+        Iterable<Review> reviews = reviewRepository.findByProduct(product);
+        ArrayList<Review> reviewList = new ArrayList<>();
+
+        float totalRate = 0;
+        for (Review r : reviews) {
+            reviewList.add(r);
+            totalRate += r.getRating();
+        }
+
+        float updateAvg = 0;
+        if (product.getAvgRating() == 0) {
+            updateAvg = totalRate/(reviewList.size());
+        } else {
+            updateAvg = (product.getAvgRating() + totalRate) / (reviewList.size() + 1);
+        }
+        product.setAvgRating(updateAvg);
+        productRepository.save(product);
+
         res.put("status", "success");
         res.put("msg", "review is updated");
 
         return res;
     }
+
+
+
     @GetMapping(path = "/instock")
     @CrossOrigin
     public @ResponseBody Page<Product> instock(@RequestParam(name = "maxprice") Float maxPrice,@RequestParam Integer stock) {

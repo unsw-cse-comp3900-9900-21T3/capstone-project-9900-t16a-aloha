@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
     Review findByOrderHistoryAndProduct(OrderHistory orderHistory, Product product);
+
+    Iterable<Review> findByProduct(Product product);
 }
