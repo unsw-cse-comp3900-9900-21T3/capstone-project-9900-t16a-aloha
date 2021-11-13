@@ -2,7 +2,8 @@
 capstone-project-9900-t16a-aloha created by GitHub Classroom
 
 
-**Front End Server**
+#Front End Server
+
 There are no additional environments for running front-end. 
 
 Chrome is recommended browser to use.
