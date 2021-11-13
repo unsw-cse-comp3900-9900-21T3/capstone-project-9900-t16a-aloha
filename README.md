@@ -61,7 +61,7 @@ Then MySQL would run with a `mysql>` prompt.Typing follwing MySQL queries line b
 
 `FLUSH PRIVILEGES;`
 
-`CREATE DATABASE ecommerce`;
+`CREATE DATABASE ecommerce;`
 
 `use ecommerce;`
 
