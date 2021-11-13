@@ -19,6 +19,32 @@ https://medium.com/@eiki1212/feature-extraction-in-natural-language-processing-w
 Using TF-IDF to IR(Information Retrieval) technique to analyze how important a word is in a document. 
 Improved the quality of the recommendation
 
-19/10/2021 - 
+13/10/2021 - 
 Trained Partial chatbox
 Integrate with FrontEnd
+
+20/10/2021 -
+tokenize whole database
+pre-process and clean the raw data
+Applying TF-IDF and cosine simialrity to generate the final recommend table
+
+25/10/2021 -
+Fix bugs on the recommend table generation
+  - Forget to eliminate dupliates
+
+28/10/2021 -
+Write inital user favourite product extraction logic
+
+5/11/2021 - 
+Implement recommendation logic with backend help
+Integrate with front-end
+
+6/11/2021 - 
+Team meeting to discuss progress
+
+12/11/2021 -
+test logic and fix bugs
+
+13/11/2021 -
+Team meeting to prepare for the final demo
+
