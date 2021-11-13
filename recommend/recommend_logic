@@ -1,0 +1,32 @@
+finalPickArray = []
+potential_products = []
+numWishToChoose = 5
+
+FinalPickArray.push(last_view);
+FinalPickArray.push(random_product);
+
+IF orderHistory is NOT Empty
+THEN
+    FinalPickArray.add(orderHistory.random())
+
+
+i=0
+WHILE i < wishlist.size() && i< numWishToChoose
+DO
+    id = wishItems.random()
+    FinalPickArray.push(id)
+    idRelatedProduct = fetch(wishItems[randIndex])
+    potential_products.push(idRelatedProduct[0:5])
+    i++;
+DONE
+
+
+count = FinalPickArray.length;
+WHILE count < 10
+DO
+    FinalPickArray.push(potential_products.random());
+    count++;
+DONE
+
+
+
