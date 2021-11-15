@@ -93,7 +93,7 @@ If you want to build the back-end server by yourself, type the follwing commands
 
 The build process will be running automatically, and once it succeeds, an "BUILD SUCESS" message will show in terminal.
 
-The package will be created at `~/capstone-project-9900-t16a-aloha/test/target/test-0.0.1-SNAPSHOT.jar
+The package will be created at `~/capstone-project-9900-t16a-aloha/test/target/test-0.0.1-SNAPSHOT.jar`
 
 # Recommend 
 To generate the recommendation table, 
