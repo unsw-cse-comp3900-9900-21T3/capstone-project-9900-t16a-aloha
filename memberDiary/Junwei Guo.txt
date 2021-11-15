@@ -1,0 +1,38 @@
+Peronal Diary
+Junwei Guo
+z5238914
+
+29/09/2021 -
+Write Project proposal database part;
+
+05/10/2021 -
+Attend weekly lab
+Prepare for database construction
+Start writing bacic backend parts
+
+11/10/2021 -
+Impplement APIs about user information
+
+
+16/10/2021 - 
+Implement APIs about product view/edit
+Fiexd some bugs on the server
+
+23/10/2021 -
+Attend weekly team meeting
+
+25/10/2021 -
+Implement search filter API
+
+30/10/2021 -
+Implement wishlist API and fixed bugs on search filters API
+
+
+6/11/2021 - 
+Team meeting to discuss progress
+Implement reset password API and send email API
+
+
+13/11/2021 -
+Team meeting to prepare for the final demo
+Integrate the backend components together
