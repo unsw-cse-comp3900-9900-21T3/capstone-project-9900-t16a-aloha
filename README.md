@@ -85,7 +85,7 @@ Done! Now the server is ready to use.
 
 By default, we have provided a built package called *new.jar* in the root of project directroy.
 
-If you want to build the back-end server by yourself, type the folling command line by line in terminal
+If you want to build the back-end server by yourself, type the follwing commands line by line in terminal
 
 `cd ~/capstone-project-9900-t16a-aloha/test`
 
