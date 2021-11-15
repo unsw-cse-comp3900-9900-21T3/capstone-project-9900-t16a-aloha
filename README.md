@@ -81,6 +81,20 @@ Enter the root of project directory, then type the command in terminal.
 
 Done! Now the server is ready to use.
 
+### Build
+
+By default, we have provided a built package called *new.jar* in the root of project directroy.
+
+If you want to build the back-end server by yourself, type the folling command line by line in terminal
+
+`cd ~/capstone-project-9900-t16a-aloha/test`
+
+`./mvnw clean package`
+
+The build process will be running automatically, and once it succeeds, an "BUILD SUCESS" message will show in terminal.
+
+The package will be created at `~/capstone-project-9900-t16a-aloha/test/target/test-0.0.1-SNAPSHOT.jar
+
 # Recommend 
 To generate the recommendation table, 
 1. open Jupiter notebook
