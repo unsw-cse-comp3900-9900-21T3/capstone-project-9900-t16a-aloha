@@ -81,6 +81,10 @@ Enter the root of project directory, then type the command in terminal.
 
 Done! Now the server is ready to use.
 
+To log in as as an administrator, please use the account
+`admin@admin.com`
+password: `admin`
+
 ### Build
 
 By default, we have provided a built package called *new.jar* in the root of project directroy.
